@@ -1,11 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
-import { ListFilter, Sparkles, CheckCircle2, Lock } from 'lucide-react';
+import { Lock, ChevronDown, CheckCircle2 } from 'lucide-react';
+
+interface TileData {
+  id: number;
+  unit: number;
+  stepNumber: number;
+  title: string;
+  cx: number;
+  cy: number;
+  status: 'active' | 'completed' | 'locked';
+}
 
 export const LearningMap: React.FC = () => {
-  const { stats, setIsLessonActive, setSelectedLessonId, playSound } = useApp();
+  const { stats, setIsLessonActive, setSelectedLessonId, playSound, showToast } = useApp();
   const [showSyllabus, setShowSyllabus] = useState(false);
+  const [isScrolledUp, setIsScrolledUp] = useState(false);
+
+  const activeStepRef = useRef<HTMLDivElement>(null);
+  const roadmapScrollRef = useRef<HTMLDivElement>(null);
+
+  // Generate multi-unit winding staircase steps
+  const tiles: TileData[] = [
+    // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
+    { id: 1, unit: 1, stepNumber: 1, title: 'Perintah print() & Salam Pertama', cx: 170, cy: 1720, status: 'active' },
+    { id: 2, unit: 1, stepNumber: 2, title: 'Variabel & Tipe String', cx: 216, cy: 1664, status: 'locked' },
+    { id: 3, unit: 1, stepNumber: 3, title: 'Penggabungan String', cx: 170, cy: 1608, status: 'locked' },
+    { id: 4, unit: 1, stepNumber: 4, title: 'Aritmatika Dasar Minuman', cx: 124, cy: 1552, status: 'locked' },
+    { id: 5, unit: 1, stepNumber: 5, title: 'Input Pengguna', cx: 170, cy: 1496, status: 'locked' },
+    { id: 6, unit: 1, stepNumber: 6, title: 'Latihan Praktik Terminal', cx: 216, cy: 1440, status: 'locked' },
+    { id: 7, unit: 1, stepNumber: 7, title: 'Format Teks f-string', cx: 170, cy: 1384, status: 'locked' },
+    { id: 8, unit: 1, stepNumber: 8, title: 'Logika Boolean', cx: 124, cy: 1328, status: 'locked' },
+    { id: 9, unit: 1, stepNumber: 9, title: 'Review Cepat Sintaks', cx: 170, cy: 1272, status: 'locked' },
+    { id: 10, unit: 1, stepNumber: 10, title: 'Tantangan Mini Game', cx: 216, cy: 1216, status: 'locked' },
+    { id: 11, unit: 1, stepNumber: 11, title: 'Ujian Sertifikasi Unit 1', cx: 170, cy: 1160, status: 'locked' },
+
+    // UNIT 2: Logika Kondisi & Percabangan (Steps 12 to 18)
+    { id: 12, unit: 2, stepNumber: 12, title: 'Kondisi if & Logika Dasar', cx: 124, cy: 980, status: 'locked' },
+    { id: 13, unit: 2, stepNumber: 13, title: 'Percabangan else & Alternatif', cx: 170, cy: 924, status: 'locked' },
+    { id: 14, unit: 2, stepNumber: 14, title: 'Kondisi Majemuk elif', cx: 216, cy: 868, status: 'locked' },
+    { id: 15, unit: 2, stepNumber: 15, title: 'Operator Logika and & or', cx: 170, cy: 812, status: 'locked' },
+    { id: 16, unit: 2, stepNumber: 16, title: 'Nested if (Kondisi Bersarang)', cx: 124, cy: 756, status: 'locked' },
+    { id: 17, unit: 2, stepNumber: 17, title: 'Studi Kasus Menu Restoran', cx: 170, cy: 700, status: 'locked' },
+    { id: 18, unit: 2, stepNumber: 18, title: 'Evaluasi Akhir Unit 2', cx: 216, cy: 644, status: 'locked' },
+
+    // UNIT 3: Struktur Data List & Koleksi (Steps 19 to 25)
+    { id: 19, unit: 3, stepNumber: 19, title: 'Mengenal List Python []', cx: 170, cy: 460, status: 'locked' },
+    { id: 20, unit: 3, stepNumber: 20, title: 'Indeks & Mengakses Elemen', cx: 124, cy: 404, status: 'locked' },
+    { id: 21, unit: 3, stepNumber: 21, title: 'Menambah Data: append()', cx: 170, cy: 348, status: 'locked' },
+    { id: 22, unit: 3, stepNumber: 22, title: 'Menghapus Data: remove()', cx: 216, cy: 292, status: 'locked' },
+    { id: 23, unit: 3, stepNumber: 23, title: 'Panjang List dengan len()', cx: 170, cy: 236, status: 'locked' },
+    { id: 24, unit: 3, stepNumber: 24, title: 'Slicing & Potong List', cx: 124, cy: 180, status: 'locked' },
+    { id: 25, unit: 3, stepNumber: 25, title: 'Master Sertifikasi List', cx: 170, cy: 124, status: 'locked' }
+  ];
+
+  // Auto-scroll the roadmap container down to Step 1 on initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (roadmapScrollRef.current) {
+        roadmapScrollRef.current.scrollTop = roadmapScrollRef.current.scrollHeight;
+      }
+    }, 120);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Track roadmap scroll position to show quick "Jump to Active Step" button
+  const handleRoadmapScroll = () => {
+    if (!roadmapScrollRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = roadmapScrollRef.current;
+    // Scrolled up more than 150px from bottom
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+    setIsScrolledUp(distanceFromBottom > 150);
+  };
+
+  const scrollToActiveStep = () => {
+    playSound('click');
+    if (roadmapScrollRef.current) {
+      roadmapScrollRef.current.scrollTo({
+        top: roadmapScrollRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const startNextLesson = () => {
     playSound('click');
@@ -14,228 +91,222 @@ export const LearningMap: React.FC = () => {
     setIsLessonActive(true);
   };
 
-  const handleTileClick = (index: number) => {
+  const handleTileClick = (tile: TileData) => {
     playSound('click');
-    if (index === 0) {
+    if (tile.id === 1) {
       startNextLesson();
     } else {
-      const lesson = LESSON_UNITS[Math.min(index, LESSON_UNITS.length - 1)];
-      setSelectedLessonId(lesson.id);
-      setIsLessonActive(true);
+      showToast(`Unit ${tile.unit} • Langkah ${tile.stepNumber}: ${tile.title}. Selesaikan langkah sebelumnya terlebih dahulu!`, 'info');
     }
   };
 
   return (
-    <section className="flex-1 max-w-[580px] mx-auto w-full flex flex-col items-center select-none" aria-label="Peta Belajar Python">
-      {/* Unit Header Sticky Banner */}
-      <header
-        className="w-full sticky top-3 z-30 mt-2 mb-3 rounded-2xl border-2 border-[#2e2e2e] shadow-[0_8px_20px_rgba(0,0,0,0.5),0_0_15px_rgba(62,207,142,0.15)] p-4 sm:p-5 flex items-center justify-between backdrop-blur-md max-w-[480px] mx-auto"
-        style={{ backgroundColor: 'rgb(31, 107, 72)' }}
-      >
-        <div className="space-y-0.5 text-left">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-brand font-extrabold uppercase tracking-wider text-[#3ecf8e]">
-              LEVEL 1, UNIT 1
-            </span>
-          </div>
-          <h1 className="text-lg sm:text-xl font-brand font-black text-white tracking-tight">
-            Menawarkan dan menerima minuman
-          </h1>
+    <section
+      className="flex-1 w-full lg:max-w-[640px] xl:max-w-[680px] mx-auto relative h-[calc(100vh-2rem)] select-none overflow-hidden"
+      aria-label="Peta Belajar Python"
+    >
+      {/* LEARN TO CODE: SELALU DITENGAH SECARA RELATIF TERHADAP SECTION ROADMAP TENGAH */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 w-[92%] max-w-[440px] bg-[#171717] border-2 border-[#2e2e2e] rounded-2xl p-4 shadow-2xl flex flex-col gap-3 pointer-events-auto">
+        <div className="flex items-center justify-between px-1">
+          <span className="font-brand font-extrabold text-sm uppercase tracking-wider text-white">
+            LEARN TO CODE
+          </span>
+          <span className="text-[11px] font-mono text-[#3ecf8e]">
+            {stats.completedLessons.length} / 11 Modul
+          </span>
         </div>
-        <button
-          onClick={() => setShowSyllabus(true)}
-          className="p-2.5 rounded-xl bg-black/25 hover:bg-black/40 text-white transition-colors"
-          title="Buku Panduan Unit"
-        >
-          <Sparkles className="w-5 h-5 text-[#3ecf8e]" />
-        </button>
-      </header>
 
-      {/* Winding Stepping Nodes Isometric Canvas */}
-      <div className="relative w-full max-w-[480px] mx-auto flex flex-col items-center select-none pt-2 pb-6">
-        <div className="relative w-[340px] h-[680px] mx-auto flex items-center justify-center overflow-visible">
-          <svg
-            className="w-full h-full overflow-visible"
-            viewBox="0 0 340 680"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              playSound('click');
+              setShowSyllabus(true);
+            }}
+            className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] active:translate-y-0.5 border border-[#393939] shadow-[0_3px_0_#121212] flex items-center justify-center text-white transition-all cursor-pointer"
+            title="Daftar Pelajaran / Silabus"
           >
-            <defs>
-              <linearGradient id="slabTopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#3ecf8e" />
-                <stop offset="100%" stopColor="#228258" />
-              </linearGradient>
-              <linearGradient id="slabTopBright" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#265c52" />
-                <stop offset="100%" stopColor="#163b34" />
-              </linearGradient>
-              <linearGradient id="slabTopMuted" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1f4b43" />
-                <stop offset="100%" stopColor="#112925" />
-              </linearGradient>
-              <linearGradient id="slabTopDark" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#183a34" />
-                <stop offset="100%" stopColor="#0d1e1b" />
-              </linearGradient>
-              <linearGradient id="sideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#142e2a" />
-                <stop offset="100%" stopColor="#081412" />
-              </linearGradient>
-              <linearGradient id="sideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#0f2421" />
-                <stop offset="100%" stopColor="#050c0a" />
-              </linearGradient>
-              <linearGradient id="glowSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#1f6e4a" />
-                <stop offset="100%" stopColor="#0d3623" />
-              </linearGradient>
-              <linearGradient id="glowSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#175438" />
-                <stop offset="100%" stopColor="#092618" />
-              </linearGradient>
-              <filter id="tileShadow" x="-30%" y="-20%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.6" />
-              </filter>
-              <filter id="activeGlow" x="-40%" y="-40%" width="180%" height="180%">
-                <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="#3ecf8e" floodOpacity="0.5" />
-                <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
-              </filter>
-            </defs>
+            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+            </svg>
+          </button>
 
-            {/* Tile 11 (Top Peak) */}
-            <g filter="url(#tileShadow)" opacity="0.45" className="cursor-pointer" onClick={() => handleTileClick(10)}>
-              <path d="M122 34 L170 62 L170 78 L122 50 Z" fill="url(#sideLeft)" />
-              <path d="M218 34 L170 62 L170 78 L218 50 Z" fill="url(#sideRight)" />
-              <path d="M170 8 C174 8 178 10 216 32 C220 34 220 38 216 40 L174 64 C172 65 168 65 166 64 L124 40 C120 38 120 34 124 32 L164 10 C166 8 168 8 170 8 Z" fill="url(#slabTopDark)" stroke="#2a524a" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 10 */}
-            <g filter="url(#tileShadow)" opacity="0.55" className="cursor-pointer" onClick={() => handleTileClick(9)}>
-              <path d="M168 90 L216 118 L216 134 L168 106 Z" fill="url(#sideLeft)" />
-              <path d="M264 90 L216 118 L216 134 L264 106 Z" fill="url(#sideRight)" />
-              <path d="M216 64 C220 64 224 66 262 88 C266 90 266 94 262 96 L220 120 C218 121 214 121 212 120 L170 96 C166 94 166 90 170 88 L210 66 C212 64 214 64 216 64 Z" fill="url(#slabTopDark)" stroke="#2b594f" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 9 */}
-            <g filter="url(#tileShadow)" opacity="0.65" className="cursor-pointer" onClick={() => handleTileClick(8)}>
-              <path d="M122 146 L170 174 L170 190 L122 162 Z" fill="url(#sideLeft)" />
-              <path d="M218 146 L170 174 L170 190 L218 162 Z" fill="url(#sideRight)" />
-              <path d="M170 120 C174 120 178 122 216 144 C220 146 220 150 216 152 L174 176 C172 177 168 177 166 176 L124 152 C120 150 120 146 124 144 L164 122 C166 120 168 120 170 120 Z" fill="url(#slabTopMuted)" stroke="#2d5e53" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 8 */}
-            <g filter="url(#tileShadow)" opacity="0.72" className="cursor-pointer" onClick={() => handleTileClick(7)}>
-              <path d="M76 202 L124 230 L124 246 L76 218 Z" fill="url(#sideLeft)" />
-              <path d="M172 202 L124 230 L124 246 L172 218 Z" fill="url(#sideRight)" />
-              <path d="M124 176 C128 176 132 178 170 200 C174 202 174 206 170 208 L128 232 C126 233 122 233 120 232 L78 208 C74 206 74 202 78 200 L118 178 C120 176 122 176 124 176 Z" fill="url(#slabTopMuted)" stroke="#31665a" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 7 */}
-            <g filter="url(#tileShadow)" opacity="0.78" className="cursor-pointer" onClick={() => handleTileClick(6)}>
-              <path d="M122 258 L170 286 L170 302 L122 274 Z" fill="url(#sideLeft)" />
-              <path d="M218 258 L170 286 L170 302 L218 274 Z" fill="url(#sideRight)" />
-              <path d="M170 232 C174 232 178 234 216 256 C220 258 220 262 216 264 L174 288 C172 289 168 289 166 288 L124 264 C120 262 120 258 124 256 L164 234 C166 232 168 232 170 232 Z" fill="url(#slabTopMuted)" stroke="#336d60" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 6 */}
-            <g filter="url(#tileShadow)" opacity="0.83" className="cursor-pointer" onClick={() => handleTileClick(5)}>
-              <path d="M168 314 L216 342 L216 358 L168 330 Z" fill="url(#sideLeft)" />
-              <path d="M264 314 L216 342 L216 358 L264 330 Z" fill="url(#sideRight)" />
-              <path d="M216 288 C220 288 224 290 262 312 C266 314 266 318 262 320 L220 344 C218 345 214 345 212 344 L170 320 C166 318 166 314 170 312 L210 290 C212 288 214 288 216 288 Z" fill="url(#slabTopBright)" stroke="#367366" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 5 */}
-            <g filter="url(#tileShadow)" opacity="0.88" className="cursor-pointer" onClick={() => handleTileClick(4)}>
-              <path d="M122 370 L170 398 L170 414 L122 386 Z" fill="url(#sideLeft)" />
-              <path d="M218 370 L170 398 L170 414 L218 386 Z" fill="url(#sideRight)" />
-              <path d="M170 344 C174 344 178 346 216 368 C220 370 220 374 216 376 L174 400 C172 401 168 401 166 400 L124 376 C120 374 120 370 124 368 L164 346 C166 344 168 344 170 344 Z" fill="url(#slabTopBright)" stroke="#39796b" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 4 */}
-            <g filter="url(#tileShadow)" opacity="0.92" className="cursor-pointer" onClick={() => handleTileClick(3)}>
-              <path d="M76 426 L124 454 L124 470 L76 442 Z" fill="url(#sideLeft)" />
-              <path d="M172 426 L124 454 L124 470 L172 442 Z" fill="url(#sideRight)" />
-              <path d="M124 400 C128 400 132 402 170 424 C174 426 174 430 170 432 L128 456 C126 457 122 457 120 456 L78 432 C74 430 74 426 78 424 L118 402 C120 400 122 400 124 400 Z" fill="url(#slabTopBright)" stroke="#3d8272" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 3 */}
-            <g filter="url(#tileShadow)" opacity="0.95" className="cursor-pointer" onClick={() => handleTileClick(2)}>
-              <path d="M122 482 L170 510 L170 526 L122 498 Z" fill="url(#sideLeft)" />
-              <path d="M218 482 L170 510 L170 526 L218 498 Z" fill="url(#sideRight)" />
-              <path d="M170 456 C174 456 178 458 216 480 C220 482 220 486 216 488 L174 512 C172 513 168 513 166 512 L124 488 C120 486 120 482 124 480 L164 458 C166 456 168 456 170 456 Z" fill="url(#slabTopBright)" stroke="#408d7c" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 2 */}
-            <g filter="url(#tileShadow)" className="cursor-pointer" onClick={() => handleTileClick(1)}>
-              <path d="M168 538 L216 566 L216 584 L168 556 Z" fill="url(#sideLeft)" />
-              <path d="M264 538 L216 566 L216 584 L264 556 Z" fill="url(#sideRight)" />
-              <path d="M216 512 C220 512 224 514 262 536 C266 538 266 542 262 544 L220 568 C218 569 214 569 212 568 L170 544 C166 542 166 538 170 536 L210 514 C212 512 214 512 216 512 Z" fill="url(#slabTopBright)" stroke="#469c89" strokeWidth="1.5" />
-            </g>
-
-            {/* Tile 1: ACTIVE GLOWING STEP */}
-            <g
-              filter="url(#activeGlow)"
-              className="cursor-pointer transition-transform hover:scale-105"
-              onClick={() => handleTileClick(0)}
-            >
-              <path d="M122 594 L170 624 L170 644 L122 614 Z" fill="url(#glowSideLeft)" />
-              <path d="M218 594 L170 624 L170 644 L218 614 Z" fill="url(#glowSideRight)" />
-              <path
-                d="M170 566 C174 566 178 568 218 592 C222 594 222 598 218 600 L174 626 C172 627 168 627 166 626 L122 600 C118 598 118 594 122 592 L164 568 C166 566 168 566 170 566 Z"
-                fill="url(#slabTopGlow)"
-                stroke="#ffffff"
-                strokeOpacity="0.75"
-                strokeWidth="1.5"
-              />
-              <ellipse cx="170" cy="596" rx="18" ry="9" fill="white" fillOpacity="0.4" filter="blur(2px)" />
-            </g>
-          </svg>
-
-          {/* Bouncing NEXT Indicator Tooltip */}
-          <div className="absolute top-[528px] left-[142px] z-30 flex flex-col items-center pointer-events-none animate-bounce">
-            <div className="bg-white text-[#0e0e0e] px-3.5 py-1 rounded-xl font-brand font-black text-[11px] tracking-wider uppercase shadow-[0_4px_14px_rgba(62,207,142,0.6)]">
-              <span className="font-extrabold">Next</span>
-            </div>
-            <div className="w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white mx-auto -mt-[1px]" />
-          </div>
+          <button
+            type="button"
+            onClick={startNextLesson}
+            className="flex-1 h-12 rounded-xl bg-[#3ecf8e] hover:bg-[#34b27b] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer"
+          >
+            <span>NEXT LESSON</span>
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+            </svg>
+          </button>
         </div>
+      </div>
 
-        {/* Bottom Control Bar (Learn To Code + Action Buttons) */}
-        <div className="w-full bg-[#171717] border-2 border-[#2e2e2e] rounded-2xl p-4 shadow-xl flex flex-col gap-3 mt-12 mb-4 z-30">
-          <div className="flex items-center justify-between px-1">
-            <span className="font-brand font-extrabold text-sm uppercase tracking-wider text-white">
-              Learn To Code
-            </span>
-            <span className="text-xs text-[#3ecf8e] font-brand font-bold">
-              {stats.completedLessons.length} / 11 Modul
-            </span>
-          </div>
+      {/* Floating Button "Ke Langkah Aktif" when user scrolls roadmap up */}
+      {isScrolledUp && (
+        <button
+          onClick={scrollToActiveStep}
+          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-full bg-[#1c1b1b]/95 hover:bg-[#242424] border border-[#3ecf8e] text-xs font-brand font-bold text-[#3ecf8e] shadow-2xl flex items-center gap-1.5 cursor-pointer transition-all animate-bounce whitespace-nowrap"
+        >
+          <ChevronDown className="w-4 h-4" />
+          <span>Ke Langkah Aktif</span>
+        </button>
+      )}
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                playSound('click');
-                setShowSyllabus(true);
-              }}
-              className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] active:translate-y-0.5 border border-[#393939] shadow-[0_3px_0_#121212] flex items-center justify-center text-white transition-all cursor-pointer"
-              title="Daftar Pelajaran"
+      {/* SCROLLABLE ROADMAP CONTAINER (HANYA INI YANG BERGERAK SAAT SCROLL) */}
+      <div
+        ref={roadmapScrollRef}
+        onScroll={handleRoadmapScroll}
+        className="w-full h-full overflow-y-auto overflow-x-hidden pt-6 pb-36 scroll-smooth select-none flex flex-col items-center"
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#2e2e2e transparent' }}
+      >
+        {/* ISOMETRIC ROADMAP SVG (SCROLLS SMOOTHLY IN CENTER) */}
+        <div className="relative w-full flex items-center justify-center py-2 select-none">
+          <div className="relative w-[340px] h-[1840px] flex items-center justify-center overflow-visible">
+            <svg
+              className="w-full h-full overflow-visible"
+              viewBox="0 0 340 1840"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
-              </svg>
-            </button>
+              <defs>
+                <linearGradient id="slabTopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#3ecf8e" />
+                  <stop offset="100%" stopColor="#228258" />
+                </linearGradient>
+                <linearGradient id="slabTopBright" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#265c52" />
+                  <stop offset="100%" stopColor="#163b34" />
+                </linearGradient>
+                <linearGradient id="slabTopMuted" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#1f4b43" />
+                  <stop offset="100%" stopColor="#112925" />
+                </linearGradient>
+                <linearGradient id="slabTopDark" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#183a34" />
+                  <stop offset="100%" stopColor="#0d1e1b" />
+                </linearGradient>
+                <linearGradient id="slabTopLocked" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#1a1a1a" />
+                  <stop offset="100%" stopColor="#111111" />
+                </linearGradient>
+                <linearGradient id="sideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#142e2a" />
+                  <stop offset="100%" stopColor="#081412" />
+                </linearGradient>
+                <linearGradient id="sideRight" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#0f2421" />
+                  <stop offset="100%" stopColor="#050c0a" />
+                </linearGradient>
+                <linearGradient id="glowSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#1f6e4a" />
+                  <stop offset="100%" stopColor="#0d3623" />
+                </linearGradient>
+                <linearGradient id="glowSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#175438" />
+                  <stop offset="100%" stopColor="#092618" />
+                </linearGradient>
+                <filter id="tileShadow" x="-30%" y="-20%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.6" />
+                </filter>
+                <filter id="activeGlow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="#3ecf8e" floodOpacity="0.5" />
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
+                </filter>
+              </defs>
 
-            <button
-              type="button"
-              onClick={startNextLesson}
-              className="flex-1 h-12 rounded-xl bg-[#3ecf8e] hover:bg-[#34b27b] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer"
+              {/* RENDER ALL ISOMETRIC SLABS */}
+              {tiles.map((tile) => {
+                const { id, cx, cy, status } = tile;
+                const isActive = status === 'active';
+                const isUnit1 = tile.unit === 1;
+
+                if (isActive) {
+                  return (
+                    <g
+                      key={id}
+                      filter="url(#activeGlow)"
+                      className="cursor-pointer transition-transform hover:scale-105"
+                      onClick={() => handleTileClick(tile)}
+                    >
+                      <path d={`M${cx - 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx - 48} ${cy + 48} Z`} fill="url(#glowSideLeft)" />
+                      <path d={`M${cx + 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx + 48} ${cy + 48} Z`} fill="url(#glowSideRight)" />
+                      <path
+                        d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 48} ${cy + 26} C${cx + 52} ${cy + 28} ${cx + 52} ${cy + 32} ${cx + 48} ${cy + 34} L${cx + 4} ${cy + 60} C${cx + 2} ${cy + 61} ${cx - 2} ${cy + 61} ${cx - 4} ${cy + 60} L${cx - 48} ${cy + 34} C${cx - 52} ${cy + 32} ${cx - 52} ${cy + 28} ${cx - 48} ${cy + 26} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
+                        fill="url(#slabTopGlow)"
+                        stroke="#ffffff"
+                        strokeOpacity="0.75"
+                        strokeWidth="1.5"
+                      />
+                      <ellipse cx={cx} cy={cy + 30} rx="18" ry="9" fill="white" fillOpacity="0.4" filter="blur(2px)" />
+                    </g>
+                  );
+                }
+
+                // Normal / Locked / Milestone Slabs
+                const fillPattern = isUnit1
+                  ? tile.id > 6
+                    ? 'url(#slabTopBright)'
+                    : 'url(#slabTopMuted)'
+                  : 'url(#slabTopLocked)';
+                const strokeColor = isUnit1 ? '#336d60' : '#2a2a2a';
+                const opacity = isUnit1 ? 0.85 : 0.55;
+
+                return (
+                  <g
+                    key={id}
+                    filter="url(#tileShadow)"
+                    opacity={opacity}
+                    className="cursor-pointer transition-opacity hover:opacity-100"
+                    onClick={() => handleTileClick(tile)}
+                  >
+                    <path d={`M${cx - 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx - 48} ${cy + 42} Z`} fill="url(#sideLeft)" />
+                    <path d={`M${cx + 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx + 48} ${cy + 42} Z`} fill="url(#sideRight)" />
+                    <path
+                      d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 46} ${cy + 24} C${cx + 50} ${cy + 26} ${cx + 50} ${cy + 30} ${cx + 46} ${cy + 32} L${cx + 4} ${cy + 56} C${cx + 2} ${cy + 57} ${cx - 2} ${cy + 57} ${cx - 4} ${cy + 56} L${cx - 46} ${cy + 32} C${cx - 50} ${cy + 30} ${cx - 50} ${cy + 26} ${cx - 46} ${cy + 24} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
+                      fill={fillPattern}
+                      stroke={strokeColor}
+                      strokeWidth="1.5"
+                    />
+                    {!isUnit1 && (
+                      <circle cx={cx} cy={cy + 28} r="6" fill="#0e0e0e" fillOpacity="0.6" />
+                    )}
+                  </g>
+                );
+              })}
+
+              {/* MILESTONE TROPHIES ON THE PATH */}
+              {/* Unit 1 Trophy Milestone (Above step 11) */}
+              <g transform="translate(150, 1070)" className="cursor-pointer">
+                <circle cx="20" cy="20" r="18" fill="#171717" stroke="#facc15" strokeWidth="2" />
+                <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#facc15" />
+                <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#facc15" strokeWidth="1.5" />
+                <path d="M28 14 h2 c1.1 0 2 .9 2 2 v1 c0 1.7 -1.3 3 -3 3 h-1" fill="none" stroke="#facc15" strokeWidth="1.5" />
+                <line x1="20" y1="24" x2="20" y2="28" stroke="#facc15" strokeWidth="2" />
+                <line x1="16" y1="28" x2="24" y2="28" stroke="#facc15" strokeWidth="2" />
+              </g>
+
+              {/* Unit 2 Trophy Milestone (Above step 18) */}
+              <g transform="translate(150, 560)" className="cursor-pointer opacity-70">
+                <circle cx="20" cy="20" r="18" fill="#171717" stroke="#38bdf8" strokeWidth="2" />
+                <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#38bdf8" />
+                <line x1="20" y1="24" x2="20" y2="28" stroke="#38bdf8" strokeWidth="2" />
+                <line x1="16" y1="28" x2="24" y2="28" stroke="#38bdf8" strokeWidth="2" />
+              </g>
+            </svg>
+
+            {/* Bouncing NEXT Indicator Tooltip at Active Step 1 */}
+            <div
+              ref={activeStepRef}
+              className="absolute top-[1650px] left-[142px] z-20 flex flex-col items-center pointer-events-none animate-bounce"
             >
-              <span>Next Lesson</span>
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-              </svg>
-            </button>
+              <div className="bg-white text-[#0e0e0e] px-3.5 py-1 rounded-xl font-brand font-black text-[11px] tracking-wider uppercase shadow-[0_4px_14px_rgba(62,207,142,0.6)]">
+                <span className="font-extrabold">Next</span>
+              </div>
+              <div className="w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white mx-auto -mt-[1px]" />
+            </div>
           </div>
         </div>
       </div>
@@ -249,7 +320,7 @@ export const LearningMap: React.FC = () => {
                 <span className="text-[10px] font-brand font-extrabold uppercase text-[#3ecf8e] tracking-wider">
                   Silabus Pembelajaran
                 </span>
-                <h3 className="text-lg font-brand font-bold text-white">Unit 1: Menawarkan Minuman</h3>
+                <h3 className="text-lg font-brand font-bold text-white">Materi Pembelajaran Python</h3>
               </div>
               <button
                 onClick={() => setShowSyllabus(false)}
@@ -268,7 +339,7 @@ export const LearningMap: React.FC = () => {
                     key={item.id}
                     onClick={() => {
                       setShowSyllabus(false);
-                      handleTileClick(idx);
+                      handleTileClick(tiles[idx]);
                     }}
                     className={`p-3.5 rounded-xl border flex items-center justify-between cursor-pointer transition-colors ${
                       isCurrent

@@ -13,7 +13,7 @@ export const RightWidgets: React.FC = () => {
 
   return (
     <aside
-      className="w-full lg:w-[330px] xl:w-[360px] shrink-0 flex flex-col gap-5 pt-1"
+      className="w-full lg:w-[330px] xl:w-[360px] shrink-0 h-full overflow-y-auto pr-1 flex flex-col gap-5 pt-1 [scrollbar-width:none]"
       aria-label="Statistik dan Widget"
     >
       {/* Top Stats Row */}

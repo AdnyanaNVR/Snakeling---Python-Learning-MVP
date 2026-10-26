@@ -53,16 +53,16 @@ const MainShell: React.FC = () => {
       {/* LEFT NAVIGATION SIDEBAR */}
       <Sidebar onOpenSettings={() => setShowSettings(true)} />
 
-      {/* CENTER & RIGHT CONTENT CONTAINER */}
-      <main className="flex-1 flex justify-center min-h-screen overflow-y-auto pb-20 lg:pb-6">
-        <div className="max-w-[1160px] w-full flex flex-col lg:flex-row justify-between px-4 sm:px-6 py-6 gap-8">
+      {/* CENTER & RIGHT CONTENT CONTAINER (DESKTOP FIXED SHELL, MOBILE SCROLLABLE) */}
+      <main className="flex-1 flex justify-center h-screen overflow-hidden pb-16 lg:pb-0">
+        <div className="max-w-[1200px] w-full h-full flex flex-col lg:flex-row justify-between px-4 sm:px-6 py-4 gap-8">
           {/* CENTER VIEW */}
           {activeTab === 'belajar' && <LearningMap />}
-          {activeTab === 'papan_skor' && <LeaderboardView />}
-          {activeTab === 'toko' && <ShopView />}
-          {activeTab === 'profil' && <ProfileView onOpenSettings={() => setShowSettings(true)} />}
+          {activeTab === 'papan_skor' && <div className="flex-1 h-full overflow-y-auto pr-1"><LeaderboardView /></div>}
+          {activeTab === 'toko' && <div className="flex-1 h-full overflow-y-auto pr-1"><ShopView /></div>}
+          {activeTab === 'profil' && <div className="flex-1 h-full overflow-y-auto pr-1"><ProfileView onOpenSettings={() => setShowSettings(true)} /></div>}
 
-          {/* RIGHT STATS & PROMOTIONS SIDEBAR */}
+          {/* RIGHT STATS & PROMOTIONS SIDEBAR (STAYS IN PLACE) */}
           <RightWidgets />
         </div>
       </main>
