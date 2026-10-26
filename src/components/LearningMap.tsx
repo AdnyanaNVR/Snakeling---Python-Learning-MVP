@@ -18,7 +18,6 @@ export const LearningMap: React.FC = () => {
   const [showSyllabus, setShowSyllabus] = useState(false);
   const [isScrolledUp, setIsScrolledUp] = useState(false);
 
-  const activeStepRef = useRef<HTMLDivElement>(null);
   const roadmapScrollRef = useRef<HTMLDivElement>(null);
 
   // Generate multi-unit winding staircase steps
@@ -148,7 +147,7 @@ export const LearningMap: React.FC = () => {
       {isScrolledUp && (
         <button
           onClick={scrollToActiveStep}
-          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-full bg-[#1c1b1b]/95 hover:bg-[#242424] border border-[#3ecf8e] text-xs font-brand font-bold text-[#3ecf8e] shadow-2xl flex items-center gap-1.5 cursor-pointer transition-all animate-bounce whitespace-nowrap"
+          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-full bg-[#1c1b1b]/95 hover:bg-[#242424] border border-[#3ecf8e] text-xs font-brand font-bold text-[#3ecf8e] shadow-2xl flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 whitespace-nowrap"
         >
           <ChevronDown className="w-4 h-4" />
           <span>Ke Langkah Aktif</span>
@@ -217,65 +216,113 @@ export const LearningMap: React.FC = () => {
                 </filter>
               </defs>
 
-              {/* RENDER ALL ISOMETRIC SLABS */}
-              {tiles.map((tile) => {
-                const { id, cx, cy, status } = tile;
-                const isActive = status === 'active';
-                const isUnit1 = tile.unit === 1;
+              {/* 1. RENDER BACKGROUND TILES IN ISOMETRIC ORDER (TOP TO BOTTOM) */}
+              {tiles
+                .filter((tile) => tile.status !== 'active')
+                .sort((a, b) => a.cy - b.cy)
+                .map((tile) => {
+                  const { id, cx, cy } = tile;
+                  const isUnit1 = tile.unit === 1;
+                  const fillPattern = isUnit1
+                    ? tile.id > 6
+                      ? 'url(#slabTopBright)'
+                      : 'url(#slabTopMuted)'
+                    : 'url(#slabTopLocked)';
+                  const strokeColor = isUnit1 ? '#336d60' : '#2a2a2a';
+                  const opacity = isUnit1 ? 0.85 : 0.55;
 
-                if (isActive) {
                   return (
                     <g
                       key={id}
-                      filter="url(#activeGlow)"
-                      className="cursor-pointer transition-transform hover:scale-105"
+                      className="roadmap-tile-group"
                       onClick={() => handleTileClick(tile)}
                     >
+                      {/* Static Hit Target */}
+                      <rect
+                        x={cx - 56}
+                        y={cy - 10}
+                        width={112}
+                        height={100}
+                        fill="transparent"
+                        style={{ pointerEvents: 'all' }}
+                      />
+                      {/* Visual Slab: Moves down smoothly on hover without dribble */}
+                      <g className="roadmap-tile-slab" filter="url(#tileShadow)" opacity={opacity}>
+                        <path d={`M${cx - 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx - 48} ${cy + 42} Z`} fill="url(#sideLeft)" />
+                        <path d={`M${cx + 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx + 48} ${cy + 42} Z`} fill="url(#sideRight)" />
+                        <path
+                          d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 46} ${cy + 24} C${cx + 50} ${cy + 26} ${cx + 50} ${cy + 30} ${cx + 46} ${cy + 32} L${cx + 4} ${cy + 56} C${cx + 2} ${cy + 57} ${cx - 2} ${cy + 57} ${cx - 4} ${cy + 56} L${cx - 46} ${cy + 32} C${cx - 50} ${cy + 30} ${cx - 50} ${cy + 26} ${cx - 46} ${cy + 24} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
+                          fill={fillPattern}
+                          stroke={strokeColor}
+                          strokeWidth="1.5"
+                        />
+                        {!isUnit1 && (
+                          <circle cx={cx} cy={cy + 28} r="6" fill="#0e0e0e" fillOpacity="0.6" />
+                        )}
+                      </g>
+                    </g>
+                  );
+                })}
+
+              {/* 2. RENDER ACTIVE TILE + NEXT INDICATOR ON TOP LAYER (PALING ATAS AGAR TIDAK OVERLAP) */}
+              {(() => {
+                const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
+                const { id, cx, cy } = activeTile;
+                return (
+                  <g
+                    key={id}
+                    className="roadmap-tile-group"
+                    onClick={() => handleTileClick(activeTile)}
+                  >
+                    {/* Static Hit Target: Covers badge & slab, stays stationary so hover is never lost */}
+                    <rect
+                      x={cx - 56}
+                      y={cy - 52}
+                      width={112}
+                      height={144}
+                      fill="transparent"
+                      style={{ pointerEvents: 'all' }}
+                    />
+                    {/* Visual Slab: Moves down smoothly on hover without dribble */}
+                    <g className="roadmap-tile-slab" filter="url(#activeGlow)">
+                      {/* Active glowing slab geometry */}
                       <path d={`M${cx - 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx - 48} ${cy + 48} Z`} fill="url(#glowSideLeft)" />
                       <path d={`M${cx + 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx + 48} ${cy + 48} Z`} fill="url(#glowSideRight)" />
                       <path
                         d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 48} ${cy + 26} C${cx + 52} ${cy + 28} ${cx + 52} ${cy + 32} ${cx + 48} ${cy + 34} L${cx + 4} ${cy + 60} C${cx + 2} ${cy + 61} ${cx - 2} ${cy + 61} ${cx - 4} ${cy + 60} L${cx - 48} ${cy + 34} C${cx - 52} ${cy + 32} ${cx - 52} ${cy + 28} ${cx - 48} ${cy + 26} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
                         fill="url(#slabTopGlow)"
                         stroke="#ffffff"
-                        strokeOpacity="0.75"
+                        strokeOpacity="0.85"
                         strokeWidth="1.5"
                       />
                       <ellipse cx={cx} cy={cy + 30} rx="18" ry="9" fill="white" fillOpacity="0.4" filter="blur(2px)" />
+
+                      {/* NEXT Indicator Badge (PALING ATAS: Digambar di atas slab aktif & di layer paling depan) */}
+                      <g transform={`translate(${cx - 28}, ${cy - 44})`}>
+                        {/* Glow halo */}
+                        <rect x="-2" y="-2" width="60" height="28" rx="14" fill="#3ecf8e" fillOpacity="0.3" filter="blur(3px)" />
+                        {/* White pill */}
+                        <rect x="0" y="0" width="56" height="24" rx="12" fill="#ffffff" filter="drop-shadow(0 4px 12px rgba(62,207,142,0.8))" />
+                        {/* Downward triangle pointer */}
+                        <polygon points="22,24 34,24 28,30" fill="#ffffff" />
+                        {/* Bold NEXT label */}
+                        <text
+                          x="28"
+                          y="16"
+                          textAnchor="middle"
+                          fill="#0e0e0e"
+                          fontFamily="Montserrat, sans-serif"
+                          fontWeight="900"
+                          fontSize="11"
+                          letterSpacing="1.2"
+                        >
+                          NEXT
+                        </text>
+                      </g>
                     </g>
-                  );
-                }
-
-                // Normal / Locked / Milestone Slabs
-                const fillPattern = isUnit1
-                  ? tile.id > 6
-                    ? 'url(#slabTopBright)'
-                    : 'url(#slabTopMuted)'
-                  : 'url(#slabTopLocked)';
-                const strokeColor = isUnit1 ? '#336d60' : '#2a2a2a';
-                const opacity = isUnit1 ? 0.85 : 0.55;
-
-                return (
-                  <g
-                    key={id}
-                    filter="url(#tileShadow)"
-                    opacity={opacity}
-                    className="cursor-pointer transition-opacity hover:opacity-100"
-                    onClick={() => handleTileClick(tile)}
-                  >
-                    <path d={`M${cx - 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx - 48} ${cy + 42} Z`} fill="url(#sideLeft)" />
-                    <path d={`M${cx + 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx + 48} ${cy + 42} Z`} fill="url(#sideRight)" />
-                    <path
-                      d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 46} ${cy + 24} C${cx + 50} ${cy + 26} ${cx + 50} ${cy + 30} ${cx + 46} ${cy + 32} L${cx + 4} ${cy + 56} C${cx + 2} ${cy + 57} ${cx - 2} ${cy + 57} ${cx - 4} ${cy + 56} L${cx - 46} ${cy + 32} C${cx - 50} ${cy + 30} ${cx - 50} ${cy + 26} ${cx - 46} ${cy + 24} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
-                      fill={fillPattern}
-                      stroke={strokeColor}
-                      strokeWidth="1.5"
-                    />
-                    {!isUnit1 && (
-                      <circle cx={cx} cy={cy + 28} r="6" fill="#0e0e0e" fillOpacity="0.6" />
-                    )}
                   </g>
                 );
-              })}
+              })()}
 
               {/* MILESTONE TROPHIES ON THE PATH */}
               {/* Unit 1 Trophy Milestone (Above step 11) */}
@@ -296,17 +343,6 @@ export const LearningMap: React.FC = () => {
                 <line x1="16" y1="28" x2="24" y2="28" stroke="#38bdf8" strokeWidth="2" />
               </g>
             </svg>
-
-            {/* Bouncing NEXT Indicator Tooltip at Active Step 1 */}
-            <div
-              ref={activeStepRef}
-              className="absolute top-[1650px] left-[142px] z-20 flex flex-col items-center pointer-events-none animate-bounce"
-            >
-              <div className="bg-white text-[#0e0e0e] px-3.5 py-1 rounded-xl font-brand font-black text-[11px] tracking-wider uppercase shadow-[0_4px_14px_rgba(62,207,142,0.6)]">
-                <span className="font-extrabold">Next</span>
-              </div>
-              <div className="w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white mx-auto -mt-[1px]" />
-            </div>
           </div>
         </div>
       </div>
