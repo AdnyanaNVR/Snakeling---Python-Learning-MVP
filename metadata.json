@@ -1,0 +1,6 @@
+{
+  "name": "Snakeling - Belajar Pemrograman Python",
+  "description": "Aplikasi gamifikasi belajar bahasa pemrograman Python interaktif bergaya Duolingo dengan peta belajar isometrik, papan skor, dan toko perlengkapan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

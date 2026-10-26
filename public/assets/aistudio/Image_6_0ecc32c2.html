@@ -1,0 +1,284 @@
+<!DOCTYPE html><html class="dark" lang="id" style=""><head></head><body class="bg-[#121212] text-[#fafafa] font-sans antialiased min-h-screen flex selection:bg-phosphor selection:text-black"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Snakeling - Peta Belajar Python</title>
+<!-- Google Fonts: Montserrat & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              950: '#0e0e0e',
+              900: '#121212',
+              850: '#171717',
+              800: '#1c1b1b',
+              750: '#242424',
+              700: '#2e2e2e',
+              600: '#393939'
+            },
+            phosphor: {
+              DEFAULT: '#3ecf8e',
+              hover: '#34b27b',
+              deep: '#1e7b52',
+              shadow: '#155237',
+              glow: 'rgba(62, 207, 142, 0.25)'
+            },
+            mist: '#b4b4b4',
+            smoke: '#898989',
+            gem: '#38bdf8',
+            flame: '#ff9600',
+            heart: '#ef4444'
+          },
+          fontFamily: {
+            brand: ['Montserrat', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Stylesheet -->
+<style data-purpose="custom-buttons">
+    /* 3D tactile button effects following Duolingo style */
+    .tactile-btn-primary {
+      background-color: #3ecf8e;
+      color: #0e0e0e;
+      box-shadow: 0 4px 0 #1b6343;
+      transition: all 0.1s ease-in-out;
+    }
+    .tactile-btn-primary:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #1b6343;
+    }
+    
+    .tactile-btn-secondary {
+      background-color: #242424;
+      border: 2px solid #393939;
+      color: #38bdf8;
+      box-shadow: 0 4px 0 #171717;
+      transition: all 0.1s ease-in-out;
+    }
+    .tactile-btn-secondary:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #171717;
+    }
+
+    .tactile-node-active {
+      background-color: #3ecf8e;
+      box-shadow: 0 7px 0 #1b6343, 0 10px 24px rgba(62, 207, 142, 0.35);
+      transition: all 0.12s ease;
+    }
+    .tactile-node-active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 0 #1b6343, 0 14px 28px rgba(62, 207, 142, 0.45);
+    }
+    .tactile-node-active:active {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 #1b6343, 0 6px 12px rgba(62, 207, 142, 0.25);
+    }
+
+    .tactile-node-inactive {
+      background-color: #242424;
+      border: 3px solid #2e2e2e;
+      box-shadow: 0 6px 0 #171717;
+      transition: all 0.12s ease;
+    }
+    .tactile-node-inactive:hover {
+      background-color: #2a2a2a;
+      border-color: #393939;
+    }
+  </style>
+<style data-purpose="path-animations">
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(1.5deg); }
+    }
+    @keyframes subtlePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.85; }
+    }
+    .mascot-float {
+      animation: gentleFloat 4.2s ease-in-out infinite;
+    }
+    .active-ping {
+      animation: subtlePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+<!-- END: Custom Stylesheet -->
+
+
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-[250px] xl:w-[270px] h-screen sticky top-0 flex-shrink-0 border-r border-obsidian-700 bg-[#121212] flex flex-col justify-between py-6 px-4 z-40" data-purpose="main-navigation">
+<div>
+<!-- Brand Logo -->
+<a aria-label="Snakeling Home" class="flex items-center gap-2.5 px-3 mb-8 group" href="#">
+
+<span class="font-brand font-extrabold text-2xl tracking-tight text-[#fafafa] group-hover:text-phosphor transition-colors">
+          snakeling
+        </span>
+</a>
+<!-- Navigation Links -->
+<nav aria-label="Sidebar Menu" class="space-y-1.5">
+<!-- Belajar (Active) -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-phosphor/10 border-2 border-phosphor/80 text-phosphor font-brand font-bold text-sm tracking-wide shadow-[0_0_15px_rgba(62,207,142,0.15)] transition-all" href="#">
+<span class="w-7 h-7 flex items-center justify-center">
+<svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+<path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"></path>
+</svg>
+</span>
+<span class="">BELAJAR</span>
+</a>
+<!-- Bunyi / Audio Lab -->
+
+<!-- Papan Skor -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl text-mist hover:text-white hover:bg-obsidian-800 border-2 border-transparent font-brand font-bold text-sm tracking-wide transition-all" href="#">
+<span class="w-7 h-7 flex items-center justify-center">
+<svg class="w-6 h-6 fill-current text-[#facc15]" viewBox="0 0 24 24">
+<path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"></path>
+</svg>
+</span>
+<span class="">PAPAN SKOR</span>
+</a>
+<!-- Misi -->
+
+<!-- Toko -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl text-mist hover:text-white hover:bg-obsidian-800 border-2 border-transparent font-brand font-bold text-sm tracking-wide transition-all" href="#">
+<span class="w-7 h-7 flex items-center justify-center">
+<svg class="w-6 h-6 fill-current text-[#f43f5e]" viewBox="0 0 24 24">
+<path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"></path>
+</svg>
+</span>
+<span class="">TOKO</span>
+</a>
+<!-- Profil -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl text-mist hover:text-white hover:bg-obsidian-800 border-2 border-transparent font-brand font-bold text-sm tracking-wide transition-all" href="#">
+<span class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#3ecf8e] to-[#1f6b48] flex items-center justify-center ring-2 ring-obsidian-700 overflow-hidden flex-shrink-0"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe8-MlpuTDOpho67_rQqKGlNa9mJ3w1PpxCcZUPvkHsobfAytLdjy_G3r2vPtACiqLFGXLvHvVs3ihUziy8iaXjmGgIU9Zx_J8CqxgkvJaxLQOxY6DpxIti77idq93ZBPV46Ik7hhSG_FSY4LkLzF9TsLzZy3rLH-A6vIlF48sNn3bam-IsGB81DyxEQAY3_s93T6eJ5touHWvV7pOkRujFgLY177Ft2oyEiEefJZ1bi8JoewgLKu0R6MBkBX0tOpy7w" alt="Profil Mascot" class="w-full h-full object-cover object-center scale-110"></span>
+<span class="">PROFIL</span>
+</a>
+<!-- Lainnya -->
+
+</nav>
+</div>
+<!-- Sidebar footer subtle status -->
+
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContentArea (Center & Right combined container) -->
+<main class="flex-1 flex justify-center min-h-screen overflow-y-auto">
+<div class="max-w-[1080px] w-full flex flex-col lg:flex-row justify-between px-4 sm:px-6 py-6 gap-8">
+<!-- BEGIN: CenterLearningPath -->
+<section class="flex-1 max-w-[580px] mx-auto w-full flex flex-col items-center" data-purpose="learning-map-path">
+<!-- Unit Header Sticky Banner -->
+<header class="w-full sticky top-3 z-30 mt-6 mb-3 rounded-2xl border-2 border-[#2e2e2e] shadow-[0_8px_20px_rgba(0,0,0,0.5),0_0_15px_rgba(62,207,142,0.15)] p-4 sm:p-5 flex items-center justify-between backdrop-blur-md max-w-[480px] mx-auto" style="background-color: rgb(31, 107, 72);">
+<div class="space-y-0.5 text-left">
+<div class="flex items-center gap-2">
+
+<span class="text-xs font-brand font-extrabold uppercase tracking-wider text-phosphor">LEVEL 1, UNIT 1</span>
+</div>
+<h1 class="text-lg sm:text-xl font-brand font-black text-white tracking-tight">
+              Menawarkan dan menerima minuman
+            </h1>
+</div>
+<!-- Buku Panduan Button -->
+
+</header>
+<!-- Winding Stepping Nodes Map -->
+<div class="relative w-full flex flex-col items-center py-4 select-none"><!-- Isometric Chess Staircase Roadmap Canvas -->
+<div class="relative w-full max-w-[480px] mx-auto flex flex-col items-center select-none pt-2 pb-6">
+  <!-- Isometric Board Grid Scene -->
+  <div class="relative w-[340px] h-[680px] mx-auto flex items-center justify-center overflow-visible"><svg class="w-full h-full overflow-visible" viewBox="0 0 340 680" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="slabTopGlow" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3ecf8e"></stop><stop offset="100%" stop-color="#228258"></stop></linearGradient><linearGradient id="slabTopBright" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#265c52"></stop><stop offset="100%" stop-color="#163b34"></stop></linearGradient><linearGradient id="slabTopMuted" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1f4b43"></stop><stop offset="100%" stop-color="#112925"></stop></linearGradient><linearGradient id="slabTopDark" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#183a34"></stop><stop offset="100%" stop-color="#0d1e1b"></stop></linearGradient><linearGradient id="sideLeft" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#142e2a"></stop><stop offset="100%" stop-color="#081412"></stop></linearGradient><linearGradient id="sideRight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0f2421"></stop><stop offset="100%" stop-color="#050c0a"></stop></linearGradient><linearGradient id="glowSideLeft" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1f6e4a"></stop><stop offset="100%" stop-color="#0d3623"></stop></linearGradient><linearGradient id="glowSideRight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#175438"></stop><stop offset="100%" stop-color="#092618"></stop></linearGradient><filter id="tileShadow" x="-30%" y="-20%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.6"></feDropShadow></filter><filter id="activeGlow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#3ecf8e" flood-opacity="0.45"></feDropShadow><feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.7"></feDropShadow></filter></defs><g filter="url(#tileShadow)" opacity="0.45"><path d="M122 34 L170 62 L170 78 L122 50 Z" fill="url(#sideLeft)"></path><path d="M218 34 L170 62 L170 78 L218 50 Z" fill="url(#sideRight)"></path><path d="M170 8 C174 8 178 10 216 32 C220 34 220 38 216 40 L174 64 C172 65 168 65 166 64 L124 40 C120 38 120 34 124 32 L164 10 C166 8 168 8 170 8 Z" fill="url(#slabTopDark)" stroke="#2a524a" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.55"><path d="M168 90 L216 118 L216 134 L168 106 Z" fill="url(#sideLeft)"></path><path d="M264 90 L216 118 L216 134 L264 106 Z" fill="url(#sideRight)"></path><path d="M216 64 C220 64 224 66 262 88 C266 90 266 94 262 96 L220 120 C218 121 214 121 212 120 L170 96 C166 94 166 90 170 88 L210 66 C212 64 214 64 216 64 Z" fill="url(#slabTopDark)" stroke="#2b594f" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.65"><path d="M122 146 L170 174 L170 190 L122 162 Z" fill="url(#sideLeft)"></path><path d="M218 146 L170 174 L170 190 L218 162 Z" fill="url(#sideRight)"></path><path d="M170 120 C174 120 178 122 216 144 C220 146 220 150 216 152 L174 176 C172 177 168 177 166 176 L124 152 C120 150 120 146 124 144 L164 122 C166 120 168 120 170 120 Z" fill="url(#slabTopMuted)" stroke="#2d5e53" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.72"><path d="M76 202 L124 230 L124 246 L76 218 Z" fill="url(#sideLeft)"></path><path d="M172 202 L124 230 L124 246 L172 218 Z" fill="url(#sideRight)"></path><path d="M124 176 C128 176 132 178 170 200 C174 202 174 206 170 208 L128 232 C126 233 122 233 120 232 L78 208 C74 206 74 202 78 200 L118 178 C120 176 122 176 124 176 Z" fill="url(#slabTopMuted)" stroke="#31665a" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.78"><path d="M122 258 L170 286 L170 302 L122 274 Z" fill="url(#sideLeft)"></path><path d="M218 258 L170 286 L170 302 L218 274 Z" fill="url(#sideRight)"></path><path d="M170 232 C174 232 178 234 216 256 C220 258 220 262 216 264 L174 288 C172 289 168 289 166 288 L124 264 C120 262 120 258 124 256 L164 234 C166 232 168 232 170 232 Z" fill="url(#slabTopMuted)" stroke="#336d60" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.83"><path d="M168 314 L216 342 L216 358 L168 330 Z" fill="url(#sideLeft)"></path><path d="M264 314 L216 342 L216 358 L264 330 Z" fill="url(#sideRight)"></path><path d="M216 288 C220 288 224 290 262 312 C266 314 266 318 262 320 L220 344 C218 345 214 345 212 344 L170 320 C166 318 166 314 170 312 L210 290 C212 288 214 288 216 288 Z" fill="url(#slabTopBright)" stroke="#367366" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.88"><path d="M122 370 L170 398 L170 414 L122 386 Z" fill="url(#sideLeft)"></path><path d="M218 370 L170 398 L170 414 L218 386 Z" fill="url(#sideRight)"></path><path d="M170 344 C174 344 178 346 216 368 C220 370 220 374 216 376 L174 400 C172 401 168 401 166 400 L124 376 C120 374 120 370 124 368 L164 346 C166 344 168 344 170 344 Z" fill="url(#slabTopBright)" stroke="#39796b" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.92"><path d="M76 426 L124 454 L124 470 L76 442 Z" fill="url(#sideLeft)"></path><path d="M172 426 L124 454 L124 470 L172 442 Z" fill="url(#sideRight)"></path><path d="M124 400 C128 400 132 402 170 424 C174 426 174 430 170 432 L128 456 C126 457 122 457 120 456 L78 432 C74 430 74 426 78 424 L118 402 C120 400 122 400 124 400 Z" fill="url(#slabTopBright)" stroke="#3d8272" stroke-width="1.5"></path></g><g filter="url(#tileShadow)" opacity="0.95"><path d="M122 482 L170 510 L170 526 L122 498 Z" fill="url(#sideLeft)"></path><path d="M218 482 L170 510 L170 526 L218 498 Z" fill="url(#sideRight)"></path><path d="M170 456 C174 456 178 458 216 480 C220 482 220 486 216 488 L174 512 C172 513 168 513 166 512 L124 488 C120 486 120 482 124 480 L164 458 C166 456 168 456 170 456 Z" fill="url(#slabTopBright)" stroke="#408d7c" stroke-width="1.5"></path></g><g filter="url(#tileShadow)"><path d="M168 538 L216 566 L216 584 L168 556 Z" fill="url(#sideLeft)"></path><path d="M264 538 L216 566 L216 584 L264 556 Z" fill="url(#sideRight)"></path><path d="M216 512 C220 512 224 514 262 536 C266 538 266 542 262 544 L220 568 C218 569 214 569 212 568 L170 544 C166 542 166 538 170 536 L210 514 C212 512 214 512 216 512 Z" fill="url(#slabTopBright)" stroke="#469c89" stroke-width="1.5"></path></g><g filter="url(#activeGlow)" class="cursor-pointer transition-transform hover:scale-105"><path d="M122 594 L170 624 L170 644 L122 614 Z" fill="url(#glowSideLeft)"></path><path d="M218 594 L170 624 L170 644 L218 614 Z" fill="url(#glowSideRight)"></path><path d="M170 566 C174 566 178 568 218 592 C222 594 222 598 218 600 L174 626 C172 627 168 627 166 626 L122 600 C118 598 118 594 122 592 L164 568 C166 566 168 566 170 566 Z" fill="url(#slabTopGlow)" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"></path><ellipse cx="170" cy="596" rx="16" ry="8" fill="white" fill-opacity="0.35" filter="blur(2px)"></ellipse></g></svg><div class="absolute top-[528px] left-[142px] z-30 flex flex-col items-center pointer-events-none animate-bounce"><div class="bg-white text-[#0e0e0e] px-3.5 py-1 rounded-xl font-brand font-black text-[11px] tracking-wider uppercase shadow-[0_4px_14px_rgba(62,207,142,0.6)]"><span class="font-extrabold">Next</span></div><div class="w-0 h-0 border-x-5 border-x-transparent border-t-5 border-t-white mx-auto -mt-[1px]"></div></div></div>
+
+  <!-- Bottom Control Bar (Learn To Play + Action Buttons) -->
+  <div class="w-full bg-[#171717] border-2 border-[#2e2e2e] rounded-2xl p-4 shadow-xl flex flex-col gap-3 mt-12 mb-4 z-30"><div class="flex items-center justify-between px-1"><span class="font-brand font-extrabold text-sm uppercase tracking-wider text-white">Learn To Code</span></div><div class="flex items-center gap-3"><button type="button" class="w-12 h-12 flex-shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] active:translate-y-0.5 border border-[#393939] shadow-[0_3px_0_#121212] flex items-center justify-center text-white transition-all" title="Daftar Pelajaran"><svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"></path></svg></button><button type="button" class="flex-1 h-12 rounded-xl bg-[#3ecf8e] hover:bg-[#34b27b] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase"><span class="">Next Lesson</span><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"></path></svg></button></div></div>
+</div></div>
+</section>
+<!-- END: CenterLearningPath -->
+<!-- BEGIN: RightSidebarWidgets -->
+<aside class="w-full lg:w-[330px] xl:w-[360px] flex-shrink-0 flex flex-col gap-5 pt-1" data-purpose="stats-and-widgets">
+<!-- Top Stats Row (Python Course, Streaks, Gems, Hearts) -->
+<div class="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl bg-obsidian-850 border border-obsidian-700" data-purpose="top-stat-bar">
+<!-- Course Flag / Python Badge -->
+
+<!-- Streak Stat -->
+<div class="flex items-center gap-1.5 font-brand font-bold text-sm text-flame cursor-pointer hover:opacity-85 transition-opacity" title="1 Hari Streak">
+<svg class="w-5 h-5 fill-current animate-pulse" viewBox="0 0 24 24">
+<path d="M12 23c-4.97 0-9-4.03-9-9 0-4.97 4.03-9 9-9 .69 0 1.35.08 2 .23C12.87 6.8 12.3 8.8 12.3 11c0 2.21 1.79 4 4 4 .65 0 1.26-.16 1.8-.44.59 1.14.9 2.45.9 3.84 0 2.51-1.03 4.8-2.7 6.43-1.12.75-2.45 1.17-3.9 1.17h-.4zM13.5 2.1c-.32 1.4-1.12 2.61-2.26 3.42-.51.36-.74.99-.57 1.58.17.6.72.99 1.33.99.39 0 .78-.11 1.12-.34 1.46-.99 2.47-2.55 2.76-4.32.06-.39-.14-.77-.49-.95-.36-.18-.79-.11-1.07.16l-.82.66z"></path>
+</svg>
+<span class="tracking-tight text-white font-extrabold">1</span>
+</div>
+<!-- Gems Stat -->
+<div class="flex items-center gap-1.5 font-brand font-bold text-sm text-gem cursor-pointer hover:opacity-85 transition-opacity" title="505 Gems Tersedia">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+<path d="M6 3h12l4 6-10 12L2 9l4-6zm.85 2L4.2 8.5h4.65L7.5 5h-.65zm3.15 0l1.35 3.5h3.3L13.5 5H10zm4.5 0l-1.35 3.5h4.65L16.5 5h-2zm-7.65 5L12 17.5 7.15 10H6.85zm3.15 0l2 6.5 2-6.5h-4zm5.15 0L12 17.5 16.85 10h-.7z"></path>
+</svg>
+<span class="tracking-tight text-white font-extrabold">505</span>
+</div>
+<!-- Hearts Stat -->
+<div class="flex items-center gap-1.5 font-brand font-bold text-sm text-heart cursor-pointer hover:opacity-85 transition-opacity" title="5 Nyawa Penuh">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+</svg>
+<span class="tracking-tight text-white font-extrabold">5</span>
+</div>
+</div>
+<!-- Widget 1: Papan Skor Unlock Card -->
+<article class="rounded-2xl border-2 border-phosphor/80 bg-obsidian-850 p-4 shadow-[0_0_20px_rgba(62,207,142,0.15)] relative overflow-hidden group" data-purpose="widget-go-premium"><div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-lg bg-phosphor/10 border border-phosphor/80 text-phosphor flex items-center justify-center"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg></span><span class="text-xs font-brand font-black uppercase tracking-wider text-phosphor">SNAKELING PRO</span></div><span class="text-[10px] font-brand font-extrabold px-2 py-0.5 rounded-full bg-phosphor/10 text-phosphor border border-phosphor/80 uppercase">PRO</span></div><h3 class="font-brand font-extrabold text-base text-white tracking-tight mb-2">Tingkatkan Skill Coding Lebih Cepat</h3><ul class="space-y-2 mb-4 text-xs font-medium text-mist"><li class="flex items-center gap-2"><svg class="w-4 h-4 text-phosphor fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg><span class=""><strong class="text-white font-bold">Bebas Iklan:</strong> Belajar tanpa gangguan</span></li><li class="flex items-center gap-2"><svg class="w-4 h-4 text-phosphor fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg><span class=""><strong class="text-white font-bold">Latihan Khusus:</strong> Review &amp; modul adaptif</span></li><li class="flex items-center gap-2"><svg class="w-4 h-4 text-phosphor fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg><span class=""><strong class="text-white font-bold">Nyawa Tak Terbatas:</strong> Latihan tanpa henti</span></li></ul><button type="button" class="w-full py-2.5 px-4 rounded-xl bg-[#3ecf8e] hover:bg-[#34b27b] active:translate-y-1 font-brand font-black text-xs uppercase tracking-wider text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all"><span class="">COBA 2 MINGGU GRATIS</span></button></article><article class="rounded-2xl border-2 border-obsidian-700 bg-obsidian-850 p-4" data-purpose="widget-leaderboard-locked">
+<h2 class="font-brand font-extrabold text-base text-white mb-3">
+            Buka Papan Skor!
+          </h2>
+<div class="flex items-center gap-3.5">
+<!-- Shield lock icon -->
+<div class="w-12 h-14 rounded-xl bg-obsidian-750 border border-obsidian-600 flex items-center justify-center flex-shrink-0 text-mist">
+<svg class="w-7 h-7 fill-current opacity-70" viewBox="0 0 24 24">
+<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.66 0 3 1.34 3 3v1h1v5H8v-5h1v-1c0-1.66 1.34-3 3-3zm0 2c-.55 0-1 .45-1 1v1h2v-1c0-.55-.45-1-1-1z"></path>
+</svg>
+</div>
+<p class="text-xs text-mist leading-relaxed font-medium">
+              Selesaikan 2 pelajaran lagi untuk mulai berkompetisi
+            </p>
+</div>
+</article>
+<!-- Widget 2: Misi Harian (Daily Quests) -->
+
+<!-- Widget 3: Buat Profil / Simpan Progres -->
+
+<!-- Footer Links -->
+<footer class="pt-2 px-1 text-[11px] font-brand font-bold text-smoke/80 uppercase tracking-wider leading-relaxed" data-purpose="dashboard-footer">
+<div class="flex flex-wrap gap-x-3 gap-y-1 justify-center lg:justify-start">
+<a class="hover:text-mist transition-colors" href="#">TENTANG</a>
+<a class="hover:text-mist transition-colors" href="#">TOKO</a>
+<a class="hover:text-mist transition-colors" href="#">EFIKASI</a>
+<a class="hover:text-mist transition-colors" href="#">KARIER</a>
+<a class="hover:text-mist transition-colors" href="#">INVESTOR</a>
+<a class="hover:text-mist transition-colors" href="#">KETENTUAN</a>
+<a class="hover:text-mist transition-colors" href="#">PRIVASI</a>
+</div>
+<div class="mt-2 text-center lg:text-left text-[10px] text-smoke/50 lowercase">
+            © 2025 Snakeling Inc. Obsidian Phosphor Edition
+          </div>
+</footer>
+</aside>
+<!-- END: RightSidebarWidgets -->
+</div>
+</main>
+<!-- END: MainContentArea -->
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>

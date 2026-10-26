@@ -1,0 +1,220 @@
+<!DOCTYPE html><html class="dark" lang="id" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Masuk - Snakeling</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Montserrat & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Code+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Custom Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              DEFAULT: '#121212',
+              surface: '#131313',
+              card: '#181818',
+              input: '#151515',
+              border: '#2a2a2a',
+              borderLight: '#393939',
+              hover: '#242424',
+            },
+            phosphor: {
+              DEFAULT: '#3ecf8e',
+              hover: '#34b27b',
+              active: '#2ca06d',
+              glow: 'rgba(62, 207, 142, 0.25)',
+            },
+            text: {
+              snow: '#fafafa',
+              mist: '#b4b4b4',
+              smoke: '#898989',
+              muted: '#636363',
+            }
+          },
+          fontFamily: {
+            sans: ['Montserrat', 'system-ui', 'sans-serif'],
+            mono: ['"Source Code Pro"', 'monospace'],
+          },
+          borderRadius: {
+            'card': '16px',
+            'field': '8px',
+          },
+          boxShadow: {
+            'phosphor-glow': '0 0 20px -3px rgba(62, 207, 142, 0.3)',
+            'subtle': '0 4px 20px rgba(0, 0, 0, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS Styles -->
+<style data-purpose="typography">
+    body {
+      font-family: 'Montserrat', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style data-purpose="micro-interactions">
+    /* Subtle 3D push-down feel for the primary button inspired by the reference design */
+    .btn-3d-submit {
+      box-shadow: 0 4px 0 #2a9463;
+      transition: all 0.12s ease-in-out;
+    }
+    .btn-3d-submit:hover {
+      box-shadow: 0 4px 0 #237e54;
+      transform: translateY(-1px);
+    }
+    .btn-3d-submit:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #237e54;
+    }
+
+    /* Social buttons micro-press feedback */
+    .btn-social {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-social:hover {
+      border-color: #4d4d4d;
+      background-color: #1e1e1e;
+      transform: translateY(-1px);
+    }
+    .btn-social:active {
+      transform: translateY(0);
+      background-color: #161616;
+    }
+  </style>
+</head>
+<body class="bg-obsidian text-text-snow min-h-screen flex flex-col justify-between selection:bg-phosphor selection:text-obsidian relative overflow-x-hidden">
+<!-- BEGIN: NavigationBar -->
+<header class="w-full px-6 py-6 sm:px-10 sm:py-8 flex items-center justify-between z-20" data-purpose="top-navigation">
+<!-- Exit / Close Button (top-left) -->
+<a aria-label="Tutup dan kembali ke beranda" class="text-text-mist hover:text-text-snow p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-phosphor focus:ring-offset-2 focus:ring-offset-obsidian" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" viewBox="0 0 24 24">
+<line x1="18" x2="6" y1="6" y2="18"></line>
+<line x1="6" x2="18" y1="6" y2="18"></line>
+</svg>
+</a>
+<!-- Top Right Brand & Sign-up Action -->
+<div class="flex items-center gap-4">
+
+<a class="px-6 py-2.5 rounded-full border border-obsidian-borderLight text-xs font-bold tracking-wider text-text-snow hover:bg-white/[0.06] hover:border-text-mist transition-all uppercase focus:outline-none focus:ring-2 focus:ring-phosphor focus:ring-offset-2 focus:ring-offset-obsidian" data-purpose="register-link" href="#">
+        Daftar
+      </a>
+</div>
+</header>
+<!-- END: NavigationBar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-grow flex items-center justify-center px-4 py-6 z-10" data-purpose="login-modal-wrapper">
+<div class="w-full max-w-[420px] mx-auto flex flex-col items-center">
+<!-- Modal / Form Title -->
+<h1 class="text-3xl font-bold text-text-snow text-center tracking-tight mb-7" data-purpose="page-title">
+        Masuk
+      </h1>
+<!-- BEGIN: AuthenticationForm -->
+<form action="#" class="w-full flex flex-col gap-3.5" data-purpose="login-form" method="POST" onsubmit="event.preventDefault();">
+<!-- Input: Username or Email -->
+<div class="w-full relative" data-purpose="email-input-group">
+<input autocomplete="username" class="w-full px-4 py-3.5 bg-obsidian-input text-text-snow text-sm placeholder:text-text-smoke border border-obsidian-borderLight rounded-field focus:outline-none focus:border-phosphor focus:ring-1 focus:ring-phosphor transition-colors shadow-inner" id="login-identifier" name="identifier" placeholder="Email atau nama pengguna" required="" type="text">
+</div>
+<!-- Input: Password with Forgot Password Action -->
+<div class="w-full relative flex items-center" data-purpose="password-input-group">
+<input autocomplete="current-password" class="w-full pl-4 pr-20 py-3.5 bg-obsidian-input text-text-snow text-sm placeholder:text-text-smoke border border-obsidian-borderLight rounded-field focus:outline-none focus:border-phosphor focus:ring-1 focus:ring-phosphor transition-colors shadow-inner" id="login-password" name="password" placeholder="Kata sandi" required="" type="password">
+<a class="absolute right-3.5 text-[11px] font-bold tracking-wider text-text-smoke hover:text-phosphor uppercase transition-colors select-none" data-purpose="forgot-password-link" href="#">
+            Lupa?
+          </a>
+</div>
+<!-- Submit Button: Phosphor Green with physical tactile styling -->
+<button class="btn-3d-submit w-full mt-2.5 py-3.5 px-6 bg-phosphor text-obsidian font-bold text-sm uppercase tracking-wider rounded-xl cursor-pointer hover:bg-phosphor-hover transition-all focus:outline-none focus:ring-2 focus:ring-phosphor focus:ring-offset-2 focus:ring-offset-obsidian" data-purpose="submit-button" id="btn-login-submit" type="submit">
+          Masuk
+        </button>
+</form>
+<!-- END: AuthenticationForm -->
+<!-- BEGIN: DividerSection -->
+<div class="w-full flex items-center my-6" data-purpose="divider">
+<div class="flex-grow border-t border-obsidian-border"></div>
+<span class="px-3.5 text-[11px] font-bold text-text-smoke uppercase tracking-widest select-none">
+          Atau
+        </span>
+<div class="flex-grow border-t border-obsidian-border"></div>
+</div>
+<!-- END: DividerSection -->
+<!-- BEGIN: SocialLogins -->
+<div class="w-full flex flex-col gap-3" data-purpose="oauth-providers">
+<!-- Google OAuth Button -->
+<button class="btn-social w-full flex items-center justify-center gap-3 py-3 px-4 bg-obsidian-card border border-obsidian-borderLight rounded-field text-text-snow font-bold text-xs uppercase tracking-wider focus:outline-none focus:ring-1 focus:ring-phosphor" type="button">
+<!-- Google SVG Icon -->
+<svg aria-hidden="true" class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"></path>
+</svg>
+<span class="">Masuk dengan Google</span>
+</button>
+<!-- Facebook OAuth Button -->
+
+<!-- Apple OAuth Button -->
+
+</div>
+<!-- END: SocialLogins -->
+<!-- BEGIN: LegalDisclaimers -->
+<footer class="w-full mt-10 text-center flex flex-col gap-4 px-2" data-purpose="legal-footer">
+<!-- Service Terms Disclaimer -->
+<p class="text-xs text-text-smoke leading-relaxed">
+          Dengan masuk ke Snakeling, kamu menyetujui 
+          <a class="text-text-snow font-semibold hover:text-phosphor transition-colors underline decoration-obsidian-borderLight underline-offset-2" href="#">Ketentuan</a> 
+          dan 
+          <a class="text-text-snow font-semibold hover:text-phosphor transition-colors underline decoration-obsidian-borderLight underline-offset-2" href="#">Kebijakan Privasi</a> kami.
+        </p>
+<!-- Security / ReCAPTCHA Notice -->
+
+</footer>
+<!-- END: LegalDisclaimers -->
+</div>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomCanvasSpacer -->
+<!-- Spacer to keep layout balanced on standard screens -->
+<div aria-hidden="true" class="h-6 w-full pointer-events-none"></div>
+<!-- END: BottomCanvasSpacer -->
+<!-- JavaScript Interactions -->
+<script data-purpose="event-handlers">
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.querySelector('form[data-purpose="login-form"]');
+      const submitBtn = document.getElementById('btn-login-submit');
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Show visual state when submitting
+        const originalText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <span class="inline-flex items-center gap-2">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-obsidian" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            MEMPROSES...
+          </span>
+        `;
+
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerText = originalText;
+        }, 1200);
+      });
+    });
+  </script>
+
+
+
+
+</body></html>

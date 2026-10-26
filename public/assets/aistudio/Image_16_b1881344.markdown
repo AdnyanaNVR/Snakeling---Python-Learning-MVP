@@ -1,0 +1,223 @@
+---
+name: Obsidian Phosphor
+colors:
+  surface: '#131313'
+  surface-dim: '#131313'
+  surface-bright: '#393939'
+  surface-container-lowest: '#0e0e0e'
+  surface-container-low: '#1c1b1b'
+  surface-container: '#201f1f'
+  surface-container-high: '#2a2a2a'
+  surface-container-highest: '#353534'
+  on-surface: '#e5e2e1'
+  on-surface-variant: '#bbcabe'
+  inverse-surface: '#e5e2e1'
+  inverse-on-surface: '#313030'
+  outline: '#869489'
+  outline-variant: '#3d4a41'
+  surface-tint: '#51df9c'
+  primary: '#60eca8'
+  on-primary: '#003822'
+  primary-container: '#3ecf8e'
+  on-primary-container: '#005434'
+  inverse-primary: '#006c45'
+  secondary: '#3fe18b'
+  on-secondary: '#00391d'
+  secondary-container: '#00c472'
+  on-secondary-container: '#004a28'
+  tertiary: '#aedec3'
+  on-tertiary: '#083825'
+  tertiary-container: '#93c2a8'
+  on-tertiary-container: '#25503c'
+  error: '#ffb4ab'
+  on-error: '#690005'
+  error-container: '#93000a'
+  on-error-container: '#ffdad6'
+  primary-fixed: '#71fcb6'
+  primary-fixed-dim: '#51df9c'
+  on-primary-fixed: '#002112'
+  on-primary-fixed-variant: '#005233'
+  secondary-fixed: '#62fea5'
+  secondary-fixed-dim: '#3fe18b'
+  on-secondary-fixed: '#00210f'
+  on-secondary-fixed-variant: '#00522d'
+  tertiary-fixed: '#bdedd2'
+  tertiary-fixed-dim: '#a2d1b6'
+  on-tertiary-fixed: '#002113'
+  on-tertiary-fixed-variant: '#234f3b'
+  background: '#131313'
+  on-background: '#e5e2e1'
+  surface-variant: '#353534'
+typography:
+  display:
+    fontFamily: Montserrat
+    fontSize: 72px
+    fontWeight: '400'
+    lineHeight: 72px
+    letterSpacing: -0.504px
+  display-mobile:
+    fontFamily: Montserrat
+    fontSize: 36px
+    fontWeight: '400'
+    lineHeight: 44px
+    letterSpacing: -0.252px
+  headline-lg:
+    fontFamily: Montserrat
+    fontSize: 36px
+    fontWeight: '400'
+    lineHeight: 44px
+    letterSpacing: -0.252px
+  headline-md:
+    fontFamily: Montserrat
+    fontSize: 24px
+    fontWeight: '400'
+    lineHeight: 32px
+    letterSpacing: -0.168px
+  headline-sm:
+    fontFamily: Montserrat
+    fontSize: 18px
+    fontWeight: '500'
+    lineHeight: 25px
+    letterSpacing: -0.126px
+  body-lg:
+    fontFamily: Montserrat
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: 24px
+    letterSpacing: -0.112px
+  body-sm:
+    fontFamily: Montserrat
+    fontSize: 14px
+    fontWeight: '400'
+    lineHeight: 20px
+    letterSpacing: -0.098px
+  label-md:
+    fontFamily: Montserrat
+    fontSize: 14px
+    fontWeight: '500'
+    lineHeight: 20px
+    letterSpacing: -0.098px
+  caption:
+    fontFamily: Montserrat
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 18px
+    letterSpacing: -0.084px
+  code-inline:
+    fontFamily: JetBrains Mono
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 16px
+    letterSpacing: 0.100em
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  gutter: 1rem
+  gutter-desktop: 1.5rem
+  margin: 1rem
+  margin-tablet: 1.5rem
+  margin-desktop: 2rem
+  space-xs: 0.5rem
+  space-sm: 0.75rem
+  space-md: 1rem
+  space-lg: 1.5rem
+  space-xl: 2.5rem
+---
+
+## Brand & Style
+
+The design system projects a developer-first, terminal-native demeanor: quiet, precise, and uncompromisingly utilitarian. Built for engineers and technical creators who inhabit command-line environments, code editors, and low-light workstations, the UI evokes the calm efficiency of a high-performance IDE.
+
+The aesthetic fuses **Minimalism** with **Modern Developer Monasticism**:
+- **Monochrome Foundation:** The canvas lives in deep `#121212` Obsidian. Visual structure is articulated entirely through crisp structural geometry, hairline borders, and tonal shifts rather than decorative flourishes or superficial shadows.
+- **Phosphor Accentuation:** The signature `#3ecf8e` green operates like a phosphor cursor blinking on a monochromatic screen—deliberately rationed for focused visual calls to action and active status cues.
+- **Subdued Hierarchy:** Bold weights (600/700) are forbidden. Large-scale headlines remain at weight 400 with negative tracking, rejecting marketing bombast in favor of understated architectural balance.
+
+## Colors
+
+The palette operates purely in dark mode. Chromatic saturation is restricted to functional green accents, set against a disciplined neutral ramp.
+
+### Core Roles
+- **Primary (`#3ecf8e` / Phosphor Green):** Primary action surfaces, input focus outlines, active badges, and essential brand accents.
+- **Secondary (`#00c573` / Mint Pulse):** Inline links and contextual references requiring subordinate accentuation.
+- **Tertiary (`#1f4b37` / Forest Depth):** Hover/pressed border states for primary CTAs and deep interactive feedback.
+- **Neutral (`#121212` / Obsidian):** Base canvas background, standard card surface fills, and primary input fields.
+
+### Grayscale & Surfaces
+- **`#fafafa` (Snow):** Highest emphasis text, active icon strokes, button text on dark fills.
+- **`#b4b4b4` (Silver Mist):** Standard card body copy, secondary headers, navigation links, and subtext.
+- **`#898989` (Smoke):** Placeholders, muted captions, helper copy, and partner marks.
+- **`#4d4d4d` (Graphite):** Wireframe structures, illustration vectors, and ghost button hover borders.
+- **`#393939` (Slate):** Form controls at rest, subtle hairline dividers, resting borders for interactive ghost controls.
+- **`#2e2e2e` (Charcoal):** Standard structural border for cards, sticky nav bottom rules, and pill boundary strokes.
+- **`#242424` (Ash):** Elevated chip fills (stars/announcements), nested card containers, popover panels.
+- **`#0d0d0d` (Void):** Container backing behind technical wireframes and schematic art.
+
+## Typography
+
+The typographic hierarchy is clean, restrained, and anti-bold. Typography relies exclusively on weights `400` (Regular) and `500` (Medium). Weights 600, 700, and black weights are strictly disallowed.
+
+### Stylistic Directives
+- **Tightened Tracking:** Montserrat maintains a systematic negative tracking scale (approximately `-0.007em`), bringing a dense, unified cadence across all headline and UI body levels.
+- **Monospace Integration:** JetBrains Mono serves code samples, terminal inputs, metadata badges, and inline syntax with generous tracking (`0.100em`).
+- **Responsive Headlines:** The 72px display headline collapses down to 36px on mobile viewports to preserve clean single-line density and prevent visual clutter.
+
+## Layout & Spacing
+
+The layout is structured around an 8px base rhythm, constrained to a maximum content container of `1200px` centered on canvas.
+
+### Layout Philosophy
+- **Grid Architecture:** Desktop views utilize a fluid 12-column grid or 4-column module system (e.g., 2x2 cards reflowing to 4x1 on widescreen, with testimonials arranged in 4-column masonry).
+- **Responsive Adaptations:**
+  - **Mobile (< 768px):** Single-column stack with `1rem` (16px) margins and `1rem` (16px) gutters. Section vertical gaps condense to 48px–64px.
+  - **Tablet (768px–1024px):** 2-column card structures with `1.5rem` (24px) gutters and margins.
+  - **Desktop (> 1024px):** Full 4-column matrix with `1.5rem` (24px) gutters, `2rem` (32px) margins, bounded at 1200px max width. Vertical section spacing breathes at 64px to 96px without hard horizontal dividers.
+
+## Elevation & Depth
+
+This system avoids ambient shadows, drop shadows, and blurred elevations. Spatial hierarchy is defined entirely through **low-contrast hairline outlines** and **tonal surface stacking**:
+
+1. **Canvas (Base Level 0):** Pure `#121212` Obsidian canvas.
+2. **Structural Tier (Level 1):** Cards and panel surfaces share `#121212` or lift subtly to `#242424` Ash.
+3. **Hairline Bounding:** Surfaces are carved out from each other using crisp, 1px solid `#2e2e2e` Charcoal borders.
+4. **Sub-Containers:** Embedded graphical diagrams and wireframe preview zones drop back to `#0d0d0d` Void, framed in `#2e2e2e`.
+5. **No Outer Glows:** Focus states on inputs, buttons, and selectable cards reject blurred glows, using only precise `1px solid #3ecf8e` Phosphor Green borders.
+
+## Shapes
+
+The system implements a geometric duality: structural containers are squared with modest radii, while interactive triggers and indicator pills use complete curvature.
+
+- **Pill Geometry (`9999px`):** Used strictly for interactive triggers, including primary and ghost buttons, GitHub star counters, announcement pills, and tags.
+- **Card Enclosures (`16px`):** Applied uniformly to feature cards, testimonial blocks, and showcase panels.
+- **Form Controls (`8px`):** Applied to text inputs, search fields, textareas, and code blocks.
+- **Avatars (`50%` / Circular):** Maintained as pure 40px circular silhouettes.
+
+## Components
+
+### Buttons
+- **Primary Pill:** Fill `#3ecf8e`, border `1px solid #3ecf8e`, text `#121212` (Montserrat Medium, 14px), padding `8px 16px`, radius `9999px`. On hover: border switches to `1px solid #1f4b37`, background remains `#3ecf8e`.
+- **Ghost Pill:** Background transparent, border `1px solid #393939`, text `#fafafa` (Montserrat Medium, 14px), padding `8px 16px`, radius `9999px`. On hover: background shifts to `rgba(255, 255, 255, 0.04)` and border transitions to `1px solid #4d4d4d`.
+
+### Chips & Pill Badges
+- **Announcement / Star Pills:** Background `#242424`, border `1px solid #2e2e2e`, radius `9999px`, padding `6px 12px`. Text is 12px Montserrat Regular `#b4b4b4` with `#fafafa` highlighted stats. Inline icons sized to 12px.
+
+### Cards
+- **Feature & Showcase Cards:** Background `#121212`, border `1px solid #2e2e2e`, radius `16px`, internal padding `24px`. Heading is 18px Montserrat Medium `#fafafa`; body is 14px Montserrat Regular `#b4b4b4`. Internal illustrations reside in a `#0d0d0d` nested container with 1px `#2e2e2e` perimeter.
+- **Testimonial Cards:** Background `#121212`, border `1px solid #2e2e2e`, radius `16px`, padding `20px`. Quote text is 14px Montserrat Regular `#b4b4b4`. Handles are 14px Montserrat Medium `#fafafa` paired with 40px circular avatars.
+
+### Input Fields
+- **Text Inputs:** Background `#121212`, border `1px solid #393939`, radius `8px`, padding `8px 12px`, text 14px Montserrat Regular `#fafafa`, placeholder text `#898989`. Focus state: border shifts directly to `1px solid #3ecf8e` with zero glow ring or box shadow.
+
+### Checkboxes & Radios
+- **Control Base:** `16px` squared (`4px` radius) for checkboxes, circular for radios. Border `1px solid #393939`, background `#121212`. Checked state: background `#3ecf8e`, border `#3ecf8e`, checkmark or center pip colored `#121212`.
+
+### Lists & Key-Value Pairs
+- Borderless rows separated by `1px solid #2e2e2e` horizontal dividers. Left-hand keys set in 14px JetBrains Mono `#898989`; right-hand values set in 14px Montserrat `#fafafa`.
+
+### Terminal & Code Blocks
+- Background `#0d0d0d`, border `1px solid #2e2e2e`, radius `8px`, padding `16px`. Font: 12px JetBrains Mono (`line-height: 1.5`, letter spacing `0.100em`). Syntax accents use `#3ecf8e` for commands, `#b4b4b4` for arguments, and `#898989` for comments.

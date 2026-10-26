@@ -1,0 +1,368 @@
+<!DOCTYPE html><html class="dark" lang="id" style=""><head><meta content="web_dashboard" name="shell-type">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"></head><body class="bg-[#121212] text-[#fafafa] font-sans antialiased min-h-screen flex selection:bg-phosphor selection:text-black"><svg aria-hidden="true" class="inline-defs-container" style="position:absolute;width:0;height:0;overflow:hidden"></svg>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Snakeling - Peta Belajar Python</title>
+<!-- Google Fonts: Montserrat & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              950: '#0e0e0e',
+              900: '#121212',
+              850: '#171717',
+              800: '#1c1b1b',
+              750: '#242424',
+              700: '#2e2e2e',
+              600: '#393939'
+            },
+            phosphor: {
+              DEFAULT: '#3ecf8e',
+              hover: '#34b27b',
+              deep: '#1e7b52',
+              shadow: '#155237',
+              glow: 'rgba(62, 207, 142, 0.25)'
+            },
+            mist: '#b4b4b4',
+            smoke: '#898989',
+            gem: '#38bdf8',
+            flame: '#ff9600',
+            heart: '#ef4444'
+          },
+          fontFamily: {
+            brand: ['Montserrat', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Stylesheet -->
+<style data-purpose="custom-buttons">
+    /* 3D tactile button effects following Duolingo style */
+    .tactile-btn-primary {
+      background-color: #3ecf8e;
+      color: #0e0e0e;
+      box-shadow: 0 4px 0 #1b6343;
+      transition: all 0.1s ease-in-out;
+    }
+    .tactile-btn-primary:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #1b6343;
+    }
+    
+    .tactile-btn-secondary {
+      background-color: #242424;
+      border: 2px solid #393939;
+      color: #38bdf8;
+      box-shadow: 0 4px 0 #171717;
+      transition: all 0.1s ease-in-out;
+    }
+    .tactile-btn-secondary:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #171717;
+    }
+
+    .tactile-node-active {
+      background-color: #3ecf8e;
+      box-shadow: 0 7px 0 #1b6343, 0 10px 24px rgba(62, 207, 142, 0.35);
+      transition: all 0.12s ease;
+    }
+    .tactile-node-active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 9px 0 #1b6343, 0 14px 28px rgba(62, 207, 142, 0.45);
+    }
+    .tactile-node-active:active {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 #1b6343, 0 6px 12px rgba(62, 207, 142, 0.25);
+    }
+
+    .tactile-node-inactive {
+      background-color: #242424;
+      border: 3px solid #2e2e2e;
+      box-shadow: 0 6px 0 #171717;
+      transition: all 0.12s ease;
+    }
+    .tactile-node-inactive:hover {
+      background-color: #2a2a2a;
+      border-color: #393939;
+    }
+  </style>
+<style data-purpose="path-animations">
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(1.5deg); }
+    }
+    @keyframes subtlePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.85; }
+    }
+    .mascot-float {
+      animation: gentleFloat 4.2s ease-in-out infinite;
+    }
+    .active-ping {
+      animation: subtlePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+<!-- END: Custom Stylesheet -->
+<!-- BEGIN: LeftSidebar -->
+<aside class="w-[250px] xl:w-[270px] h-screen sticky top-0 flex-shrink-0 border-r border-obsidian-700 bg-[#121212] flex flex-col justify-between py-6 px-4 z-40" data-purpose="main-navigation">
+<div>
+<!-- Brand Logo -->
+<a aria-label="Snakeling Home" class="flex items-center gap-2.5 px-3 mb-8 group" href="#">
+<span class="font-brand font-extrabold text-2xl tracking-tight text-[#fafafa] group-hover:text-phosphor transition-colors">
+          snakeling
+        </span>
+</a>
+<!-- Navigation Links -->
+<nav aria-label="Sidebar Menu" class="space-y-1.5"><!-- Belajar (Inactive) -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl text-mist hover:text-white hover:bg-obsidian-800 border-2 border-transparent font-brand font-bold text-sm tracking-wide transition-all" href="#">
+<span class="w-7 h-7 flex items-center justify-center">
+<svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+<path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"></path>
+</svg>
+</span>
+<span class="">BELAJAR</span>
+</a>
+<!-- Papan Skor (Active) -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl text-mist hover:text-white hover:bg-obsidian-800 border-2 border-transparent font-brand font-bold text-sm tracking-wide transition-all" href="#">
+<span class="w-7 h-7 flex items-center justify-center">
+<svg class="w-6 h-6 fill-current text-[#facc15]" viewBox="0 0 24 24">
+<path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"></path>
+</svg>
+</span>
+<span class="">PAPAN SKOR</span>
+</a>
+<!-- Toko -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl bg-phosphor/10 border-2 border-phosphor/80 text-phosphor font-brand font-bold text-sm tracking-wide shadow-[0_0_15px_rgba(62,207,142,0.15)] transition-all" href="#">
+<span class="w-7 h-7 flex items-center justify-center">
+<svg class="w-6 h-6 fill-current text-[#f43f5e]" viewBox="0 0 24 24">
+<path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"></path>
+</svg>
+</span>
+<span class="">TOKO</span>
+</a>
+<!-- Profil -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-2xl text-mist hover:text-white hover:bg-obsidian-800 border-2 border-transparent font-brand font-bold text-sm tracking-wide transition-all" href="#">
+<span class="w-7 h-7 rounded-full bg-gradient-to-tr from-[#3ecf8e] to-[#1f6b48] flex items-center justify-center ring-2 ring-obsidian-700 overflow-hidden flex-shrink-0">
+<img alt="Profil Mascot" class="w-full h-full object-cover object-center scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW7lJDD8DDHLhSD0SUNqafd_I1_f2VzZmHynGlQGGmaNj5alSbgCDnHDFzJv4HKNQBZAkgulgXxvP7_1AP8rw72PnsZkcC0taMIFNScsFS5RafKdndKmkiQitMZMxtpEaqKBSvt9Pq4XVTejubbebKH7ZZ67jD5U2ybDHEgISaoNXLFEyLST7l-HQyUH9RqZPcUcXp7GyShj8VJjYchPWVxTjSRcMkNs070M3FJlkrjLoZmJL4xOcv32xLi2tare3LCw">
+</span>
+<span class="">PROFIL</span>
+</a></nav>
+</div>
+<!-- Sidebar footer subtle status -->
+</aside>
+<!-- END: LeftSidebar -->
+<!-- BEGIN: MainContentArea (Center & Right combined container) -->
+<main class="flex-1 flex justify-center min-h-screen overflow-y-auto"><div class="flex flex-col w-full">
+<div class="flex w-full min-h-screen">
+<!-- CENTER CONTENT COLUMN: TOKO SNAKELING -->
+<div class="flex-1 max-w-[800px] px-6 lg:px-12 py-8 mx-auto space-y-10">
+<!-- HEADER TOKO & SALDO GEMS -->
+<header class="space-y-6">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-extrabold tracking-tight">Toko Snakeling</h1>
+<p class="font-body-sm text-body-sm text-outline mt-1.5 max-w-xl">
+            Tukarkan Gems yang kamu kumpulkan untuk perlengkapan belajar dan kustomisasi maskot.
+          </p>
+</div>
+<!-- Banner Saldo Gems Pengguna -->
+
+</header>
+<!-- SECTION 1: KEKUATAN & PEMULIHAN (POWER-UPS) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between pb-2">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">Kekuatan &amp; Pemulihan</h2>
+<p class="font-caption text-caption text-outline">Gunakan item ini untuk menjaga rentetan belajar harian dan latihan tanpa henti.</p>
+</div>
+<span class="font-code-inline text-code-inline text-outline uppercase">MODUL_S1</span>
+</div>
+<div class="space-y-3">
+<!-- Item 1: Streak Freeze -->
+<div class="bg-surface-container-low rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 transition-all hover:bg-surface-container">
+<div class="flex items-center gap-4 min-w-0">
+<div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center flex-shrink-0 relative overflow-hidden">
+<svg class="w-8 h-8 text-gem fill-current drop-shadow-sm" viewBox="0 0 24 24">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"></path>
+</svg>
+<div class="absolute bottom-1 right-1 text-flame">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+<path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.784 1.399 8.163-7.333-3.856-7.333 3.856 1.399-8.163-5.934-5.784 8.2-1.192zm0 5.702l-2.062 4.179-4.611.67 3.336 3.252-.787 4.59 4.124-2.168 4.124 2.168-.787-4.59 3.336-3.252-4.611-.67z"></path>
+</svg>
+</div>
+</div>
+<div class="space-y-1 min-w-0">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Bekukan Streak (Streak Freeze)</h3>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-caption text-caption text-primary">Dimiliki: 1/2</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+                  Melindungi Streak harianmu agar tidak putus jika terlewat satu hari coding. Otomatis terpasang saat absen.
+                </p>
+</div>
+</div>
+<div class="flex-shrink-0 self-end md:self-center w-full md:w-auto">
+<button class="tactile-btn-primary w-full md:w-auto px-5 py-2.5 rounded-xl font-label-md text-label-md font-bold flex items-center justify-center gap-2" onclick="purchaseItem(200, this)">
+<svg class="w-4 h-4 fill-current text-obsidian-900" viewBox="0 0 24 24">
+<path d="M12 2L3.5 8.5L12 22L20.5 8.5L12 2Z"></path>
+</svg>
+<span class="">200 GEMS</span>
+</button>
+</div>
+</div>
+<!-- Item 2: Full Hearts Refill -->
+<div class="bg-surface-container-low rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 transition-all hover:bg-surface-container">
+<div class="flex items-center gap-4 min-w-0">
+<div class="w-16 h-16 rounded-2xl bg-surface-container flex items-center justify-center flex-shrink-0">
+<svg class="w-8 h-8 fill-current text-heart" viewBox="0 0 24 24">
+<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+</svg>
+</div>
+<div class="space-y-1 min-w-0">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold truncate">Isi Ulang Nyawa Instan</h3>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-caption text-caption text-secondary">Penuh 5/5</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+                  Kembalikan 5 nyawa penuh secara kilat tanpa harus menunggu regenerasi waktu belajar 30 menit per hati.
+                </p>
+</div>
+</div>
+<div class="flex-shrink-0 self-end md:self-center w-full md:w-auto">
+<button class="tactile-btn-secondary opacity-60 cursor-not-allowed w-full md:w-auto px-5 py-2.5 rounded-xl font-label-md text-label-md font-bold flex items-center justify-center gap-2" disabled="">
+<span class="">NYAWA PENUH</span>
+</button>
+</div>
+</div>
+<!-- Item 3: XP Boost 15 Menit -->
+
+</div>
+</section>
+<!-- SECTION 2: KOLEKSI & KUSTOMISASI MASKOT (COSMETICS) -->
+
+<!-- FEEDBACK TOAST / NOTIFICATION (INLINE MICRO-INTERACTION) -->
+<div class="fixed bottom-6 right-6 lg:right-[380px] z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none" id="shop-toast">
+<div class="bg-surface-container-high border border-primary/30 text-on-surface px-4 py-3 rounded-xl shadow-xl flex items-center gap-3">
+<span class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center flex-shrink-0">
+<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>
+</span>
+<span class="font-body-sm text-body-sm font-medium" id="toast-message">Item berhasil dibeli!</span>
+</div>
+</div>
+</div>
+<!-- RIGHT SIDEBAR (PERSIS DENGAN SCREEN_2 / DASHBOARD) -->
+<aside class="w-full lg:w-[330px] xl:w-[360px] flex-shrink-0 flex flex-col gap-5 pt-1" data-purpose="stats-and-widgets">
+<!-- Top Stats Row (Python Course, Streaks, Gems, Hearts) -->
+<div class="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl bg-obsidian-850 border border-obsidian-700" data-purpose="top-stat-bar">
+<!-- Streak Stat -->
+<div class="flex items-center gap-1.5 font-brand font-bold text-sm text-flame cursor-pointer hover:opacity-85 transition-opacity" title="1 Hari Streak">
+<svg class="w-5 h-5 fill-current animate-pulse" viewBox="0 0 24 24">
+<path d="M12 23c-4.97 0-9-4.03-9-9 0-4.97 4.03-9 9-9 .69 0 1.35.08 2 .23C12.87 6.8 12.3 8.8 12.3 11c0 2.21 1.79 4 4 4 .65 0 1.26-.16 1.8-.44.59 1.14.9 2.45.9 3.84 0 2.51-1.03 4.8-2.7 6.43-1.12.75-2.45 1.17-3.9 1.17h-.4zM13.5 2.1c-.32 1.4-1.12 2.61-2.26 3.42-.51.36-.74.99-.57 1.58.17.6.72.99 1.33.99.39 0 .78-.11 1.12-.34 1.46-.99 2.47-2.55 2.76-4.32.06-.39-.14-.77-.49-.95-.36-.18-.79-.11-1.07.16l-.82.66z"></path>
+</svg>
+<span class="tracking-tight text-white font-extrabold">1</span>
+</div>
+<!-- Gems Stat -->
+<div class="flex items-center gap-1.5 font-brand font-bold text-sm text-gem cursor-pointer hover:opacity-85 transition-opacity" title="505 Gems Tersedia">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+<path d="M6 3h12l4 6-10 12L2 9l4-6zm.85 2L4.2 8.5h4.65L7.5 5h-.65zm3.15 0l1.35 3.5h3.3L13.5 5H10zm4.5 0l-1.35 3.5h4.65L16.5 5h-2zm-7.65 5L12 17.5 7.15 10H6.85zm3.15 0l2 6.5 2-6.5h-4zm5.15 0L12 17.5 16.85 10h-.7z"></path>
+</svg>
+<span class="tracking-tight text-white font-extrabold" id="sidebar-gems">505</span>
+</div>
+<!-- Hearts Stat -->
+<div class="flex items-center gap-1.5 font-brand font-bold text-sm text-heart cursor-pointer hover:opacity-85 transition-opacity" title="5 Nyawa Penuh">
+<svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+</svg>
+<span class="tracking-tight text-white font-extrabold">5</span>
+</div>
+</div>
+<!-- Widget 1: Promo Snakeling Pro -->
+<article class="rounded-2xl border-2 border-phosphor/80 bg-obsidian-850 p-4 shadow-[0_0_20px_rgba(62,207,142,0.15)] relative overflow-hidden group" data-purpose="widget-go-premium"><div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-lg bg-phosphor/10 border border-phosphor/80 text-phosphor flex items-center justify-center"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg></span><span class="text-xs font-brand font-black uppercase tracking-wider text-phosphor">SNAKELING PRO</span></div><span class="text-[10px] font-brand font-extrabold px-2 py-0.5 rounded-full bg-phosphor/10 text-phosphor border border-phosphor/80 uppercase">PRO</span></div><h3 class="font-brand font-extrabold text-base text-white tracking-tight mb-2">Tingkatkan Skill Coding Lebih Cepat</h3><ul class="space-y-2 mb-4 text-xs font-medium text-mist"><li class="flex items-center gap-2"><svg class="w-4 h-4 text-phosphor fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg><span class=""><strong class="text-white font-bold">Bebas Iklan:</strong> Belajar tanpa gangguan</span></li><li class="flex items-center gap-2"><svg class="w-4 h-4 text-phosphor fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg><span class=""><strong class="text-white font-bold">Latihan Khusus:</strong> Review &amp; modul adaptif</span></li><li class="flex items-center gap-2"><svg class="w-4 h-4 text-phosphor fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg><span class=""><strong class="text-white font-bold">Nyawa Tak Terbatas:</strong> Latihan tanpa henti</span></li></ul><button type="button" class="w-full py-2.5 px-4 rounded-xl bg-[#3ecf8e] hover:bg-[#34b27b] active:translate-y-1 font-brand font-black text-xs uppercase tracking-wider text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all"><span class="">COBA 2 MINGGU GRATIS</span></button></article>
+<!-- Widget 2: Buka Papan Skor! -->
+<article class="rounded-2xl border-2 border-obsidian-700 bg-obsidian-850 p-4" data-purpose="widget-leaderboard-locked">
+<h2 class="font-brand font-extrabold text-base text-white mb-3">
+            Buka Papan Skor!
+          </h2>
+<div class="flex items-center gap-3.5">
+<!-- Shield lock icon -->
+<div class="w-12 h-14 rounded-xl bg-obsidian-750 border border-obsidian-600 flex items-center justify-center flex-shrink-0 text-mist">
+<svg class="w-7 h-7 fill-current opacity-70" viewBox="0 0 24 24">
+<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.66 0 3 1.34 3 3v1h1v5H8v-5h1v-1c0-1.66 1.34-3 3-3zm0 2c-.55 0-1 .45-1 1v1h2v-1c0-.55-.45-1-1-1z"></path>
+</svg>
+</div>
+<p class="text-xs text-mist leading-relaxed font-medium">
+              Selesaikan 2 pelajaran lagi untuk mulai berkompetisi
+            </p>
+</div>
+</article>
+<!-- Footer Links -->
+<footer class="pt-2 px-1 text-[11px] font-brand font-bold text-smoke/80 uppercase tracking-wider leading-relaxed" data-purpose="dashboard-footer">
+<div class="flex flex-wrap gap-x-3 gap-y-1 justify-center lg:justify-start">
+<a class="hover:text-mist transition-colors" href="#">TENTANG</a>
+<a class="hover:text-mist transition-colors" href="#">TOKO</a>
+<a class="hover:text-mist transition-colors" href="#">EFIKASI</a>
+<a class="hover:text-mist transition-colors" href="#">KARIER</a>
+<a class="hover:text-mist transition-colors" href="#">INVESTOR</a>
+<a class="hover:text-mist transition-colors" href="#">KETENTUAN</a>
+<a class="hover:text-mist transition-colors" href="#">PRIVASI</a>
+</div>
+<div class="mt-2 text-center lg:text-left text-[10px] text-smoke/50 lowercase">
+            © 2025 Snakeling Inc. Obsidian Phosphor Edition
+          </div>
+</footer>
+</aside>
+</div>
+</div>
+<script>
+  let currentGems = 505;
+
+  function showToast(text, isError = false) {
+    const toast = document.getElementById('shop-toast');
+    const msg = document.getElementById('toast-message');
+    if (!toast || !msg) return;
+
+    msg.textContent = text;
+    if (isError) {
+      toast.querySelector('div').className = 'bg-surface-container-high border border-error/40 text-error px-4 py-3 rounded-xl shadow-xl flex items-center gap-3';
+    } else {
+      toast.querySelector('div').className = 'bg-surface-container-high border border-primary/30 text-on-surface px-4 py-3 rounded-xl shadow-xl flex items-center gap-3';
+    }
+
+    toast.classList.remove('translate-y-20', 'opacity-0');
+    setTimeout(() => {
+      toast.classList.add('translate-y-20', 'opacity-0');
+    }, 2400);
+  }
+
+  function purchaseItem(cost, btnElement) {
+    if (currentGems < cost) {
+      showToast('Gems kamu tidak cukup untuk item ini!', true);
+      return;
+    }
+
+    currentGems -= cost;
+    const balanceEl = document.getElementById('gem-balance');
+    const sidebarGemsEl = document.getElementById('sidebar-gems');
+    if (balanceEl) balanceEl.textContent = currentGems;
+    if (sidebarGemsEl) sidebarGemsEl.textContent = currentGems;
+
+    btnElement.innerHTML = `<span>DIMILIKI</span>`;
+    btnElement.disabled = true;
+    btnElement.className = "tactile-btn-secondary opacity-80 cursor-default w-full md:w-auto px-5 py-2.5 rounded-xl font-label-md text-label-md font-bold flex items-center justify-center gap-2";
+
+    showToast(`Sukses membeli item seharga ${cost} Gems!`);
+  }
+</script></main>
+<!-- END: MainContentArea -->
+
+
+</body></html>
