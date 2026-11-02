@@ -167,7 +167,7 @@ BEGIN
     NEW.id,
     extracted_username,
     COALESCE(NEW.raw_user_meta_data->>'display_name', extracted_username),
-    COALESCE(NEW.raw_user_meta_data->>'avatar_url', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCW7lJDD8DDHLhSD0SUNqafd_I1_f2VzZmHynGlQGGmaNj5alSbgCDnHDFzJv4HKNQBZAkgulgXxvP7_1AP8rw72PnsZkcC0taMIFNScsFS5RafKdndKmkiQitMZMxtpEaqKBSvt9Pq4XVTejubbebKH7ZZ67jD5U2ybDHEgISaoNXLFEyLST7l-HQyUH9RqZPcUcXp7GyShj8VJjYchPWVxTjSRcMkNs070M3FJlkrjLoZmJL4xOcv32xLi2tare3LCw')
+    COALESCE(NEW.raw_user_meta_data->>'avatar_url', '/logo_snakepreview.png')
   );
 
   INSERT INTO public.user_stats (user_id, xp, gems, hearts, streak, streak_freeze_count)
