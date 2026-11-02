@@ -16,52 +16,51 @@ const MainShell: React.FC = () => {
   const { activeTab, toast, isLessonActive, isLoggedIn } = useApp();
   const [showSettings, setShowSettings] = useState(false);
 
-  // If user is not logged in, force showing the Landing View & Auth Modals
-  if (!isLoggedIn) {
-    return (
-      <>
-        <LandingView onEnterApp={() => {}} />
-        <LoginModal />
-        <RegisterModal />
-        <ProModal />
-      </>
-    );
-  }
-
   return (
-    <div className="bg-[#121212] text-[#fafafa] font-sans antialiased min-h-screen flex selection:bg-[#3ecf8e] selection:text-[#0e0e0e] relative">
-      {/* LEFT NAVIGATION SIDEBAR */}
-      <Sidebar onOpenSettings={() => setShowSettings(true)} />
+    <>
+      {!isLoggedIn ? (
+        <>
+          <LandingView onEnterApp={() => {}} />
+          <LoginModal />
+          <RegisterModal />
+          <ProModal />
+        </>
+      ) : (
+        <div className="bg-[#121212] text-[#fafafa] font-sans antialiased min-h-screen flex selection:bg-[#3ecf8e] selection:text-[#0e0e0e] relative">
+          {/* LEFT NAVIGATION SIDEBAR */}
+          <Sidebar onOpenSettings={() => setShowSettings(true)} />
 
-      {/* CENTER & RIGHT CONTENT CONTAINER (DESKTOP FIXED SHELL, MOBILE SCROLLABLE) */}
-      <main className="flex-1 flex justify-center h-screen overflow-hidden pb-16 lg:pb-0">
-        <div className="max-w-[1200px] w-full h-full flex flex-col lg:flex-row justify-between px-4 sm:px-6 py-4 gap-8">
-          {/* CENTER VIEW */}
-          {activeTab === 'belajar' && <LearningMap />}
-          {activeTab === 'papan_skor' && <div className="flex-1 h-full overflow-y-auto pr-1"><LeaderboardView /></div>}
-          {activeTab === 'toko' && <div className="flex-1 h-full overflow-y-auto pr-1"><ShopView /></div>}
-          {activeTab === 'profil' && <div className="flex-1 h-full overflow-y-auto pr-1"><ProfileView onOpenSettings={() => setShowSettings(true)} /></div>}
+          {/* CENTER & RIGHT CONTENT CONTAINER (DESKTOP FIXED SHELL, MOBILE SCROLLABLE) */}
+          <main className="flex-1 flex justify-center h-screen overflow-hidden pb-16 lg:pb-0">
+            <div className="max-w-[1200px] w-full h-full flex flex-col lg:flex-row justify-between px-4 sm:px-6 py-4 gap-8">
+              {/* CENTER VIEW */}
+              {activeTab === 'belajar' && <LearningMap />}
+              {activeTab === 'papan_skor' && <div className="flex-1 h-full overflow-y-auto pr-1"><LeaderboardView /></div>}
+              {activeTab === 'toko' && <div className="flex-1 h-full overflow-y-auto pr-1"><ShopView /></div>}
+              {activeTab === 'profil' && <div className="flex-1 h-full overflow-y-auto pr-1"><ProfileView onOpenSettings={() => setShowSettings(true)} /></div>}
 
-          {/* RIGHT STATS & PROMOTIONS SIDEBAR (STAYS IN PLACE) */}
-          <RightWidgets />
+              {/* RIGHT STATS & PROMOTIONS SIDEBAR (STAYS IN PLACE) */}
+              <RightWidgets />
+            </div>
+          </main>
+
+          {/* INTERACTIVE LESSON MODAL */}
+          {isLessonActive && <InteractiveLessonModal />}
+
+          {/* AUTH & DIALOG MODALS */}
+          <LoginModal />
+          <RegisterModal />
+          <ProModal />
+          <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
         </div>
-      </main>
+      )}
 
-      {/* INTERACTIVE LESSON MODAL */}
-      {isLessonActive && <InteractiveLessonModal />}
-
-      {/* AUTH & DIALOG MODALS */}
-      <LoginModal />
-      <RegisterModal />
-      <ProModal />
-      <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
-
-      {/* FLOATING TOAST NOTIFICATION */}
+      {/* FLOATING TOAST NOTIFICATION - ALWAYS VISIBLE */}
       {toast && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-20 lg:bottom-6 right-6 lg:right-96 z-50 animate-in fade-in slide-in-from-bottom-4 duration-200"
+          className="fixed bottom-6 right-6 z-[9999] animate-in fade-in slide-in-from-bottom-4 duration-200"
         >
           <div
             className={`px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border ${
@@ -91,7 +90,7 @@ const MainShell: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -371,8 +371,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Auth: Register
   const registerUser = async (username: string, email: string, _pass: string): Promise<boolean> => {
     try {
+      if (_pass.length < 6) {
+        showToast('Kata sandi minimal 6 karakter!', 'error');
+        return false;
+      }
+
       if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password: _pass,
           options: {
@@ -383,18 +388,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           showToast(error.message, 'error');
           return false;
         }
+
+        if (data.user) {
+          setUser({
+            id: data.user.id,
+            username,
+            displayName: username,
+            email,
+            avatarUrl: '/logo_snakepreview.png',
+            isPro: false,
+            joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
+            userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
+          });
+        }
+      } else {
+        setUser({
+          id: `usr_${Date.now()}`,
+          username,
+          displayName: username,
+          email,
+          avatarUrl: DEFAULT_USER.avatarUrl,
+          isPro: false,
+          joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
+          userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
+        });
       }
 
-      setUser({
-        id: `usr_${Date.now()}`,
-        username,
-        displayName: username,
-        email,
-        avatarUrl: DEFAULT_USER.avatarUrl,
-        isPro: false,
-        joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
-        userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
-      });
       setIsLoggedIn(true);
       setShowRegisterModal(false);
       playSound('complete');
