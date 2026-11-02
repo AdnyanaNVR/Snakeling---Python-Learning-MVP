@@ -10,17 +10,17 @@ import { InteractiveLessonModal } from './components/InteractiveLessonModal';
 import { LoginModal, RegisterModal } from './components/AuthModals';
 import { ProModal, SettingsModal } from './components/SettingsAndProModals';
 import { LandingView } from './components/LandingView';
-import { Check, AlertCircle, Home, LayoutDashboard } from 'lucide-react';
+import { Check, AlertCircle } from 'lucide-react';
 
 const MainShell: React.FC = () => {
-  const { activeTab, toast, isLessonActive } = useApp();
+  const { activeTab, toast, isLessonActive, isLoggedIn } = useApp();
   const [showSettings, setShowSettings] = useState(false);
-  const [viewMode, setViewMode] = useState<'app' | 'landing'>('app');
 
-  if (viewMode === 'landing') {
+  // If user is not logged in, force showing the Landing View & Auth Modals
+  if (!isLoggedIn) {
     return (
       <>
-        <LandingView onEnterApp={() => setViewMode('app')} />
+        <LandingView onEnterApp={() => {}} />
         <LoginModal />
         <RegisterModal />
         <ProModal />
@@ -30,26 +30,6 @@ const MainShell: React.FC = () => {
 
   return (
     <div className="bg-[#121212] text-[#fafafa] font-sans antialiased min-h-screen flex selection:bg-[#3ecf8e] selection:text-[#0e0e0e] relative">
-      {/* View Switcher Pill at Top-Right (Allows jumping back to Landing Hero easily) */}
-      <div className="fixed top-4 right-4 z-40 hidden md:flex items-center gap-1.5 p-1 bg-[#171717]/80 backdrop-blur-md border border-[#2e2e2e] rounded-xl shadow-lg">
-        <button
-          onClick={() => setViewMode('landing')}
-          className="px-2.5 py-1 text-xs font-brand font-medium text-[#898989] hover:text-white rounded-lg transition-colors flex items-center gap-1"
-          title="Buka Halaman Depan / Landing"
-        >
-          <Home className="w-3.5 h-3.5" />
-          <span>Landing</span>
-        </button>
-        <span className="text-[#393939] text-xs">|</span>
-        <button
-          onClick={() => setViewMode('app')}
-          className="px-2.5 py-1 text-xs font-brand font-bold text-[#3ecf8e] bg-[#3ecf8e]/10 rounded-lg flex items-center gap-1"
-        >
-          <LayoutDashboard className="w-3.5 h-3.5" />
-          <span>App</span>
-        </button>
-      </div>
-
       {/* LEFT NAVIGATION SIDEBAR */}
       <Sidebar onOpenSettings={() => setShowSettings(true)} />
 

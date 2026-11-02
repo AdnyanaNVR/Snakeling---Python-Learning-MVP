@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { INITIAL_SHOP_ITEMS } from '../data/curriculum';
 import { ShopItem } from '../types';
 import { Shield, Heart, Zap, Sparkles, Glasses, Star } from 'lucide-react';
+import { SnakelingMascot } from './SnakelingMascot';
 
 export const ShopView: React.FC = () => {
   const { stats, purchaseShopItem, equipCosmetic } = useApp();
@@ -140,6 +141,30 @@ export const ShopView: React.FC = () => {
           <span className="font-mono text-xs text-[#898989] uppercase tracking-wider">
             EDISI_2025
           </span>
+        </div>
+
+        {/* Live Mascot Dressing Room Card */}
+        <div className="bg-[#171717] border-2 border-[#2e2e2e] rounded-3xl p-5 flex flex-col sm:flex-row items-center gap-6 shadow-xl">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-[#1c1b1b] border border-[#393939] p-2 flex items-center justify-center shrink-0 shadow-inner">
+            <SnakelingMascot
+              mood="excited"
+              size="md"
+              equippedCosmetics={stats.equippedCosmetics}
+            />
+          </div>
+          <div className="space-y-1 text-center sm:text-left flex-1">
+            <span className="text-[10px] font-brand font-black uppercase text-[#3ecf8e] tracking-wider">
+              Tampilan Maskot Kamu
+            </span>
+            <h3 className="text-base sm:text-lg font-brand font-bold text-white">
+              Snakeling Custom Edition
+            </h3>
+            <p className="text-xs text-[#b4b4b4]">
+              {stats.equippedCosmetics.length > 0
+                ? `${stats.equippedCosmetics.length} aksesori terpasang aktif di maskotmu!`
+                : 'Belum ada aksesori terpasang. Dapatkan dan pasang aksesori di bawah untuk mengubah tampilan maskot!'}
+            </p>
+          </div>
         </div>
 
         <div className="space-y-3">

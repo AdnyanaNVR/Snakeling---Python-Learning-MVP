@@ -70,7 +70,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSettings }) => {
           {/* Brand Wordmark */}
           <button
             onClick={() => handleNavClick('belajar')}
-            className="flex items-center gap-2.5 px-3 mb-8 group text-left w-full focus:outline-none"
+            className="flex items-center px-3 mb-8 group text-left w-full focus:outline-none cursor-pointer"
             aria-label="Snakeling Home"
           >
             <span className="font-brand font-extrabold text-2xl tracking-tight text-[#fafafa] group-hover:text-[#3ecf8e] transition-colors">

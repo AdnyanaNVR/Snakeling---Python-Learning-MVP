@@ -52,7 +52,7 @@ const DEFAULT_USER: UserProfile = {
   username: 'adnyana_py',
   displayName: 'Adnyana',
   email: 'adnyana@snakeling.app',
-  avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCW7lJDD8DDHLhSD0SUNqafd_I1_f2VzZmHynGlQGGmaNj5alSbgCDnHDFzJv4HKNQBZAkgulgXxvP7_1AP8rw72PnsZkcC0taMIFNScsFS5RafKdndKmkiQitMZMxtpEaqKBSvt9Pq4XVTejubbebKH7ZZ67jD5U2ybDHEgISaoNXLFEyLST7l-HQyUH9RqZPcUcXp7GyShj8VJjYchPWVxTjSRcMkNs070M3FJlkrjLoZmJL4xOcv32xLi2tare3LCw',
+  avatarUrl: '/logo_snakepreview.png',
   isPro: false,
   joinedDate: 'Bergabung Februari 2025',
   userCode: 'SNK-9402'
@@ -79,7 +79,14 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('belajar');
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem('snakeling_is_logged_in');
+      return stored === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
   const [showRegisterModal, setShowRegisterModal] = useState<boolean>(false);
   const [showProModal, setShowProModal] = useState<boolean>(false);
@@ -95,7 +102,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [user, setUser] = useState<UserProfile>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_USER);
-      return saved ? JSON.parse(saved) : DEFAULT_USER;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (!parsed.avatarUrl || parsed.avatarUrl.includes('googleusercontent')) {
+          parsed.avatarUrl = '/logo_snakepreview.png';
+        }
+        return parsed;
+      }
+      return DEFAULT_USER;
     } catch {
       return DEFAULT_USER;
     }
@@ -111,6 +125,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // Save to LocalStorage
+  useEffect(() => {
+    localStorage.setItem('snakeling_is_logged_in', isLoggedIn ? 'true' : 'false');
+  }, [isLoggedIn]);
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
   }, [user]);

@@ -28,198 +28,72 @@ export const SnakelingMascot: React.FC<MascotProps> = ({
   const hasGlasses = showAccessories && equippedCosmetics.includes('retro_shades');
   const hasGoldenSkin = showAccessories && equippedCosmetics.includes('golden_skin');
 
-  const bodyGradientStart = hasGoldenSkin ? '#fbbf24' : '#3ecf8e';
-  const bodyGradientEnd = hasGoldenSkin ? '#d97706' : '#1b6343';
-  const bellyColor = hasGoldenSkin ? '#fef08a' : '#a7f3d0';
+  // Dynamic filter for skin and mood
+  let imageFilter = '';
+  if (hasGoldenSkin) {
+    imageFilter += ' drop-shadow(0 0 20px rgba(251,191,36,0.85)) sepia(0.85) hue-rotate(35deg) saturate(1.8) brightness(1.1)';
+  } else {
+    imageFilter += ' drop-shadow(0 8px 18px rgba(0,0,0,0.55))';
+  }
+
+  if (mood === 'sad') {
+    imageFilter += ' saturate(0.6) brightness(0.9)';
+  }
 
   return (
     <div className={`relative flex items-center justify-center select-none ${sizeMap[size]} ${className}`}>
-      <svg
-        viewBox="0 0 200 200"
-        className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] overflow-visible"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient id={`snakeBody-${mood}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={bodyGradientStart} />
-            <stop offset="100%" stopColor={bodyGradientEnd} />
-          </linearGradient>
-          <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
-        </defs>
+      {/* Ambient glow when excited or celebrating */}
+      {(mood === 'excited' || mood === 'celebrate') && (
+        <div className="absolute inset-2 bg-[#3ecf8e]/20 blur-xl rounded-full pointer-events-none -z-10" />
+      )}
 
-        {/* Coiled Tail Base */}
-        <path
-          d="M 60,170 C 40,165 30,145 45,130 C 60,115 110,140 140,150 C 165,158 175,178 150,185 C 120,192 75,188 60,170 Z"
-          fill={`url(#snakeBody-${mood})`}
-          stroke="#155237"
-          strokeWidth="3"
+      {/* Mascot Image */}
+      <img
+        src="/logo_snakepreview.png"
+        alt="Snakeling Maskot"
+        className={`w-full h-full object-contain pointer-events-none transition-transform duration-300 ${
+          mood === 'thinking' ? '-rotate-6 scale-95' : mood === 'sad' ? 'rotate-3 scale-95' : mood === 'celebrate' ? 'scale-105' : ''
+        }`}
+        style={{ filter: imageFilter }}
+      />
+
+      {/* Mood Overlays & Emotes */}
+      {mood === 'thinking' && (
+        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#1c1b1b] border-2 border-[#38bdf8] text-[#38bdf8] flex items-center justify-center font-brand font-black text-xs shadow-lg animate-bounce">
+          ?
+        </div>
+      )}
+
+      {mood === 'sad' && (
+        <div
+          className="absolute top-[38%] left-[28%] w-2.5 h-3.5 bg-[#38bdf8] opacity-90 animate-pulse shadow-md"
+          style={{ borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%' }}
         />
+      )}
 
-        {/* Upright Neck / Torso */}
-        <path
-          d="M 85,150 C 75,115 80,85 100,75 C 120,65 130,105 125,145 C 115,160 95,160 85,150 Z"
-          fill={`url(#snakeBody-${mood})`}
-          stroke="#155237"
-          strokeWidth="3"
-        />
+      {mood === 'celebrate' && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <span className="absolute -top-2 left-2 text-[#facc15] text-sm animate-ping">✦</span>
+          <span className="absolute -top-3 right-3 text-[#3ecf8e] text-base animate-bounce">★</span>
+          <span className="absolute bottom-2 -left-2 text-[#38bdf8] text-xs">✦</span>
+          <span className="absolute bottom-1 -right-2 text-[#ff9600] text-sm animate-pulse">★</span>
+        </div>
+      )}
 
-        {/* Yellow/Green Belly Scutes */}
-        <path
-          d="M 90,145 C 92,120 95,95 106,85 C 112,87 116,110 112,145 C 103,150 96,148 90,145 Z"
-          fill={bellyColor}
-          opacity="0.85"
-        />
-        <line x1="93" y1="105" x2="111" y2="105" stroke="#155237" strokeWidth="1.5" opacity="0.4" />
-        <line x1="91" y1="122" x2="113" y2="122" stroke="#155237" strokeWidth="1.5" opacity="0.4" />
-        <line x1="90" y1="138" x2="113" y2="138" stroke="#155237" strokeWidth="1.5" opacity="0.4" />
+      {/* Equipped Accessories */}
+      {hasVisor && (
+        <div className="absolute top-[32%] left-[28%] w-[44%] h-[12%] bg-[#3ecf8e]/90 border border-white/80 rounded-full shadow-[0_0_12px_#3ecf8e] pointer-events-none transform -rotate-1 flex items-center justify-center overflow-hidden">
+          <div className="w-full h-[2px] bg-white opacity-80" />
+        </div>
+      )}
 
-        {/* Cute Snake Head */}
-        <ellipse
-          cx="100"
-          cy="68"
-          rx="38"
-          ry="32"
-          fill={`url(#snakeBody-${mood})`}
-          stroke="#155237"
-          strokeWidth="3"
-        />
-
-        {/* Cheeks blush */}
-        <circle cx="75" cy="78" r="6" fill="#f43f5e" opacity={mood === 'excited' ? '0.45' : '0.25'} />
-        <circle cx="125" cy="78" r="6" fill="#f43f5e" opacity={mood === 'excited' ? '0.45' : '0.25'} />
-
-        {/* Eyes based on Mood */}
-        {mood === 'sad' ? (
-          <g>
-            {/* Sad Eyes */}
-            <circle cx="82" cy="62" r="7" fill="#0e0e0e" />
-            <circle cx="118" cy="62" r="7" fill="#0e0e0e" />
-            <circle cx="84" cy="60" r="2.5" fill="#ffffff" />
-            <circle cx="120" cy="60" r="2.5" fill="#ffffff" />
-            {/* Droopy brow */}
-            <path d="M 75,54 Q 82,59 89,56" stroke="#155237" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-            <path d="M 125,54 Q 118,59 111,56" stroke="#155237" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-            {/* Tear */}
-            <path d="M 73,70 C 70,75 75,80 77,75 Z" fill="#38bdf8" opacity="0.8" />
-          </g>
-        ) : mood === 'thinking' ? (
-          <g>
-            {/* Thinking Eyes - looking up/side */}
-            <circle cx="82" cy="60" r="8" fill="#ffffff" />
-            <circle cx="84" cy="56" r="4.5" fill="#0e0e0e" />
-            <circle cx="85" cy="54" r="1.5" fill="#ffffff" />
-
-            <circle cx="118" cy="60" r="8" fill="#ffffff" />
-            <circle cx="120" cy="56" r="4.5" fill="#0e0e0e" />
-            <circle cx="121" cy="54" r="1.5" fill="#ffffff" />
-
-            {/* Inquisitive eyebrow */}
-            <path d="M 74,52 Q 82,48 90,53" stroke="#155237" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-            <path d="M 112,54 Q 120,53 126,51" stroke="#155237" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          </g>
-        ) : (
-          <g>
-            {/* Happy / Excited Big Cartoon Eyes */}
-            <circle cx="80" cy="62" r="9" fill="#ffffff" />
-            <circle cx="81" cy="63" r="6" fill="#0e0e0e" />
-            <circle cx="84" cy="60" r="2.5" fill="#ffffff" />
-            <circle cx="78" cy="65" r="1.2" fill="#ffffff" />
-
-            <circle cx="120" cy="62" r="9" fill="#ffffff" />
-            <circle cx="119" cy="63" r="6" fill="#0e0e0e" />
-            <circle cx="122" cy="60" r="2.5" fill="#ffffff" />
-            <circle cx="116" cy="65" r="1.2" fill="#ffffff" />
-
-            {/* Friendly Eyebrows */}
-            <path d="M 72,50 Q 80,45 88,50" stroke="#155237" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-            <path d="M 112,50 Q 120,45 128,50" stroke="#155237" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          </g>
-        )}
-
-        {/* Mouth based on Mood */}
-        {mood === 'sad' ? (
-          <path
-            d="M 88,88 Q 100,78 112,88"
-            stroke="#155237"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-          />
-        ) : mood === 'excited' || mood === 'celebrate' ? (
-          <g>
-            {/* Open Happy Mouth */}
-            <path
-              d="M 88,78 Q 100,98 112,78 Z"
-              fill="#991b1b"
-              stroke="#155237"
-              strokeWidth="2.5"
-            />
-            {/* Cute pink tongue */}
-            <path
-              d="M 94,86 Q 100,94 106,86 Z"
-              fill="#f43f5e"
-            />
-          </g>
-        ) : (
-          <g>
-            {/* Gentle Smile */}
-            <path
-              d="M 90,78 Q 100,88 110,78"
-              stroke="#155237"
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-            />
-            {/* Tongue flicker for snake charm */}
-            <path
-              d="M 100,83 L 100,92 L 96,96 M 100,92 L 104,96"
-              stroke="#f43f5e"
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </g>
-        )}
-
-        {/* Nostrils */}
-        <circle cx="94" cy="72" r="1" fill="#155237" />
-        <circle cx="106" cy="72" r="1" fill="#155237" />
-
-        {/* Accessories if equipped */}
-        {hasVisor && (
-          <g>
-            <path
-              d="M 64,58 Q 100,50 136,58 L 138,68 Q 100,60 62,68 Z"
-              fill="#3ecf8e"
-              opacity="0.85"
-              stroke="#10b981"
-              strokeWidth="1.5"
-            />
-            <line x1="68" y1="62" x2="132" y2="62" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
-          </g>
-        )}
-
-        {hasGlasses && (
-          <g>
-            <rect x="68" y="56" width="26" height="14" rx="3" fill="#171717" stroke="#fbbf24" strokeWidth="2" />
-            <rect x="106" y="56" width="26" height="14" rx="3" fill="#171717" stroke="#fbbf24" strokeWidth="2" />
-            <line x1="94" y1="63" x2="106" y2="63" stroke="#fbbf24" strokeWidth="2" />
-          </g>
-        )}
-
-        {/* Celebration sparkles */}
-        {mood === 'celebrate' && (
-          <g>
-            <path d="M 40,50 L 45,55 L 40,60 L 35,55 Z" fill="#facc15" />
-            <path d="M 160,40 L 165,45 L 160,50 L 155,45 Z" fill="#3ecf8e" />
-            <circle cx="150" cy="70" r="3" fill="#38bdf8" />
-            <circle cx="50" cy="80" r="3" fill="#f43f5e" />
-          </g>
-        )}
-      </svg>
+      {hasGlasses && (
+        <div className="absolute top-[31%] left-[26%] w-[48%] h-[15%] pointer-events-none flex items-center justify-between px-0.5">
+          <div className="w-[45%] h-full bg-[#121212]/95 border-2 border-[#fbbf24] rounded-md shadow-md" />
+          <div className="w-[10%] h-[2px] bg-[#fbbf24]" />
+          <div className="w-[45%] h-full bg-[#121212]/95 border-2 border-[#fbbf24] rounded-md shadow-md" />
+        </div>
+      )}
     </div>
   );
 };
