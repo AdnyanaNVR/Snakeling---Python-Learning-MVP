@@ -3,146 +3,9 @@ import { useApp } from '../context/AppContext';
 import { X, Eye, EyeOff, User, Mail, Lock, AlertCircle, Database, Check, Key } from 'lucide-react';
 import { isSupabaseConfigured, getSupabaseConfig, saveSupabaseCredentials, clearSupabaseCredentials } from '../lib/supabase';
 
-// Helper Modal to easily connect Supabase credentials directly from UI
-export const SupabaseSetupModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  const currentConfig = getSupabaseConfig();
-  const [url, setUrl] = useState(currentConfig.url || '');
-  const [key, setKey] = useState(currentConfig.anonKey || '');
-  const [saving, setSaving] = useState(false);
-
-  if (!isOpen) return null;
-
-  const isNamedProjectUrl = url.trim().toLowerCase().includes('snakeling8.supabase.co');
-
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanUrl = url.trim();
-    if (!cleanUrl.startsWith('https://')) {
-      alert('URL Supabase harus diawali dengan https:// (contoh: https://[project-ref].supabase.co)');
-      return;
-    }
-    if (cleanUrl.toLowerCase().includes('snakeling8.supabase.co')) {
-      alert('Perhatian: "snakeling8.supabase.co" bukan alamat URL Supabase yang valid. Buka dashboard Supabase -> Project Settings (ikon gerigi) -> Data API -> Salin "Project URL" yang formatnya https://[20-karakter-acak].supabase.co');
-      return;
-    }
-    if (!key.trim()) {
-      alert('Anon Key tidak boleh kosong');
-      return;
-    }
-    setSaving(true);
-    saveSupabaseCredentials(cleanUrl, key);
-  };
-
-  return (
-    <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl w-full max-w-lg p-6 shadow-2xl relative my-8">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-[#898989] hover:text-white p-1 cursor-pointer"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        <div className="flex items-center gap-2 mb-3">
-          <Database className="w-5 h-5 text-[#3ecf8e]" />
-          <h2 className="font-brand font-bold text-lg text-white">Hubungkan Supabase Cloud</h2>
-        </div>
-
-        {currentConfig.source === 'secret' && (
-          <div className="mb-4 p-3 bg-[#064e3b]/50 border border-[#10b981]/50 rounded-xl text-xs text-[#a7f3d0] flex items-center gap-2.5">
-            <Check className="w-4 h-4 text-[#3ecf8e] shrink-0" />
-            <div>
-              <strong>Kredensial Aktif dari Secrets:</strong> Project URL resmi ({currentConfig.url.slice(0, 26)}...) terbaca dari Secrets panel.
-            </div>
-          </div>
-        )}
-
-        {/* Step by step guide banner */}
-        <div className="p-3.5 mb-4 bg-[#111827] border border-[#1f2937] rounded-xl text-xs text-[#9ca3af] space-y-1.5 leading-relaxed">
-          <p className="font-bold text-[#3ecf8e] flex items-center gap-1.5">
-            📌 Cara menyalin Project URL &amp; Key dari Supabase:
-          </p>
-          <ol className="list-decimal pl-4 space-y-1 text-[#d1d5db]">
-            <li>Buka dashboard proyek Supabase Anda (<strong>snakeling8</strong>).</li>
-            <li>Di pojok kiri bawah, klik <strong className="text-white">Project Settings</strong> (ikon gerigi ⚙️).</li>
-            <li>Klik menu <strong className="text-white">Data API</strong> (atau <strong>API</strong>).</li>
-            <li>Salin <strong className="text-[#3ecf8e]">Project URL</strong> (format: <code className="text-[#3ecf8e]">https://[20-karakter].supabase.co</code>).</li>
-            <li>Salin <strong className="text-[#3ecf8e]">Project API keys</strong> bagian <code className="text-[#3ecf8e]">anon public</code>.</li>
-          </ol>
-        </div>
-
-        {isNamedProjectUrl && (
-          <div className="mb-4 p-3 bg-[#38260e] border border-[#f59e0b]/40 rounded-xl text-xs text-[#fde68a] leading-relaxed flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" />
-            <div>
-              <strong>Perhatian:</strong> Jangan mengisi nama proyek <code className="bg-black/40 px-1 py-0.5 rounded text-white">snakeling8.supabase.co</code>. Salin Project URL asli dari <strong>Project Settings → Data API</strong>.
-            </div>
-          </div>
-        )}
-
-        <form onSubmit={handleSave} className="space-y-4">
-          <div>
-            <label className="block text-xs font-mono text-[#898989] mb-1">
-              Project URL <span className="text-[#ffb4ab]">*</span>
-            </label>
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://abcdefghijklmnopqrst.supabase.co"
-              required
-              className="w-full bg-[#121212] border border-[#333333] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#3ecf8e] font-mono"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-mono text-[#898989] mb-1">
-              API Key (anon public) <span className="text-[#ffb4ab]">*</span>
-            </label>
-            <input
-              type="text"
-              value={key}
-              onChange={(e) => setKey(e.target.value)}
-              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-              required
-              className="w-full bg-[#121212] border border-[#333333] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#3ecf8e] font-mono"
-            />
-          </div>
-
-          <div className="pt-2 flex flex-col sm:flex-row gap-2">
-            <button
-              type="submit"
-              disabled={saving}
-              className="tactile-btn-primary flex-1 py-2.5 rounded-xl text-xs font-brand font-bold uppercase tracking-wider cursor-pointer"
-            >
-              {saving ? 'Menyimpan...' : 'Simpan & Hubungkan'}
-            </button>
-            {isSupabaseConfigured && (
-              <button
-                type="button"
-                onClick={clearSupabaseCredentials}
-                className="px-4 py-2.5 rounded-xl bg-[#2b1416] text-[#ffb4ab] border border-[#ef4444]/30 text-xs font-mono hover:bg-[#381a1d] transition-colors cursor-pointer"
-              >
-                Reset ke Mode Demo
-              </button>
-            )}
-          </div>
-        </form>
-
-        <div className="mt-4 pt-3 border-t border-[#2e2e2e] text-center">
-          <button
-            type="button"
-            onClick={() => {
-              clearSupabaseCredentials();
-            }}
-            className="text-[11px] text-[#898989] hover:text-[#3ecf8e] transition-colors cursor-pointer"
-          >
-            Ingin mencoba langsung tanpa Supabase? Klik di sini untuk Mode Demo
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+// Helper Modal - Disabled for privacy and security
+export const SupabaseSetupModal: React.FC<{ isOpen: boolean; onClose: () => void }> = () => {
+  return null;
 };
 
 export const LoginModal: React.FC = () => {
@@ -217,27 +80,9 @@ export const LoginModal: React.FC = () => {
 
             {/* Error Message banner */}
             {errorMsg && (
-              <div className="w-full mb-4 p-3.5 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex flex-col gap-2.5">
-                <div className="flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0 mt-0.5" />
-                  <span className="flex-1 leading-relaxed">{errorMsg}</span>
-                </div>
-                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#ef4444]/20">
-                  <button
-                    type="button"
-                    onClick={() => setShowDbModal(true)}
-                    className="px-3 py-1.5 bg-[#3a1a1e] hover:bg-[#4a2025] text-white rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
-                  >
-                    ⚙️ Periksa URL Supabase
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => continueWithDemo(identifier || 'SiswaPython')}
-                    className="px-3 py-1.5 bg-[#1e3a2b] hover:bg-[#254a37] text-[#3ecf8e] rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
-                  >
-                    🚀 Masuk Instan (Mode Demo)
-                  </button>
-                </div>
+              <div className="w-full mb-4 p-3.5 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0 mt-0.5" />
+                <span className="flex-1 leading-relaxed">{errorMsg}</span>
               </div>
             )}
 
@@ -264,8 +109,8 @@ export const LoginModal: React.FC = () => {
                     setPassword(e.target.value);
                     if (errorMsg) setErrorMsg('');
                   }}
-                  placeholder={identifier.trim().toLowerCase() === 'demo' ? 'Kata sandi boleh kosong (Akun Demo)' : 'Masukkan kata sandi'}
-                  required={identifier.trim().toLowerCase() !== 'demo'}
+                  placeholder="Masukkan kata sandi"
+                  required
                   className="w-full pl-4 pr-20 py-3.5 bg-[#151515] text-[#fafafa] text-sm placeholder:text-[#898989] border border-[#393939] rounded-xl focus:outline-none focus:border-[#3ecf8e] transition-colors shadow-inner"
                 />
                 <button
@@ -274,21 +119,6 @@ export const LoginModal: React.FC = () => {
                   className="absolute right-3.5 text-[11px] font-brand font-bold tracking-wider text-[#898989] hover:text-[#3ecf8e] uppercase transition-colors"
                 >
                   {showPassword ? 'TUTUP' : 'LIHAT'}
-                </button>
-              </div>
-
-              {/* Quick Demo Shortcut */}
-              <div className="flex items-center justify-between px-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIdentifier('demo');
-                    setPassword('');
-                    loginUser('demo', '');
-                  }}
-                  className="text-xs text-[#3ecf8e] hover:text-[#6ee7b7] font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <span>⚡ Masuk Cepat Akun Demo (demo / tanpa sandi)</span>
                 </button>
               </div>
 
@@ -324,24 +154,6 @@ export const LoginModal: React.FC = () => {
               </svg>
               <span>Masuk Cepat Google</span>
             </button>
-
-            {/* Supabase Connection Helper link */}
-            <div className="mt-6 text-center">
-              <button
-                type="button"
-                onClick={() => setShowDbModal(true)}
-                className="text-[11px] font-mono text-[#898989] hover:text-[#3ecf8e] flex items-center gap-1.5 mx-auto transition-colors"
-              >
-                <Database className="w-3.5 h-3.5" />
-                <span>
-                  {isSupabaseConfigured
-                    ? (getSupabaseConfig().source === 'secret'
-                        ? '✓ Terhubung ke Supabase (Secrets)'
-                        : '✓ Terhubung ke Supabase Cloud')
-                    : 'Pengaturan Database Supabase (snakeling8)'}
-                </span>
-              </button>
-            </div>
           </div>
         </main>
       </div>
@@ -427,27 +239,9 @@ export const RegisterModal: React.FC = () => {
 
             {/* Error Banner */}
             {errorMsg && (
-              <div className="w-full mb-4 p-3.5 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex flex-col gap-2.5">
-                <div className="flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0 mt-0.5" />
-                  <span className="flex-1 leading-relaxed">{errorMsg}</span>
-                </div>
-                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#ef4444]/20">
-                  <button
-                    type="button"
-                    onClick={() => setShowDbModal(true)}
-                    className="px-3 py-1.5 bg-[#3a1a1e] hover:bg-[#4a2025] text-white rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
-                  >
-                    ⚙️ Periksa URL Supabase
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => continueWithDemo(username || 'SiswaPython', email || 'siswa@snakeling.app')}
-                    className="px-3 py-1.5 bg-[#1e3a2b] hover:bg-[#254a37] text-[#3ecf8e] rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
-                  >
-                    🚀 Masuk Instan (Mode Demo)
-                  </button>
-                </div>
+              <div className="w-full mb-4 p-3.5 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0 mt-0.5" />
+                <span className="flex-1 leading-relaxed">{errorMsg}</span>
               </div>
             )}
 
@@ -556,43 +350,9 @@ export const RegisterModal: React.FC = () => {
                 Daftar Cepat Google
               </span>
             </button>
-
-            {/* Quick Demo Access Button */}
-            <div className="mt-3 text-center">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowRegisterModal(false);
-                  loginUser('demo', '');
-                }}
-                className="text-xs text-[#3ecf8e] hover:text-[#6ee7b7] font-mono inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <span>⚡ Coba Akun Demo Sekarang (demo / tanpa sandi)</span>
-              </button>
-            </div>
-
-            {/* Supabase Connection Helper link */}
-            <div className="mt-5 text-center">
-              <button
-                type="button"
-                onClick={() => setShowDbModal(true)}
-                className="text-[11px] font-mono text-[#898989] hover:text-[#3ecf8e] flex items-center gap-1.5 mx-auto transition-colors"
-              >
-                <Database className="w-3.5 h-3.5" />
-                <span>
-                  {isSupabaseConfigured
-                    ? (getSupabaseConfig().source === 'secret'
-                        ? '✓ Terhubung ke Supabase (Secrets)'
-                        : '✓ Terhubung ke Supabase Cloud')
-                    : 'Pengaturan Database Supabase (snakeling8)'}
-                </span>
-              </button>
-            </div>
           </div>
         </main>
       </div>
-
-      <SupabaseSetupModal isOpen={showDbModal} onClose={() => setShowDbModal(false)} />
     </>
   );
 };

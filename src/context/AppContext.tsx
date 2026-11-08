@@ -216,7 +216,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Purchase Shop Item
   const purchaseShopItem = (item: ShopItem): boolean => {
-    if (stats.gems < item.costGems) {
+    const isDemo = user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account';
+
+    if (!isDemo && stats.gems < item.costGems) {
       playSound('wrong');
       showToast('Gems kamu tidak cukup untuk item ini!', 'error');
       return false;
@@ -229,7 +231,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       setStats((prev) => ({
         ...prev,
-        gems: prev.gems - item.costGems,
+        gems: isDemo ? prev.gems : prev.gems - item.costGems,
         streakFreezeCount: prev.streakFreezeCount + 1,
         inventory: {
           ...prev.inventory,
@@ -243,7 +245,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       setStats((prev) => ({
         ...prev,
-        gems: prev.gems - item.costGems,
+        gems: isDemo ? prev.gems : prev.gems - item.costGems,
         hearts: prev.maxHearts
       }));
     } else {
@@ -255,7 +257,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           : prev.equippedCosmetics;
         return {
           ...prev,
-          gems: prev.gems - item.costGems,
+          gems: isDemo ? prev.gems : prev.gems - item.costGems,
           inventory: nextInv,
           equippedCosmetics: nextCosmetics
         };
@@ -269,17 +271,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Hearts refill
   const refillHearts = (): boolean => {
+    const isDemo = user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account';
+
     if (stats.hearts >= stats.maxHearts) {
       showToast('Nyawa sudah penuh 5/5!', 'info');
       return false;
     }
-    if (stats.gems < 100) {
+    if (!isDemo && stats.gems < 100) {
       showToast('Butuh 100 Gems untuk isi ulang nyawa!', 'error');
       return false;
     }
     setStats((prev) => ({
       ...prev,
-      gems: prev.gems - 100,
+      gems: isDemo ? prev.gems : prev.gems - 100,
       hearts: prev.maxHearts
     }));
     playSound('purchase');
@@ -354,10 +358,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           joinedDate: 'Bergabung 2025 (Mode Demo)',
           userCode: 'SNK-DEMO'
         });
+        setStats((prev) => ({
+          ...prev,
+          gems: 999999
+        }));
         setIsLoggedIn(true);
         setShowLoginModal(false);
         playSound('correct');
-        showToast('Berhasil masuk dengan akun demo!');
+        showToast('Berhasil masuk dengan akun demo (Gems Tak Terbatas)!');
         return { success: true };
       }
 

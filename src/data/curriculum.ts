@@ -168,16 +168,6 @@ export const INITIAL_SHOP_ITEMS = [
     maxQuantity: 1
   },
   {
-    id: 'xp_boost',
-    name: 'Pengganda XP (15 Menit)',
-    category: 'powerup' as const,
-    description: 'Dapatkan 2x lipat poin pengalaman (XP) untuk setiap latihan yang diselesaikan dalam 15 menit ke depan.',
-    costGems: 150,
-    icon: 'lightning',
-    badgeText: 'Populer',
-    maxQuantity: 5
-  },
-  {
     id: 'visor_cyber',
     name: 'Cyber Coder Visor',
     category: 'cosmetic' as const,

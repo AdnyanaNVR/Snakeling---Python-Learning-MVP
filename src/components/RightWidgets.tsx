@@ -35,12 +35,14 @@ export const RightWidgets: React.FC = () => {
         <div
           onClick={() => setActiveTab('toko')}
           className="flex items-center gap-2.5 font-brand font-bold text-sm text-[#38bdf8] cursor-pointer hover:opacity-90 transition-opacity px-2.5 py-1.5 rounded-xl hover:bg-[#162025]"
-          title={`${stats.gems} Gems Tersedia`}
+          title={user.username.toLowerCase() === 'demo' ? 'Gems Tak Terbatas (Akun Demo)' : `${stats.gems} Gems Tersedia`}
         >
           <div className="relative flex items-center justify-center">
             <Gem className="w-5 h-5 text-[#38bdf8] fill-[#38bdf8]/20" />
           </div>
-          <span className="tracking-tight text-white font-extrabold">{stats.gems}</span>
+          <span className="tracking-tight text-white font-extrabold">
+            {user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account' ? '∞' : stats.gems}
+          </span>
         </div>
 
         {/* Hearts Stat */}

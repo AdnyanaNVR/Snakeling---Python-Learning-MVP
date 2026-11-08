@@ -134,27 +134,6 @@ export const SettingsModal: React.FC<{ isOpen: boolean; onClose: () => void }> =
           </button>
         </div>
 
-        {/* Supabase Status Info */}
-        <div className="p-3.5 rounded-2xl bg-[#1c1b1b] border border-[#2e2e2e] space-y-1">
-          <div className="flex items-center gap-2">
-            <Database className="w-4 h-4 text-[#38bdf8]" />
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-              Status Database Supabase
-            </h4>
-          </div>
-          <p className="text-xs text-[#898989]">
-            {isSupabaseConfigured ? (
-              <span className="text-[#3ecf8e] font-semibold">
-                ✓ Terhubung ke Supabase Cloud Database
-              </span>
-            ) : (
-              <span className="text-[#ff9600]">
-                Mode Offline / LocalStorage (Siap deploy ke Vercel + Supabase)
-              </span>
-            )}
-          </p>
-        </div>
-
         {/* Reset progress */}
         <div className="pt-2 flex flex-col gap-2.5">
           <button

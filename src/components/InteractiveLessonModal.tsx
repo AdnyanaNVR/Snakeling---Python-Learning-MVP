@@ -9,6 +9,7 @@ export const InteractiveLessonModal: React.FC = () => {
   const {
     selectedLessonId,
     setIsLessonActive,
+    user,
     stats,
     loseHeart,
     finishLesson,
@@ -16,6 +17,8 @@ export const InteractiveLessonModal: React.FC = () => {
     playSound,
     showToast
   } = useApp();
+
+  const isDemo = user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account';
 
   const lesson = LESSON_UNITS.find((u) => u.id === selectedLessonId) || LESSON_UNITS[0];
   const questions = lesson.questions;
@@ -139,7 +142,7 @@ export const InteractiveLessonModal: React.FC = () => {
               className="tactile-btn-primary w-full py-3.5 rounded-xl font-brand font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2"
             >
               <Heart className="w-4 h-4 fill-current text-[#ef4444]" />
-              <span>Isi Ulang 5 Nyawa (100 Gems)</span>
+              <span>{isDemo ? 'Isi Ulang 5 Nyawa (Gratis Demo)' : 'Isi Ulang 5 Nyawa (100 Gems)'}</span>
             </button>
             <button
               onClick={() => setIsLessonActive(false)}
