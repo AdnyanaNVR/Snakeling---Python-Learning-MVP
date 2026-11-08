@@ -6,7 +6,7 @@ export const LeaderboardView: React.FC = () => {
   const { leaderboard, user, stats } = useApp();
 
   return (
-    <section className="flex-1 max-w-[560px] mx-auto lg:mx-0 w-full flex flex-col items-center" aria-label="Papan Skor Snakeling">
+    <section className="flex-1 w-full lg:max-w-[640px] xl:max-w-[680px] mx-auto flex flex-col items-center" aria-label="Papan Skor Snakeling">
       <div className="w-full max-w-[560px] mx-auto flex flex-col pt-2 pb-12 px-2">
         {/* Header: Title & Subtitle */}
         <div className="text-center mb-6">

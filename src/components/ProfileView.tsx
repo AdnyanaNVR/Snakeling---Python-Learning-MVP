@@ -121,7 +121,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
             <h3 className="text-2xl font-brand font-extrabold text-white tracking-tight">
               {stats.streak} Hari
             </h3>
-            <p className="text-xs text-[#898989] mt-0.5">Konsistensi aktif</p>
           </div>
         </div>
 
@@ -139,7 +138,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
             <h3 className="text-2xl font-brand font-extrabold text-white tracking-tight">
               {stats.xp} XP
             </h3>
-            <p className="text-xs text-[#898989] mt-0.5">Level 2 Calon Coder</p>
           </div>
         </div>
 
@@ -157,7 +155,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
             <h3 className="text-2xl font-brand font-extrabold text-white tracking-tight">
               {stats.modulesCompleted} Modul
             </h3>
-            <p className="text-xs text-[#898989] mt-0.5">Syntax, Variables</p>
           </div>
         </div>
       </div>

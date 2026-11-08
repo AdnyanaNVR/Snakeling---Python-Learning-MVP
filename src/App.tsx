@@ -35,9 +35,21 @@ const MainShell: React.FC = () => {
             <div className="max-w-[1200px] w-full h-full flex flex-col lg:flex-row justify-between px-4 sm:px-6 py-4 gap-8">
               {/* CENTER VIEW */}
               {activeTab === 'belajar' && <LearningMap />}
-              {activeTab === 'papan_skor' && <div className="flex-1 h-full overflow-y-auto pr-1"><LeaderboardView /></div>}
-              {activeTab === 'toko' && <div className="flex-1 h-full overflow-y-auto pr-1"><ShopView /></div>}
-              {activeTab === 'profil' && <div className="flex-1 h-full overflow-y-auto pr-1"><ProfileView onOpenSettings={() => setShowSettings(true)} /></div>}
+              {activeTab === 'papan_skor' && (
+                <div className="flex-1 w-full h-full overflow-y-auto pr-1 scroll-smooth flex justify-center" style={{ scrollbarWidth: 'thin', scrollbarColor: '#2e2e2e transparent' }}>
+                  <LeaderboardView />
+                </div>
+              )}
+              {activeTab === 'toko' && (
+                <div className="flex-1 h-full overflow-y-auto pr-1 scroll-smooth" style={{ scrollbarWidth: 'thin', scrollbarColor: '#2e2e2e transparent' }}>
+                  <ShopView />
+                </div>
+              )}
+              {activeTab === 'profil' && (
+                <div className="flex-1 h-full overflow-y-auto pr-1 scroll-smooth" style={{ scrollbarWidth: 'thin', scrollbarColor: '#2e2e2e transparent' }}>
+                  <ProfileView onOpenSettings={() => setShowSettings(true)} />
+                </div>
+              )}
 
               {/* RIGHT STATS & PROMOTIONS SIDEBAR (STAYS IN PLACE) */}
               <RightWidgets />
