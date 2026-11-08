@@ -341,6 +341,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Auth: Login
   const loginUser = async (emailOrUser: string, _pass: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      const cleanIdent = emailOrUser.trim().toLowerCase();
+      // Khusus akun demo: nama 'demo' dengan kata sandi kosong atau apa saja
+      if (cleanIdent === 'demo' || cleanIdent === 'demo@snakeling.app') {
+        setUser({
+          id: 'usr_demo_account',
+          username: 'demo',
+          displayName: 'Akun Demo',
+          email: 'demo@snakeling.app',
+          avatarUrl: '/logo_snakepreview.png',
+          isPro: false,
+          joinedDate: 'Bergabung 2025 (Mode Demo)',
+          userCode: 'SNK-DEMO'
+        });
+        setIsLoggedIn(true);
+        setShowLoginModal(false);
+        playSound('correct');
+        showToast('Berhasil masuk dengan akun demo!');
+        return { success: true };
+      }
+
       if (isSupabaseConfigured && supabase) {
         const { error } = await supabase.auth.signInWithPassword({
           email: emailOrUser,

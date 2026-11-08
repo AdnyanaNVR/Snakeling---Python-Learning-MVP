@@ -159,8 +159,14 @@ export const LoginModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-    if (!identifier.trim() || !password) {
-      setErrorMsg('Mohon isi email dan kata sandi!');
+    const cleanId = identifier.trim().toLowerCase();
+    const isDemo = cleanId === 'demo' || cleanId === 'demo@snakeling.app';
+    if (!identifier.trim()) {
+      setErrorMsg('Mohon isi email atau nama pengguna!');
+      return;
+    }
+    if (!isDemo && !password) {
+      setErrorMsg('Mohon isi kata sandi!');
       return;
     }
     setLoading(true);
@@ -258,8 +264,8 @@ export const LoginModal: React.FC = () => {
                     setPassword(e.target.value);
                     if (errorMsg) setErrorMsg('');
                   }}
-                  placeholder="Masukkan kata sandi"
-                  required
+                  placeholder={identifier.trim().toLowerCase() === 'demo' ? 'Kata sandi boleh kosong (Akun Demo)' : 'Masukkan kata sandi'}
+                  required={identifier.trim().toLowerCase() !== 'demo'}
                   className="w-full pl-4 pr-20 py-3.5 bg-[#151515] text-[#fafafa] text-sm placeholder:text-[#898989] border border-[#393939] rounded-xl focus:outline-none focus:border-[#3ecf8e] transition-colors shadow-inner"
                 />
                 <button
@@ -268,6 +274,21 @@ export const LoginModal: React.FC = () => {
                   className="absolute right-3.5 text-[11px] font-brand font-bold tracking-wider text-[#898989] hover:text-[#3ecf8e] uppercase transition-colors"
                 >
                   {showPassword ? 'TUTUP' : 'LIHAT'}
+                </button>
+              </div>
+
+              {/* Quick Demo Shortcut */}
+              <div className="flex items-center justify-between px-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIdentifier('demo');
+                    setPassword('');
+                    loginUser('demo', '');
+                  }}
+                  className="text-xs text-[#3ecf8e] hover:text-[#6ee7b7] font-mono flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <span>⚡ Masuk Cepat Akun Demo (demo / tanpa sandi)</span>
                 </button>
               </div>
 
@@ -331,7 +352,7 @@ export const LoginModal: React.FC = () => {
 };
 
 export const RegisterModal: React.FC = () => {
-  const { showRegisterModal, setShowRegisterModal, setShowLoginModal, registerUser, continueWithDemo, showToast } = useApp();
+  const { showRegisterModal, setShowRegisterModal, setShowLoginModal, registerUser, loginUser, continueWithDemo, showToast } = useApp();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -535,6 +556,20 @@ export const RegisterModal: React.FC = () => {
                 Daftar Cepat Google
               </span>
             </button>
+
+            {/* Quick Demo Access Button */}
+            <div className="mt-3 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowRegisterModal(false);
+                  loginUser('demo', '');
+                }}
+                className="text-xs text-[#3ecf8e] hover:text-[#6ee7b7] font-mono inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                <span>⚡ Coba Akun Demo Sekarang (demo / tanpa sandi)</span>
+              </button>
+            </div>
 
             {/* Supabase Connection Helper link */}
             <div className="mt-5 text-center">
