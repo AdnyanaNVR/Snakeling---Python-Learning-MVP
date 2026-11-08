@@ -48,6 +48,18 @@ interface AppContextType {
 const STORAGE_KEY_USER = 'snakeling_user_profile';
 const STORAGE_KEY_STATS = 'snakeling_user_stats';
 
+const getTodayStr = (): string => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
+const getDayDifference = (dateStr1: string, dateStr2: string): number => {
+  const d1 = new Date(dateStr1 + 'T00:00:00');
+  const d2 = new Date(dateStr2 + 'T00:00:00');
+  const diffTime = d1.getTime() - d2.getTime();
+  return Math.round(diffTime / (1000 * 60 * 60 * 24));
+};
+
 const DEFAULT_USER: UserProfile = {
   id: 'usr_adnyana_default',
   username: 'adnyana_py',
@@ -66,14 +78,15 @@ const DEFAULT_STATS: UserStats = {
   maxHearts: 5,
   xp: 120,
   streakFreezeCount: 1,
-  modulesCompleted: 4,
-  currentLessonIndex: 0,
+  modulesCompleted: 1,
+  currentLessonIndex: 1,
   completedLessons: ['unit1_lesson1'],
   inventory: {
     streak_freeze: 1
   },
   equippedCosmetics: [],
-  activityDates: ['2025-02-27']
+  activityDates: [getTodayStr()],
+  lastActiveDate: getTodayStr()
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -312,18 +325,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Complete a lesson
   const finishLesson = (lessonId: string, earnedXp: number, earnedGems: number) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getTodayStr();
     setStats((prev) => {
       const alreadyCompleted = prev.completedLessons.includes(lessonId);
       const nextCompleted = alreadyCompleted ? prev.completedLessons : [...prev.completedLessons, lessonId];
       const nextActivityDates = prev.activityDates.includes(today) ? prev.activityDates : [...prev.activityDates, today];
+
+      // REAL STREAK CALCULATION
+      let nextStreak = prev.streak || 1;
+      let nextFreezeCount = prev.streakFreezeCount ?? 1;
+      const lastActive = prev.lastActiveDate;
+
+      if (!lastActive) {
+        nextStreak = 1;
+      } else if (lastActive === today) {
+        // Practiced again today, streak already maintained!
+        nextStreak = Math.max(1, prev.streak);
+      } else {
+        const diff = getDayDifference(today, lastActive);
+        if (diff === 1) {
+          // Exactly consecutive day (yesterday -> today)
+          nextStreak = prev.streak + 1;
+          setTimeout(() => {
+            showToast(`🔥 Streak harian bertambah! Sekarang ${nextStreak} hari berturut-turut!`, 'success');
+          }, 600);
+        } else if (diff === 2 && nextFreezeCount > 0) {
+          // Missed 1 day, streak freeze protects!
+          nextFreezeCount = nextFreezeCount - 1;
+          nextStreak = prev.streak + 1;
+          setTimeout(() => {
+            showToast(`🛡️ Streak Freeze otomatis melindungi rentetan belajarmu! Streak naik ke ${nextStreak} hari!`, 'info');
+          }, 600);
+        } else {
+          // Missed more than 1 day or no freeze
+          nextStreak = 1;
+          setTimeout(() => {
+            showToast(`🔥 Streak baru dimulai hari ini (Hari ke-1)!`, 'success');
+          }, 600);
+        }
+      }
+
       return {
         ...prev,
+        streak: nextStreak,
+        streakFreezeCount: nextFreezeCount,
+        lastActiveDate: today,
         xp: prev.xp + earnedXp,
         gems: prev.gems + earnedGems,
         completedLessons: nextCompleted,
-        modulesCompleted: Math.max(prev.modulesCompleted, Math.min(10, nextCompleted.length + 3)),
-        currentLessonIndex: Math.min(10, prev.currentLessonIndex + 1),
+        modulesCompleted: nextCompleted.length,
+        currentLessonIndex: nextCompleted.length,
         activityDates: nextActivityDates
       };
     });
@@ -536,10 +587,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Build dynamic leaderboard list that places current user accurately
   const leaderboard: LeaderboardUser[] = React.useMemo(() => {
     const list: LeaderboardUser[] = [...INITIAL_LEADERBOARD];
+
+    const userInitials = (user.displayName || user.username || 'U')
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+
+    // Insert or update current user in leaderboard
+    list.push({
+      rank: 0,
+      initials: userInitials || 'SN',
+      name: `${user.displayName} (Kamu)`,
+      xp: stats.xp,
+      isCurrentUser: true,
+      avatarUrl: user.avatarUrl
+    });
+
     // Sort descending by XP
     list.sort((a, b) => b.xp - a.xp);
     return list.map((item, idx) => ({ ...item, rank: idx + 1 }));
-  }, []);
+  }, [user.displayName, user.username, user.avatarUrl, stats.xp]);
 
   return (
     <AppContext.Provider

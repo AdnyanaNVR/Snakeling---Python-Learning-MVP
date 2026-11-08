@@ -7,6 +7,7 @@ interface TileData {
   id: number;
   unit: number;
   stepNumber: number;
+  lessonId: string;
   title: string;
   cx: number;
   cy: number;
@@ -27,42 +28,54 @@ export const LearningMap: React.FC = () => {
 
   const tileMetaData = [
     // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
-    { id: 1, unit: 1, stepNumber: 1, title: 'Perintah print() & Salam Pertama', status: 'active' as const },
-    { id: 2, unit: 1, stepNumber: 2, title: 'Variabel & Tipe String', status: 'locked' as const },
-    { id: 3, unit: 1, stepNumber: 3, title: 'Penggabungan String', status: 'locked' as const },
-    { id: 4, unit: 1, stepNumber: 4, title: 'Aritmatika Dasar Minuman', status: 'locked' as const },
-    { id: 5, unit: 1, stepNumber: 5, title: 'Input Pengguna', status: 'locked' as const },
-    { id: 6, unit: 1, stepNumber: 6, title: 'Latihan Praktik Terminal', status: 'locked' as const },
-    { id: 7, unit: 1, stepNumber: 7, title: 'Format Teks f-string', status: 'locked' as const },
-    { id: 8, unit: 1, stepNumber: 8, title: 'Logika Boolean', status: 'locked' as const },
-    { id: 9, unit: 1, stepNumber: 9, title: 'Review Cepat Sintaks', status: 'locked' as const },
-    { id: 10, unit: 1, stepNumber: 10, title: 'Tantangan Mini Game', status: 'locked' as const },
-    { id: 11, unit: 1, stepNumber: 11, title: 'Ujian Sertifikasi Unit 1', status: 'locked' as const },
+    { id: 1, unit: 1, stepNumber: 1, lessonId: 'unit1_lesson1', title: 'Perintah print() & Salam Pertama' },
+    { id: 2, unit: 1, stepNumber: 2, lessonId: 'unit1_lesson2', title: 'Variabel & Tipe String' },
+    { id: 3, unit: 1, stepNumber: 3, lessonId: 'unit1_lesson3', title: 'Penggabungan String' },
+    { id: 4, unit: 1, stepNumber: 4, lessonId: 'unit1_lesson4', title: 'Aritmatika Dasar Minuman' },
+    { id: 5, unit: 1, stepNumber: 5, lessonId: 'unit1_lesson5', title: 'Input Pengguna' },
+    { id: 6, unit: 1, stepNumber: 6, lessonId: 'unit1_lesson6', title: 'Latihan Praktik Terminal' },
+    { id: 7, unit: 1, stepNumber: 7, lessonId: 'unit1_lesson7', title: 'Format Teks f-string' },
+    { id: 8, unit: 1, stepNumber: 8, lessonId: 'unit1_lesson8', title: 'Logika Boolean' },
+    { id: 9, unit: 1, stepNumber: 9, lessonId: 'unit1_lesson9', title: 'Review Cepat Sintaks' },
+    { id: 10, unit: 1, stepNumber: 10, lessonId: 'unit1_lesson10', title: 'Tantangan Mini Game' },
+    { id: 11, unit: 1, stepNumber: 11, lessonId: 'unit1_lesson11', title: 'Ujian Sertifikasi Unit 1' },
 
     // UNIT 2: Logika Kondisi & Percabangan (Steps 12 to 18)
-    { id: 12, unit: 2, stepNumber: 12, title: 'Kondisi if & Logika Dasar', status: 'locked' as const },
-    { id: 13, unit: 2, stepNumber: 13, title: 'Percabangan else & Alternatif', status: 'locked' as const },
-    { id: 14, unit: 2, stepNumber: 14, title: 'Kondisi Majemuk elif', status: 'locked' as const },
-    { id: 15, unit: 2, stepNumber: 15, title: 'Operator Logika and & or', status: 'locked' as const },
-    { id: 16, unit: 2, stepNumber: 16, title: 'Nested if (Kondisi Bersarang)', status: 'locked' as const },
-    { id: 17, unit: 2, stepNumber: 17, title: 'Studi Kasus Menu Restoran', status: 'locked' as const },
-    { id: 18, unit: 2, stepNumber: 18, title: 'Evaluasi Akhir Unit 2', status: 'locked' as const },
+    { id: 12, unit: 2, stepNumber: 12, lessonId: 'unit2_lesson1', title: 'Kondisi if & Logika Dasar' },
+    { id: 13, unit: 2, stepNumber: 13, lessonId: 'unit2_lesson2', title: 'Percabangan else & Alternatif' },
+    { id: 14, unit: 2, stepNumber: 14, lessonId: 'unit2_lesson3', title: 'Kondisi Majemuk elif' },
+    { id: 15, unit: 2, stepNumber: 15, lessonId: 'unit2_lesson4', title: 'Operator Logika and & or' },
+    { id: 16, unit: 2, stepNumber: 16, lessonId: 'unit2_lesson5', title: 'Nested if (Kondisi Bersarang)' },
+    { id: 17, unit: 2, stepNumber: 17, lessonId: 'unit2_lesson6', title: 'Studi Kasus Menu Restoran' },
+    { id: 18, unit: 2, stepNumber: 18, lessonId: 'unit2_lesson7', title: 'Evaluasi Akhir Unit 2' },
 
     // UNIT 3: Struktur Data List & Koleksi (Steps 19 to 25)
-    { id: 19, unit: 3, stepNumber: 19, title: 'Mengenal List Python []', status: 'locked' as const },
-    { id: 20, unit: 3, stepNumber: 20, title: 'Indeks & Mengakses Elemen', status: 'locked' as const },
-    { id: 21, unit: 3, stepNumber: 21, title: 'Menambah Data: append()', status: 'locked' as const },
-    { id: 22, unit: 3, stepNumber: 22, title: 'Menghapus Data: remove()', status: 'locked' as const },
-    { id: 23, unit: 3, stepNumber: 23, title: 'Panjang List dengan len()', status: 'locked' as const },
-    { id: 24, unit: 3, stepNumber: 24, title: 'Slicing & Potong List', status: 'locked' as const },
-    { id: 25, unit: 3, stepNumber: 25, title: 'Master Sertifikasi List', status: 'locked' as const }
+    { id: 19, unit: 3, stepNumber: 19, lessonId: 'unit3_lesson1', title: 'Mengenal List Python []' },
+    { id: 20, unit: 3, stepNumber: 20, lessonId: 'unit3_lesson2', title: 'Indeks & Mengakses Elemen' },
+    { id: 21, unit: 3, stepNumber: 21, lessonId: 'unit3_lesson3', title: 'Menambah Data: append()' },
+    { id: 22, unit: 3, stepNumber: 22, lessonId: 'unit3_lesson4', title: 'Menghapus Data: remove()' },
+    { id: 23, unit: 3, stepNumber: 23, lessonId: 'unit3_lesson5', title: 'Panjang List dengan len()' },
+    { id: 24, unit: 3, stepNumber: 24, lessonId: 'unit3_lesson6', title: 'Slicing & Potong List' },
+    { id: 25, unit: 3, stepNumber: 25, lessonId: 'unit3_lesson7', title: 'Master Sertifikasi List' }
   ];
 
-  const tiles: TileData[] = tileMetaData.map((meta, i) => ({
-    ...meta,
-    cx: cxPattern[i % 6],
-    cy: startCy - i * dyStep
-  }));
+  const completedCount = stats.completedLessons.length;
+
+  const tiles: TileData[] = tileMetaData.map((meta, i) => {
+    let status: 'completed' | 'active' | 'locked' = 'locked';
+    if (stats.completedLessons.includes(meta.lessonId) || meta.stepNumber <= completedCount) {
+      status = 'completed';
+    } else if (meta.stepNumber === completedCount + 1) {
+      status = 'active';
+    }
+
+    return {
+      ...meta,
+      status,
+      cx: cxPattern[i % 6],
+      cy: startCy - i * dyStep
+    };
+  });
 
   // Auto-scroll the roadmap container down to Step 1 on initial load
   useEffect(() => {
@@ -95,15 +108,18 @@ export const LearningMap: React.FC = () => {
 
   const startNextLesson = () => {
     playSound('click');
-    const lesson = LESSON_UNITS[0];
+    const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
+    const lesson = LESSON_UNITS.find((u) => u.id === activeTile.lessonId) || LESSON_UNITS[0];
     setSelectedLessonId(lesson.id);
     setIsLessonActive(true);
   };
 
   const handleTileClick = (tile: TileData) => {
     playSound('click');
-    if (tile.id === 1) {
-      startNextLesson();
+    if (tile.status === 'active' || tile.status === 'completed') {
+      const lesson = LESSON_UNITS.find((u) => u.id === tile.lessonId) || LESSON_UNITS[0];
+      setSelectedLessonId(lesson.id);
+      setIsLessonActive(true);
     } else {
       showToast(`Unit ${tile.unit} • Langkah ${tile.stepNumber}: ${tile.title}. Selesaikan langkah sebelumnya terlebih dahulu!`, 'info');
     }

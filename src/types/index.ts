@@ -23,6 +23,7 @@ export interface UserStats {
   inventory: Record<string, number>;
   equippedCosmetics: string[];
   activityDates: string[];
+  lastActiveDate?: string;
 }
 
 export interface ShopItem {

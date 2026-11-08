@@ -133,6 +133,218 @@ export const LESSON_UNITS: LessonUnit[] = [
         explanation: 'F-string dengan awalan `f"..."` dan kurung kurawal `{}` adalah cara resmi dan paling elegan di Python modern.'
       }
     ]
+  },
+  {
+    id: 'unit1_lesson4',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 4,
+    title: 'Aritmatika Dasar Minuman',
+    subtitle: 'Menghitung total harga dan jumlah cangkir kopi',
+    xpReward: 35,
+    gemReward: 15,
+    questions: [
+      {
+        id: 'q4_1',
+        type: 'code_predict',
+        prompt: 'Berapakah hasil dari ekspresi perhitungan Python berikut?',
+        codeSnippet: 'harga_kopi = 15000\njumlah = 2\ntotal = harga_kopi * jumlah\nprint(total)',
+        options: ['30000', '150002', '30000.0', 'Error'],
+        correctAnswer: '30000',
+        explanation: 'Operator `*` digunakan untuk perkalian antar bilangan integer di Python (15000 * 2 = 30000).'
+      },
+      {
+        id: 'q4_2',
+        type: 'fill_blank',
+        prompt: 'Lengkapi operator untuk menghitung kembalian uang:',
+        codeSnippet: 'kembalian = bayar __ total_belanja',
+        options: ['-', '+', '/', '%'],
+        correctAnswer: '-',
+        explanation: 'Gunakan operator pengurangan `-` untuk menghitung sisa atau kembalian uang.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson5',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 5,
+    title: 'Input Pengguna',
+    subtitle: 'Menerima pesanan langsung dari ketikan pengguna',
+    xpReward: 40,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'q5_1',
+        type: 'multiple_choice',
+        prompt: 'Fungsi bawaan Python apa yang digunakan untuk menerima masukan teks dari pengguna?',
+        options: ['input()', 'read()', 'scan()', 'prompt()'],
+        correctAnswer: 'input()',
+        explanation: 'Fungsi `input("Pesan...")` meminta input dari keyboard terminal dan mengembalikannya sebagai tipe string.'
+      },
+      {
+        id: 'q5_2',
+        type: 'code_order',
+        prompt: 'Susun kode untuk meminta nama pemesan minuman:',
+        options: ['nama', '=', 'input', '(', '"Nama anda: "', ')'],
+        correctAnswer: ['nama', '=', 'input', '(', '"Nama anda: "', ')'],
+        explanation: 'Urutan variabel nama, operator penugasan `=`, fungsi input, dan pesan prompt di dalam tanda kurung.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson6',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 6,
+    title: 'Latihan Praktik Terminal',
+    subtitle: 'Konversi tipe data input angka dengan int()',
+    xpReward: 40,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'q6_1',
+        type: 'code_predict',
+        prompt: 'Fungsi input() selalu menghasilkan tipe teks (string). Apa yang terjadi jika kode berikut dijalankan?',
+        codeSnippet: 'jumlah = "3"\ntotal = jumlah * 2\nprint(total)',
+        options: ['33', '6', 'Error', 'None'],
+        correctAnswer: '33',
+        explanation: 'Perkalian string dengan integer di Python akan menduplikasi teks string ("3" * 2 = "33"). Gunakan int() jika ingin operasi matematika!'
+      },
+      {
+        id: 'q6_2',
+        type: 'fill_blank',
+        prompt: 'Lengkapi konversi teks menjadi bilangan bulat (integer):',
+        codeSnippet: 'angka = ____(input("Jumlah cangkir: "))',
+        options: ['int', 'str', 'float', 'number'],
+        correctAnswer: 'int',
+        explanation: 'Fungsi `int()` mengubah teks numerik menjadi tipe bilangan bulat agar dapat dihitung secara aritmatika.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson7',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 7,
+    title: 'Format Teks f-string Lanjutan',
+    subtitle: 'Menampilkan ringkasan nota pesanan elegan',
+    xpReward: 45,
+    gemReward: 25,
+    questions: [
+      {
+        id: 'q7_1',
+        type: 'code_predict',
+        prompt: 'Apa keluaran dari baris kode f-string berikut?',
+        codeSnippet: 'menu = "Kopi Latte"\nharga = 25000\nprint(f"1 {menu} = Rp{harga}")',
+        options: [
+          '1 Kopi Latte = Rp25000',
+          '1 {menu} = Rp{harga}',
+          '1 menu = Rpharga',
+          'Error: syntax salah'
+        ],
+        correctAnswer: '1 Kopi Latte = Rp25000',
+        explanation: 'Di dalam f-string, ekspresi di dalam kurung kurawal `{menu}` dan `{harga}` akan otomatis diganti dengan nilai variabelnya.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson8',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 8,
+    title: 'Logika Boolean',
+    subtitle: 'Mengenal nilai kebenaran True dan False',
+    xpReward: 45,
+    gemReward: 25,
+    questions: [
+      {
+        id: 'q8_1',
+        type: 'multiple_choice',
+        prompt: 'Manakah penulisan nilai Boolean yang benar di Python?',
+        options: ['True dan False', 'true dan false', 'TRUE dan FALSE', '1 dan 0 saja'],
+        correctAnswer: 'True dan False',
+        explanation: 'Di Python, tipe data Boolean ditulis dengan huruf kapital di awal: `True` dan `False`.'
+      },
+      {
+        id: 'q8_2',
+        type: 'code_predict',
+        prompt: 'Apa hasil evaluasi perbandingan berikut?',
+        codeSnippet: 'tersedia = True\nprint(tersedia == True)',
+        options: ['True', 'False', 'tersedia', 'Error'],
+        correctAnswer: 'True',
+        explanation: 'Operator kesetaraan `==` membandingkan nilai, dan karena `tersedia` bernilai `True`, hasilnya adalah `True`.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson9',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 9,
+    title: 'Review Cepat Sintaks',
+    subtitle: 'Menguji kepekaan sintaks dan indentasi Python',
+    xpReward: 50,
+    gemReward: 25,
+    questions: [
+      {
+        id: 'q9_1',
+        type: 'multiple_choice',
+        prompt: 'Simbol apa yang digunakan untuk membuat komentar 1 baris di Python?',
+        options: ['#', '//', '/*', '--'],
+        correctAnswer: '#',
+        explanation: 'Di Python, tanda pagar `#` digunakan untuk menulis komentar satu baris yang diabaikan oleh penerjemah Python.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson10',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 10,
+    title: 'Tantangan Mini Game Kasir',
+    subtitle: 'Simulasi pemesanan minuman mini di kafe',
+    xpReward: 50,
+    gemReward: 30,
+    questions: [
+      {
+        id: 'q10_1',
+        type: 'code_predict',
+        prompt: 'Perhatikan simulasi mini kasir berikut, berapa total tagihan yang tercetak?',
+        codeSnippet: 'pesanan = "Boba"\nharga = 18000\ndiskon = 3000\ntagihan = harga - diskon\nprint(f"Tagihan: Rp{tagihan}")',
+        options: ['Tagihan: Rp15000', 'Tagihan: Rp18000', 'Tagihan: Rp21000', 'Error'],
+        correctAnswer: 'Tagihan: Rp15000',
+        explanation: 'Harga 18.000 dikurangi diskon 3.000 menghasilkan tagihan Rp15.000.'
+      }
+    ]
+  },
+  {
+    id: 'unit1_lesson11',
+    unitNumber: 1,
+    unitTitle: 'Menawarkan dan menerima minuman',
+    lessonOrder: 11,
+    title: 'Ujian Sertifikasi Unit 1',
+    subtitle: 'Uji pemahaman komprehensif seluruh materi dasar Python',
+    xpReward: 80,
+    gemReward: 50,
+    questions: [
+      {
+        id: 'q11_1',
+        type: 'multiple_choice',
+        prompt: 'Manakah nama variabel yang TIDAK valid di Python?',
+        options: ['2minuman', 'minuman_2', '_minuman', 'namaMinuman'],
+        correctAnswer: '2minuman',
+        explanation: 'Nama variabel di Python tidak boleh diawali dengan angka.'
+      },
+      {
+        id: 'q11_2',
+        type: 'code_order',
+        prompt: 'Susun kode lengkap menyapa dan menampilkan pesanan pembeli:',
+        options: ['nama = "Budi"', 'print(', 'f"Halo {nama}, selamat menikmati!"', ')'],
+        correctAnswer: ['nama = "Budi"', 'print(', 'f"Halo {nama}, selamat menikmati!"', ')'],
+        explanation: 'Mendefinisikan variabel nama terlebih dahulu sebelum menggunakannya di dalam fungsi print f-string.'
+      }
+    ]
   }
 ];
 

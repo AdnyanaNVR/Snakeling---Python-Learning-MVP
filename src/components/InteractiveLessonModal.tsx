@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
 import { SnakelingMascot, MascotMood } from './SnakelingMascot';
 import confetti from 'canvas-confetti';
-import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem, Infinity } from 'lucide-react';
+import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem, Infinity, Flame } from 'lucide-react';
 
 export const InteractiveLessonModal: React.FC = () => {
   const {
@@ -180,20 +180,27 @@ export const InteractiveLessonModal: React.FC = () => {
           </div>
 
           {/* Reward cards */}
-          <div className="grid grid-cols-2 gap-4 max-w-xs mx-auto">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#3ecf8e]/15 to-transparent border border-[#3ecf8e]/30 flex flex-col items-center shadow-[0_0_15px_rgba(62,207,142,0.15)]">
-              <div className="w-8 h-8 rounded-xl bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center mb-1.5 shadow-[0_0_10px_rgba(62,207,142,0.3)]">
+          <div className="grid grid-cols-3 gap-2.5 max-w-sm mx-auto">
+            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#3ecf8e]/15 to-transparent border border-[#3ecf8e]/30 flex flex-col items-center shadow-[0_0_15px_rgba(62,207,142,0.15)]">
+              <div className="w-8 h-8 rounded-xl bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center mb-1 shadow-[0_0_10px_rgba(62,207,142,0.3)]">
                 <Zap className="w-4 h-4 fill-current" />
               </div>
-              <span className="text-[11px] font-brand font-bold uppercase text-[#3ecf8e]">TOTAL XP</span>
-              <span className="text-2xl font-brand font-black text-white mt-0.5">+{lesson.xpReward}</span>
+              <span className="text-[10px] font-brand font-bold uppercase text-[#3ecf8e]">TOTAL XP</span>
+              <span className="text-xl font-brand font-black text-white mt-0.5">+{lesson.xpReward}</span>
             </div>
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#38bdf8]/15 to-transparent border border-[#38bdf8]/30 flex flex-col items-center shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-              <div className="w-8 h-8 rounded-xl bg-[#38bdf8]/20 text-[#38bdf8] flex items-center justify-center mb-1.5 shadow-[0_0_10px_rgba(56,189,248,0.3)]">
+            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#38bdf8]/15 to-transparent border border-[#38bdf8]/30 flex flex-col items-center shadow-[0_0_15px_rgba(56,189,248,0.15)]">
+              <div className="w-8 h-8 rounded-xl bg-[#38bdf8]/20 text-[#38bdf8] flex items-center justify-center mb-1 shadow-[0_0_10px_rgba(56,189,248,0.3)]">
                 <Gem className="w-4 h-4 stroke-[2.2] fill-[#38bdf8]/30" />
               </div>
-              <span className="text-[11px] font-brand font-bold uppercase text-[#38bdf8]">GEMS DIDAPAT</span>
-              <span className="text-2xl font-brand font-black text-white mt-0.5">+{lesson.gemReward}</span>
+              <span className="text-[10px] font-brand font-bold uppercase text-[#38bdf8]">GEMS</span>
+              <span className="text-xl font-brand font-black text-white mt-0.5">+{lesson.gemReward}</span>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#ff9600]/15 to-transparent border border-[#ff9600]/30 flex flex-col items-center shadow-[0_0_15px_rgba(255,150,0,0.15)]">
+              <div className="w-8 h-8 rounded-xl bg-[#ff9600]/20 text-[#ff9600] flex items-center justify-center mb-1 shadow-[0_0_10px_rgba(255,150,0,0.3)]">
+                <Flame className="w-4 h-4 fill-current animate-pulse" />
+              </div>
+              <span className="text-[10px] font-brand font-bold uppercase text-[#ff9600]">STREAK</span>
+              <span className="text-xl font-brand font-black text-white mt-0.5">{stats.streak} HARI</span>
             </div>
           </div>
 

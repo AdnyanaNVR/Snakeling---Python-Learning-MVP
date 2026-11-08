@@ -32,7 +32,9 @@ export const LeaderboardView: React.FC = () => {
               <div
                 key={item.name}
                 className={`flex items-center justify-between py-3 px-3.5 rounded-xl transition-all border-b border-[#242424] last:border-b-0 ${
-                  isRank1
+                  item.isCurrentUser
+                    ? 'bg-[#18261e] border-2 border-[#3ecf8e]/60 shadow-[0_0_12px_rgba(62,207,142,0.2)]'
+                    : isRank1
                     ? 'bg-[#facc15]/5 hover:bg-[#facc15]/10'
                     : 'hover:bg-[#202020]'
                 }`}
@@ -52,15 +54,30 @@ export const LeaderboardView: React.FC = () => {
                         <Award className="w-3.5 h-3.5 fill-amber-600" />
                       </span>
                     ) : (
-                      <span className="text-[#898989] text-xs">{item.rank}</span>
+                      <span className={`text-xs ${item.isCurrentUser ? 'text-[#3ecf8e] font-extrabold' : 'text-[#898989]'}`}>
+                        #{item.rank}
+                      </span>
                     )}
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-[#242424] border border-[#393939] flex items-center justify-center text-sm font-bold text-[#fafafa] shrink-0">
+                  <div className={`w-10 h-10 rounded-full border flex items-center justify-center text-sm font-bold shrink-0 ${
+                    item.isCurrentUser
+                      ? 'bg-[#3ecf8e]/20 border-[#3ecf8e] text-[#3ecf8e]'
+                      : 'bg-[#242424] border-[#393939] text-[#fafafa]'
+                  }`}>
                     {item.initials}
                   </div>
-                  <span className="font-medium text-sm text-white tracking-wide">
-                    {item.name}
-                  </span>
+                  <div>
+                    <span className={`font-medium text-sm tracking-wide block ${
+                      item.isCurrentUser ? 'text-[#3ecf8e] font-bold' : 'text-white'
+                    }`}>
+                      {item.name}
+                    </span>
+                    {item.isCurrentUser && (
+                      <span className="text-[10px] text-[#898989] font-mono">
+                        Peringkat Anda saat ini
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-1.5 font-brand font-bold text-xs text-[#3ecf8e]">
                   <Zap className="w-3.5 h-3.5 fill-current text-[#facc15]" />
@@ -74,8 +91,8 @@ export const LeaderboardView: React.FC = () => {
         {/* User Fixed / Pinned Status Card */}
         <div className="mt-6 bg-[#18261e] border border-[#3ecf8e]/30 rounded-2xl p-4 flex items-center justify-between shadow-[0_8px_20px_rgba(0,0,0,0.5)]">
           <div className="flex items-center gap-4">
-            <span className="w-6 text-center font-brand font-bold text-base text-[#898989]">
-              {stats.xp > 0 ? '#' + (leaderboard.filter(l => l.xp > stats.xp).length + 1) : '-'}
+            <span className="w-6 text-center font-brand font-bold text-base text-[#3ecf8e]">
+              #{leaderboard.find((l) => l.isCurrentUser)?.rank || 1}
             </span>
             <div className="relative w-11 h-11 rounded-full overflow-hidden bg-[#242424] border-2 border-[#3ecf8e] shrink-0 flex items-center justify-center">
               <img
