@@ -101,10 +101,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
               <Calendar className="w-3.5 h-3.5" />
               <span>{user.joinedDate}</span>
             </span>
-            <span>·</span>
-            <span className="font-mono text-[#3ecf8e]">
-              ID: #{user.userCode}
-            </span>
           </div>
         </div>
       </div>
@@ -187,15 +183,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
           </div>
         </div>
 
-        {/* Month Header and Streak Badge */}
+        {/* Month Header */}
         <div className="flex items-center justify-between">
           <h3 className="font-brand font-extrabold text-base text-white">
             Februari 2025
           </h3>
-          <div className="flex items-center gap-1.5 text-xs text-[#3ecf8e] font-brand font-bold">
-            <Flame className="w-4 h-4 fill-current animate-pulse" />
-            <span>Hari ini aktif (1 hari streak)</span>
-          </div>
         </div>
 
         {/* Calendar Grid */}

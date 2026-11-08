@@ -128,20 +128,8 @@ export const LearningMap: React.FC = () => {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => {
-              playSound('click');
-              setShowSyllabus(true);
-            }}
-            className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] active:translate-y-0.5 border border-[#393939] shadow-[0_3px_0_#121212] flex items-center justify-center text-white transition-all cursor-pointer group"
-            title="Daftar Pelajaran / Silabus"
-          >
-            <BookOpen className="w-5 h-5 text-[#b4b4b4] group-hover:text-[#3ecf8e] transition-colors stroke-[2.2]" />
-          </button>
-
-          <button
-            type="button"
             onClick={startNextLesson}
-            className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
+            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
           >
             <span>NEXT LESSON</span>
             <ArrowRight className="w-4 h-4 stroke-[2.8] transition-transform group-hover:translate-x-0.5" />
