@@ -20,10 +20,10 @@ export const LearningMap: React.FC = () => {
 
   const roadmapScrollRef = useRef<HTMLDivElement>(null);
 
-  // Winding staircase steps matching the isometric serpentine zigzag pattern (Center -> Right -> Center -> Left)
-  const cxPattern = [170, 230, 170, 110];
+  // 4 tiles per straight diagonal leg (Leg 1: 4 tiles up-right, Leg 2: 4 tiles up-left, repeating)
+  const cxPattern = [95, 145, 195, 245, 195, 145];
   const startCy = 1720;
-  const dyStep = 64;
+  const dyStep = 52;
 
   const tileMetaData = [
     // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
@@ -60,7 +60,7 @@ export const LearningMap: React.FC = () => {
 
   const tiles: TileData[] = tileMetaData.map((meta, i) => ({
     ...meta,
-    cx: cxPattern[i % 4],
+    cx: cxPattern[i % 6],
     cy: startCy - i * dyStep
   }));
 
