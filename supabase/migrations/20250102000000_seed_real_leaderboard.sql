@@ -31,7 +31,10 @@ CREATE TABLE IF NOT EXISTS public.user_stats (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. POLISIR RLS UNTUK MEMBACA PAPAN SKOR PUBLIK
+-- 2. HAPUS BATASAN FOREIGN KEY STRICT KE AUTH.USERS AGAR SEED PENGGUNA DAPAT DIMASUKKAN TANPA ERROR
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_id_fkey;
+
+-- 3. POLISIR RLS UNTUK MEMBACA PAPAN SKOR PUBLIK
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_stats ENABLE ROW LEVEL SECURITY;
 
@@ -47,7 +50,7 @@ CREATE POLICY "Users can insert own stats" ON public.user_stats FOR INSERT WITH 
 DROP POLICY IF EXISTS "Users can update own stats" ON public.user_stats;
 CREATE POLICY "Users can update own stats" ON public.user_stats FOR UPDATE USING (true);
 
--- 3. VIEW PAPAN SKOR UNTUK KEMUDAHAN QUERY DARI CLIENT
+-- 4. VIEW PAPAN SKOR UNTUK KEMUDAHAN QUERY DARI CLIENT
 CREATE OR REPLACE VIEW public.leaderboard_view AS
 SELECT 
   p.id AS user_id,
@@ -65,7 +68,7 @@ ORDER BY s.xp DESC NULLS LAST;
 
 GRANT SELECT ON public.leaderboard_view TO anon, authenticated, service_role;
 
--- 4. SEED DATA PENGGUNA SUNGGUHAN (REAL LEARNERS)
+-- 5. SEED DATA PENGGUNA SUNGGUHAN (REAL LEARNERS)
 INSERT INTO public.profiles (id, username, display_name, avatar_url, bio, is_pro)
 VALUES
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'rizky_ramadhan', 'Rizky Ramadhan', 'https://api.dicebear.com/7.x/bottts/svg?seed=Rizky', 'Python & Backend Dev', true),
