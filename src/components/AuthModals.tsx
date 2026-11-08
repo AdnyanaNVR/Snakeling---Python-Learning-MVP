@@ -12,10 +12,17 @@ export const SupabaseSetupModal: React.FC<{ isOpen: boolean; onClose: () => void
 
   if (!isOpen) return null;
 
+  const isNamedProjectUrl = url.trim().toLowerCase().includes('snakeling8.supabase.co');
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim().startsWith('https://')) {
-      alert('URL Supabase harus diawali dengan https:// (contoh: https://abcxyz.supabase.co)');
+    const cleanUrl = url.trim();
+    if (!cleanUrl.startsWith('https://')) {
+      alert('URL Supabase harus diawali dengan https:// (contoh: https://[project-ref].supabase.co)');
+      return;
+    }
+    if (cleanUrl.toLowerCase().includes('snakeling8.supabase.co')) {
+      alert('Perhatian: "snakeling8.supabase.co" bukan alamat URL Supabase yang valid. Buka dashboard Supabase -> Project Settings (ikon gerigi) -> Data API -> Salin "Project URL" yang formatnya https://[20-karakter-acak].supabase.co');
       return;
     }
     if (!key.trim()) {
@@ -23,55 +30,86 @@ export const SupabaseSetupModal: React.FC<{ isOpen: boolean; onClose: () => void
       return;
     }
     setSaving(true);
-    saveSupabaseCredentials(url, key);
+    saveSupabaseCredentials(cleanUrl, key);
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl w-full max-w-lg p-6 shadow-2xl relative my-8">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#898989] hover:text-white p-1"
+          className="absolute top-4 right-4 text-[#898989] hover:text-white p-1 cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <Database className="w-5 h-5 text-[#3ecf8e]" />
           <h2 className="font-brand font-bold text-lg text-white">Hubungkan Supabase Cloud</h2>
         </div>
 
-        <p className="text-xs text-[#b4b4b4] mb-5 leading-relaxed">
-          Ambil dari dashboard proyek Supabase Anda (seperti <strong className="text-white">snakeling8</strong>) di menu{' '}
-          <strong className="text-[#3ecf8e]">Project Settings → API</strong>.
-        </p>
+        {currentConfig.source === 'secret' && (
+          <div className="mb-4 p-3 bg-[#064e3b]/50 border border-[#10b981]/50 rounded-xl text-xs text-[#a7f3d0] flex items-center gap-2.5">
+            <Check className="w-4 h-4 text-[#3ecf8e] shrink-0" />
+            <div>
+              <strong>Kredensial Aktif dari Secrets:</strong> Project URL resmi ({currentConfig.url.slice(0, 26)}...) terbaca dari Secrets panel.
+            </div>
+          </div>
+        )}
+
+        {/* Step by step guide banner */}
+        <div className="p-3.5 mb-4 bg-[#111827] border border-[#1f2937] rounded-xl text-xs text-[#9ca3af] space-y-1.5 leading-relaxed">
+          <p className="font-bold text-[#3ecf8e] flex items-center gap-1.5">
+            📌 Cara menyalin Project URL &amp; Key dari Supabase:
+          </p>
+          <ol className="list-decimal pl-4 space-y-1 text-[#d1d5db]">
+            <li>Buka dashboard proyek Supabase Anda (<strong>snakeling8</strong>).</li>
+            <li>Di pojok kiri bawah, klik <strong className="text-white">Project Settings</strong> (ikon gerigi ⚙️).</li>
+            <li>Klik menu <strong className="text-white">Data API</strong> (atau <strong>API</strong>).</li>
+            <li>Salin <strong className="text-[#3ecf8e]">Project URL</strong> (format: <code className="text-[#3ecf8e]">https://[20-karakter].supabase.co</code>).</li>
+            <li>Salin <strong className="text-[#3ecf8e]">Project API keys</strong> bagian <code className="text-[#3ecf8e]">anon public</code>.</li>
+          </ol>
+        </div>
+
+        {isNamedProjectUrl && (
+          <div className="mb-4 p-3 bg-[#38260e] border border-[#f59e0b]/40 rounded-xl text-xs text-[#fde68a] leading-relaxed flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-[#f59e0b] shrink-0 mt-0.5" />
+            <div>
+              <strong>Perhatian:</strong> Jangan mengisi nama proyek <code className="bg-black/40 px-1 py-0.5 rounded text-white">snakeling8.supabase.co</code>. Salin Project URL asli dari <strong>Project Settings → Data API</strong>.
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label className="block text-xs font-mono text-[#898989] mb-1">Project URL</label>
+            <label className="block text-xs font-mono text-[#898989] mb-1">
+              Project URL <span className="text-[#ffb4ab]">*</span>
+            </label>
             <input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://xyzcompany.supabase.co"
+              placeholder="https://abcdefghijklmnopqrst.supabase.co"
               required
               className="w-full bg-[#121212] border border-[#333333] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#3ecf8e] font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-[#898989] mb-1">API Key (anon public)</label>
+            <label className="block text-xs font-mono text-[#898989] mb-1">
+              API Key (anon public) <span className="text-[#ffb4ab]">*</span>
+            </label>
             <input
               type="text"
               value={key}
               onChange={(e) => setKey(e.target.value)}
-              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..."
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               required
               className="w-full bg-[#121212] border border-[#333333] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#3ecf8e] font-mono"
             />
           </div>
 
-          <div className="pt-2 flex gap-2">
+          <div className="pt-2 flex flex-col sm:flex-row gap-2">
             <button
               type="submit"
               disabled={saving}
@@ -83,20 +121,32 @@ export const SupabaseSetupModal: React.FC<{ isOpen: boolean; onClose: () => void
               <button
                 type="button"
                 onClick={clearSupabaseCredentials}
-                className="px-3 py-2 rounded-xl bg-[#2b1416] text-[#ffb4ab] border border-[#ef4444]/30 text-xs font-mono hover:bg-[#381a1d]"
+                className="px-4 py-2.5 rounded-xl bg-[#2b1416] text-[#ffb4ab] border border-[#ef4444]/30 text-xs font-mono hover:bg-[#381a1d] transition-colors cursor-pointer"
               >
-                Reset
+                Reset ke Mode Demo
               </button>
             )}
           </div>
         </form>
+
+        <div className="mt-4 pt-3 border-t border-[#2e2e2e] text-center">
+          <button
+            type="button"
+            onClick={() => {
+              clearSupabaseCredentials();
+            }}
+            className="text-[11px] text-[#898989] hover:text-[#3ecf8e] transition-colors cursor-pointer"
+          >
+            Ingin mencoba langsung tanpa Supabase? Klik di sini untuk Mode Demo
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 export const LoginModal: React.FC = () => {
-  const { showLoginModal, setShowLoginModal, setShowRegisterModal, loginUser, showToast } = useApp();
+  const { showLoginModal, setShowLoginModal, setShowRegisterModal, loginUser, continueWithDemo, showToast } = useApp();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -114,18 +164,15 @@ export const LoginModal: React.FC = () => {
       return;
     }
     setLoading(true);
-    const ok = await loginUser(identifier.trim(), password);
+    const res = await loginUser(identifier.trim(), password);
     setLoading(false);
-    if (!ok) {
-      setErrorMsg('Gagal masuk. Periksa kembali email dan kata sandi Anda.');
+    if (!res.success) {
+      setErrorMsg(res.error || 'Gagal masuk. Periksa kembali email dan kata sandi Anda.');
     }
   };
 
   const handleGoogleLogin = async () => {
-    setLoading(true);
-    setErrorMsg('');
-    await loginUser('google_user@gmail.com', 'google_auth');
-    setLoading(false);
+    continueWithDemo('GoogleUser', 'google_user@gmail.com');
   };
 
   return (
@@ -164,9 +211,27 @@ export const LoginModal: React.FC = () => {
 
             {/* Error Message banner */}
             {errorMsg && (
-              <div className="w-full mb-4 p-3 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex items-center gap-2.5">
-                <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0" />
-                <span className="flex-1">{errorMsg}</span>
+              <div className="w-full mb-4 p-3.5 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex flex-col gap-2.5">
+                <div className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0 mt-0.5" />
+                  <span className="flex-1 leading-relaxed">{errorMsg}</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#ef4444]/20">
+                  <button
+                    type="button"
+                    onClick={() => setShowDbModal(true)}
+                    className="px-3 py-1.5 bg-[#3a1a1e] hover:bg-[#4a2025] text-white rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
+                  >
+                    ⚙️ Periksa URL Supabase
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => continueWithDemo(identifier || 'SiswaPython')}
+                    className="px-3 py-1.5 bg-[#1e3a2b] hover:bg-[#254a37] text-[#3ecf8e] rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
+                  >
+                    🚀 Masuk Instan (Mode Demo)
+                  </button>
+                </div>
               </div>
             )}
 
@@ -249,7 +314,9 @@ export const LoginModal: React.FC = () => {
                 <Database className="w-3.5 h-3.5" />
                 <span>
                   {isSupabaseConfigured
-                    ? '✓ Terhubung ke Supabase Cloud'
+                    ? (getSupabaseConfig().source === 'secret'
+                        ? '✓ Terhubung ke Supabase (Secrets)'
+                        : '✓ Terhubung ke Supabase Cloud')
                     : 'Pengaturan Database Supabase (snakeling8)'}
                 </span>
               </button>
@@ -264,7 +331,7 @@ export const LoginModal: React.FC = () => {
 };
 
 export const RegisterModal: React.FC = () => {
-  const { showRegisterModal, setShowRegisterModal, setShowLoginModal, registerUser, showToast } = useApp();
+  const { showRegisterModal, setShowRegisterModal, setShowLoginModal, registerUser, continueWithDemo, showToast } = useApp();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -290,18 +357,15 @@ export const RegisterModal: React.FC = () => {
     }
 
     setLoading(true);
-    const ok = await registerUser(username.trim(), email.trim(), password);
+    const res = await registerUser(username.trim(), email.trim(), password);
     setLoading(false);
-    if (!ok) {
-      setErrorMsg('Gagal membuat akun. Pastikan email belum terdaftar atau format email valid.');
+    if (!res.success) {
+      setErrorMsg(res.error || 'Gagal membuat akun.');
     }
   };
 
   const handleGoogleSignup = async () => {
-    setLoading(true);
-    setErrorMsg('');
-    await registerUser('SiswaPython', `user_${Date.now()}@gmail.com`, 'google_pass_123');
-    setLoading(false);
+    continueWithDemo('GoogleUser', 'google_user@gmail.com');
   };
 
   return (
@@ -342,9 +406,27 @@ export const RegisterModal: React.FC = () => {
 
             {/* Error Banner */}
             {errorMsg && (
-              <div className="w-full mb-4 p-3 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex items-center gap-2.5">
-                <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0" />
-                <span className="flex-1">{errorMsg}</span>
+              <div className="w-full mb-4 p-3.5 rounded-xl bg-[#2b1416] border border-[#ef4444]/40 text-[#ffb4ab] text-xs flex flex-col gap-2.5">
+                <div className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-[#ef4444] shrink-0 mt-0.5" />
+                  <span className="flex-1 leading-relaxed">{errorMsg}</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#ef4444]/20">
+                  <button
+                    type="button"
+                    onClick={() => setShowDbModal(true)}
+                    className="px-3 py-1.5 bg-[#3a1a1e] hover:bg-[#4a2025] text-white rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
+                  >
+                    ⚙️ Periksa URL Supabase
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => continueWithDemo(username || 'SiswaPython', email || 'siswa@snakeling.app')}
+                    className="px-3 py-1.5 bg-[#1e3a2b] hover:bg-[#254a37] text-[#3ecf8e] rounded-lg text-[11px] font-brand font-bold transition-colors cursor-pointer"
+                  >
+                    🚀 Masuk Instan (Mode Demo)
+                  </button>
+                </div>
               </div>
             )}
 
@@ -464,7 +546,9 @@ export const RegisterModal: React.FC = () => {
                 <Database className="w-3.5 h-3.5" />
                 <span>
                   {isSupabaseConfigured
-                    ? '✓ Terhubung ke Supabase Cloud'
+                    ? (getSupabaseConfig().source === 'secret'
+                        ? '✓ Terhubung ke Supabase (Secrets)'
+                        : '✓ Terhubung ke Supabase Cloud')
                     : 'Pengaturan Database Supabase (snakeling8)'}
                 </span>
               </button>

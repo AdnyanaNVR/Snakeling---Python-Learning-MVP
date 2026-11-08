@@ -32,8 +32,9 @@ interface AppContextType {
   finishLesson: (lessonId: string, earnedXp: number, earnedGems: number) => void;
   equipCosmetic: (itemId: string) => void;
   upgradeToPro: () => void;
-  loginUser: (emailOrUser: string, pass: string) => Promise<boolean>;
-  registerUser: (username: string, email: string, pass: string) => Promise<boolean>;
+  loginUser: (emailOrUser: string, pass: string) => Promise<{ success: boolean; error?: string }>;
+  registerUser: (username: string, email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
+  continueWithDemo: (username?: string, email?: string) => void;
   logoutUser: () => void;
   leaderboard: LeaderboardUser[];
   activeLessonModal: boolean;
@@ -338,7 +339,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Auth: Login
-  const loginUser = async (emailOrUser: string, _pass: string): Promise<boolean> => {
+  const loginUser = async (emailOrUser: string, _pass: string): Promise<{ success: boolean; error?: string }> => {
     try {
       if (isSupabaseConfigured && supabase) {
         const { error } = await supabase.auth.signInWithPassword({
@@ -346,8 +347,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           password: _pass
         });
         if (error) {
-          showToast(error.message, 'error');
-          return false;
+          let msg = error.message;
+          const lower = (error.message || '').toLowerCase();
+          if (lower.includes('failed to fetch') || (error as { name?: string }).name === 'AuthRetryableFetchError') {
+            msg = 'Gagal terhubung ke Supabase (URL tidak dapat dijangkau). Pastikan URL bukan nama proyek (bukan "snakeling8"), melainkan Project URL di menu Project Settings → Data API (format: https://[id-acak].supabase.co). Anda dapat mereset URL atau masuk mode demo.';
+          } else if (lower.includes('invalid login credentials')) {
+            msg = 'Email atau kata sandi tidak cocok. Silakan periksa kembali.';
+          } else if (lower.includes('email not confirmed')) {
+            msg = 'Email belum dikonfirmasi! Cek kotak masuk email kamu atau matikan "Confirm email" di dashboard Supabase.';
+          }
+          showToast(msg, 'error');
+          return { success: false, error: msg };
         }
       }
 
@@ -361,19 +371,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setShowLoginModal(false);
       playSound('correct');
       showToast(`Selamat datang kembali, ${emailOrUser.split('@')[0]}!`);
-      return true;
+      return { success: true };
     } catch (e: unknown) {
-      showToast((e as Error).message || 'Gagal masuk', 'error');
-      return false;
+      const origMsg = (e as Error).message || '';
+      let msg = origMsg;
+      if (origMsg.toLowerCase().includes('failed to fetch') || (e as { name?: string }).name === 'AuthRetryableFetchError') {
+        msg = 'Gagal terhubung ke Supabase (URL tidak dapat dijangkau). Pastikan URL bukan nama proyek (bukan "snakeling8"), melainkan Project URL di menu Project Settings → Data API (format: https://[id-acak].supabase.co). Anda dapat mereset URL atau masuk mode demo.';
+      } else {
+        msg = origMsg || 'Gagal masuk';
+      }
+      showToast(msg, 'error');
+      return { success: false, error: msg };
     }
   };
 
   // Auth: Register
-  const registerUser = async (username: string, email: string, _pass: string): Promise<boolean> => {
+  const registerUser = async (username: string, email: string, _pass: string): Promise<{ success: boolean; error?: string }> => {
     try {
       if (_pass.length < 6) {
-        showToast('Kata sandi minimal 6 karakter!', 'error');
-        return false;
+        const msg = 'Kata sandi minimal 6 karakter!';
+        showToast(msg, 'error');
+        return { success: false, error: msg };
       }
 
       if (isSupabaseConfigured && supabase) {
@@ -384,12 +402,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             data: { username, display_name: username }
           }
         });
+
         if (error) {
-          showToast(error.message, 'error');
-          return false;
+          console.error('Supabase Sign Up Error:', error);
+          let msg = error.message;
+          const lower = (error.message || '').toLowerCase();
+          if (lower.includes('failed to fetch') || (error as { name?: string }).name === 'AuthRetryableFetchError') {
+            msg = 'Gagal terhubung ke Supabase (URL tidak dapat dijangkau). Pastikan URL bukan nama proyek (bukan "snakeling8"), melainkan Project URL di menu Project Settings → Data API (format: https://[id-acak].supabase.co). Anda dapat mereset URL atau masuk mode demo.';
+          } else if (lower.includes('rate limit')) {
+            msg = 'Batas pengiriman email Supabase tercapai. Matikan "Confirm email" di menu Authentication > Providers > Email di Supabase.';
+          } else if (lower.includes('already registered')) {
+            msg = 'Email ini sudah terdaftar. Silakan langsung masuk (Login).';
+          } else if (lower.includes('database error')) {
+            msg = 'Error database saat menyimpan profil: Pastikan migration SQL sudah dijalankan di Supabase SQL Editor.';
+          } else if (lower.includes('valid email')) {
+            msg = 'Format alamat email tidak diterima oleh Supabase. Gunakan email aktif (seperti @gmail.com).';
+          }
+          showToast(msg, 'error');
+          return { success: false, error: msg };
         }
 
-        if (data.user) {
+        if (data?.user) {
           setUser({
             id: data.user.id,
             username,
@@ -418,11 +451,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setShowRegisterModal(false);
       playSound('complete');
       showToast(`Akun berhasil dibuat! Halo ${username}`);
-      return true;
+      return { success: true };
     } catch (e: unknown) {
-      showToast((e as Error).message || 'Gagal mendaftar', 'error');
-      return false;
+      const origMsg = (e as Error).message || '';
+      let msg = origMsg;
+      if (origMsg.toLowerCase().includes('failed to fetch') || (e as { name?: string }).name === 'AuthRetryableFetchError') {
+        msg = 'Gagal terhubung ke Supabase (URL tidak dapat dijangkau). Pastikan URL bukan nama proyek (bukan "snakeling8"), melainkan Project URL di menu Project Settings → Data API (format: https://[id-acak].supabase.co). Anda dapat mereset URL atau masuk mode demo.';
+      } else {
+        msg = origMsg || 'Gagal mendaftar';
+      }
+      showToast(msg, 'error');
+      return { success: false, error: msg };
     }
+  };
+
+  // Instant local/demo entry
+  const continueWithDemo = (customUsername?: string, customEmail?: string) => {
+    const finalUsername = customUsername?.trim() || 'SiswaPython';
+    const finalEmail = customEmail?.trim() || `${finalUsername.toLowerCase()}@snakeling.app`;
+    setUser({
+      id: `usr_${Date.now()}`,
+      username: finalUsername,
+      displayName: finalUsername,
+      email: finalEmail,
+      avatarUrl: DEFAULT_USER.avatarUrl,
+      isPro: false,
+      joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
+      userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
+    });
+    setIsLoggedIn(true);
+    setShowLoginModal(false);
+    setShowRegisterModal(false);
+    playSound('complete');
+    showToast(`Masuk sebagai ${finalUsername} (Mode Demo / Lokal)`);
   };
 
   // Auth: Logout
@@ -469,6 +530,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         upgradeToPro,
         loginUser,
         registerUser,
+        continueWithDemo,
         logoutUser,
         leaderboard,
         activeLessonModal,
