@@ -2,10 +2,10 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 import { INITIAL_SHOP_ITEMS } from '../data/curriculum';
 import { ShopItem } from '../types';
-import { Shield, Heart, Zap, Sparkles, Gem, Flame } from 'lucide-react';
+import { Shield, Heart, Zap, Sparkles, Gem, Flame, Infinity } from 'lucide-react';
 
 export const ShopView: React.FC = () => {
-  const { stats, purchaseShopItem } = useApp();
+  const { stats, user, purchaseShopItem } = useApp();
 
   const powerUps = INITIAL_SHOP_ITEMS.filter((i) => i.category === 'powerup');
 
@@ -87,17 +87,40 @@ export const ShopView: React.FC = () => {
                         {item.name}
                       </h3>
                       <span className="px-2 py-0.5 rounded-full bg-[#242424] text-[11px] font-mono text-[#3ecf8e]">
-                        {isFreeze ? `Dimiliki: ${stats.streakFreezeCount}/2` : isHeart ? `${stats.hearts}/${stats.maxHearts} Nyawa` : item.badgeText}
+                        {isFreeze ? (
+                          `Dimiliki: ${stats.streakFreezeCount}/2`
+                        ) : isHeart ? (
+                          user.isPro ? (
+                            <span className="inline-flex items-center gap-1.5 text-[#ef4444] font-bold">
+                              <Infinity className="w-3.5 h-3.5 text-[#ef4444] stroke-[3]" />
+                              <span>Nyawa Tak Terbatas</span>
+                            </span>
+                          ) : (
+                            `${stats.hearts}/${stats.maxHearts} Nyawa`
+                          )
+                        ) : (
+                          item.badgeText
+                        )}
                       </span>
                     </div>
                     <p className="text-xs text-[#898989] max-w-md leading-relaxed">
-                      {item.description}
+                      {isHeart && user.isPro
+                        ? 'Snakeling Pro aktif: Nyawa kamu tidak akan pernah habis saat belajar atau mencoba kuis!'
+                        : item.description}
                     </p>
                   </div>
                 </div>
 
                 <div className="shrink-0 self-end md:self-center w-full md:w-auto">
-                  {isHeartsFull ? (
+                  {isHeart && user.isPro ? (
+                    <button
+                      disabled
+                      className="tactile-btn-secondary opacity-90 cursor-default w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 text-[#ef4444] border-[#ef4444]/40 bg-[#ef4444]/10 shadow-[0_0_12px_rgba(239,68,68,0.2)]"
+                    >
+                      <Infinity className="w-4 h-4 text-[#ef4444] stroke-[3]" />
+                      <span>PRO: NYAWA TAK TERBATAS</span>
+                    </button>
+                  ) : isHeartsFull ? (
                     <button
                       disabled
                       className="tactile-btn-secondary opacity-60 cursor-not-allowed w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"

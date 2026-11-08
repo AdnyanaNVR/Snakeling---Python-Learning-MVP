@@ -271,6 +271,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Hearts refill
   const refillHearts = (): boolean => {
+    if (user.isPro) {
+      showToast('Snakeling Pro aktif: Nyawa Anda sudah tak terbatas!', 'info');
+      return true;
+    }
+
     const isDemo = user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account';
 
     if (stats.hearts >= stats.maxHearts) {
@@ -293,6 +298,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Lose a heart during quiz
   const loseHeart = () => {
+    if (user.isPro) {
+      playSound('wrong');
+      return;
+    }
+
     setStats((prev) => ({
       ...prev,
       hearts: Math.max(0, prev.hearts - 1)

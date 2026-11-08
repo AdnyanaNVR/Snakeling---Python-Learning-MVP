@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
 import { SnakelingMascot, MascotMood } from './SnakelingMascot';
 import confetti from 'canvas-confetti';
-import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem } from 'lucide-react';
+import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem, Infinity } from 'lucide-react';
 
 export const InteractiveLessonModal: React.FC = () => {
   const {
@@ -100,7 +100,9 @@ export const InteractiveLessonModal: React.FC = () => {
     } else {
       playSound('wrong');
       setMascotMood('sad');
-      loseHeart();
+      if (!user.isPro) {
+        loseHeart();
+      }
     }
   };
 
@@ -121,7 +123,7 @@ export const InteractiveLessonModal: React.FC = () => {
   }, [isAnswerChecked, selectedOption, selectedTokens, currentQ]);
 
   // If user runs out of hearts
-  if (stats.hearts <= 0 && !isCompleted) {
+  if (stats.hearts <= 0 && !isCompleted && !user.isPro) {
     return (
       <div className="fixed inset-0 z-50 bg-[#121212] flex items-center justify-center p-4">
         <div className="w-full max-w-md bg-[#171717] border-2 border-[#2e2e2e] rounded-3xl p-6 text-center space-y-6 shadow-2xl">
@@ -234,9 +236,25 @@ export const InteractiveLessonModal: React.FC = () => {
         </div>
 
         {/* Hearts Indicator */}
-        <div className="flex items-center gap-2 font-brand font-bold text-sm text-[#ef4444] px-3 py-1.5 rounded-xl bg-[#ef4444]/10 border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+        <div
+          className={`flex items-center gap-2 font-brand font-bold text-sm text-[#ef4444] px-3 py-1.5 rounded-xl ${
+            user.isPro
+              ? 'bg-[#ef4444]/15 border border-[#ef4444]/40 shadow-[0_0_12px_rgba(239,68,68,0.25)]'
+              : 'bg-[#ef4444]/10 border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]'
+          }`}
+          title={user.isPro ? 'Nyawa Tak Terbatas (Snakeling Pro)' : `${stats.hearts} Nyawa Tersisa`}
+        >
           <Heart className="w-5 h-5 fill-[#ef4444] text-[#ef4444] drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]" />
-          <span className="text-base text-white font-extrabold">{stats.hearts}</span>
+          {user.isPro ? (
+            <div className="flex items-center justify-center" title="Nyawa Tak Terbatas">
+              <Infinity
+                className="w-5 h-5 text-[#ef4444] stroke-[3] drop-shadow-[0_0_8px_rgba(239,68,68,0.85)]"
+                aria-label="Nyawa Tak Terbatas"
+              />
+            </div>
+          ) : (
+            <span className="text-base text-white font-extrabold">{stats.hearts}</span>
+          )}
         </div>
       </header>
 

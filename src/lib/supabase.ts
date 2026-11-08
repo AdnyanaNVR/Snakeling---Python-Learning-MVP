@@ -16,7 +16,7 @@ const resolveConfigValue = (
     if (envVal && typeof envVal === 'string') {
       const clean = envVal.trim();
       if (clean && !clean.includes('your-project') && !clean.includes('snakeling8.supabase.co')) {
-        if (!isUrl || (clean.startsWith('https://') && clean.includes('.supabase.co'))) {
+        if (!isUrl || clean.startsWith('https://') || clean.startsWith('http://')) {
           return { value: clean, source: 'secret' };
         }
       }
@@ -65,8 +65,7 @@ export const configSource = resolvedUrl.source === 'secret' || resolvedKey.sourc
 export const isSupabaseConfigured = Boolean(
   supabaseUrl &&
   supabaseAnonKey &&
-  supabaseUrl.startsWith('https://') &&
-  supabaseUrl.includes('.supabase.co') &&
+  (supabaseUrl.startsWith('https://') || supabaseUrl.startsWith('http://')) &&
   !supabaseUrl.includes('snakeling8.supabase.co') &&
   !supabaseUrl.includes('your-project')
 );

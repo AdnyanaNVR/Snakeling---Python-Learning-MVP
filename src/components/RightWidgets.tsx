@@ -1,13 +1,13 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Flame, Gem, Heart, Crown, Trophy, CheckCircle2, Sparkles, Zap } from 'lucide-react';
+import { Flame, Gem, Heart, Crown, Trophy, CheckCircle2, Sparkles, Zap, Infinity } from 'lucide-react';
 
 export const RightWidgets: React.FC = () => {
   const { stats, user, setShowProModal, refillHearts, playSound, setActiveTab } = useApp();
 
   const handleHeartClick = () => {
     playSound('click');
-    if (stats.hearts < stats.maxHearts) {
+    if (stats.hearts < stats.maxHearts && !user.isPro) {
       refillHearts();
     }
   };
@@ -40,21 +40,38 @@ export const RightWidgets: React.FC = () => {
           <div className="relative flex items-center justify-center">
             <Gem className="w-5 h-5 text-[#38bdf8] fill-[#38bdf8]/20" />
           </div>
-          <span className="tracking-tight text-white font-extrabold">
-            {user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account' ? '∞' : stats.gems}
-          </span>
+          {user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account' ? (
+            <div className="flex items-center justify-center" title="Gems Tak Terbatas">
+              <Infinity className="w-5 h-5 text-[#38bdf8] stroke-[3] drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]" />
+            </div>
+          ) : (
+            <span className="tracking-tight text-white font-extrabold">{stats.gems}</span>
+          )}
         </div>
 
         {/* Hearts Stat */}
         <div
           onClick={handleHeartClick}
-          className="flex items-center gap-2.5 font-brand font-bold text-sm text-[#ef4444] cursor-pointer hover:opacity-90 transition-opacity px-2.5 py-1.5 rounded-xl hover:bg-[#251717]"
-          title={`${stats.hearts}/${stats.maxHearts} Nyawa (Klik untuk isi ulang)`}
+          className={`flex items-center gap-2.5 font-brand font-bold text-sm text-[#ef4444] cursor-pointer hover:opacity-95 transition-all px-2.5 py-1.5 rounded-xl ${
+            user.isPro
+              ? 'bg-[#ef4444]/15 border border-[#ef4444]/40 shadow-[0_0_12px_rgba(239,68,68,0.2)]'
+              : 'hover:bg-[#251717]'
+          }`}
+          title={user.isPro ? 'Nyawa Tak Terbatas (Snakeling Pro Aktif)' : `${stats.hearts}/${stats.maxHearts} Nyawa (Klik untuk isi ulang)`}
         >
           <div className="relative flex items-center justify-center">
-            <Heart className="w-5 h-5 text-[#ef4444] fill-[#ef4444]" />
+            <Heart className="w-5 h-5 text-[#ef4444] fill-[#ef4444] drop-shadow-[0_0_6px_rgba(239,68,68,0.6)]" />
           </div>
-          <span className="tracking-tight text-white font-extrabold">{user.isPro ? '∞' : stats.hearts}</span>
+          {user.isPro ? (
+            <div className="flex items-center justify-center" title="Nyawa Tak Terbatas">
+              <Infinity
+                className="w-5 h-5 text-[#ef4444] stroke-[3] drop-shadow-[0_0_8px_rgba(239,68,68,0.85)]"
+                aria-label="Nyawa Tak Terbatas"
+              />
+            </div>
+          ) : (
+            <span className="tracking-tight text-white font-extrabold">{stats.hearts}</span>
+          )}
         </div>
       </div>
 
@@ -89,8 +106,11 @@ export const RightWidgets: React.FC = () => {
             <span><strong className="text-white font-bold">Latihan Khusus:</strong> Review &amp; modul adaptif</span>
           </li>
           <li className="flex items-center gap-2.5">
-            <Heart className="w-4 h-4 text-[#ef4444] shrink-0 fill-[#ef4444]/40" />
-            <span><strong className="text-white font-bold">Nyawa Tak Terbatas:</strong> Latihan tanpa henti</span>
+            <Heart className="w-4 h-4 text-[#ef4444] shrink-0 fill-[#ef4444]" />
+            <span className="flex items-center gap-1.5">
+              <span><strong className="text-white font-bold">Nyawa Tak Terbatas:</strong> Latihan tanpa henti</span>
+              <Infinity className="w-3.5 h-3.5 text-[#ef4444] stroke-[3] shrink-0" />
+            </span>
           </li>
         </ul>
 

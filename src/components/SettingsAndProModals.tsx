@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { isSupabaseConfigured } from '../lib/supabase';
-import { X, Volume2, VolumeX, Sparkles, Check, Database, RotateCcw, LogOut } from 'lucide-react';
+import { X, Volume2, VolumeX, Sparkles, Check, Database, RotateCcw, LogOut, Infinity, Heart } from 'lucide-react';
 
 export const ProModal: React.FC = () => {
   const { showProModal, setShowProModal, upgradeToPro, user } = useApp();
@@ -43,17 +43,34 @@ export const ProModal: React.FC = () => {
 
           <div className="space-y-3 py-2">
             {[
-              { title: 'Nyawa Tak Terbatas (Unlimited Hearts)', desc: 'Belajar dan coba latihan berulang tanpa takut kehabisan nyawa.' },
-              { title: 'Bebas Iklan & Distraksi', desc: 'Fokus penuh pada materi pemrograman tanpa gangguan.' },
-              { title: 'Review Modul Cerdas & Kesalahan', desc: 'Sistem mengenali kelemahan kodemu dan memberi latihan perbaikan.' },
-              { title: 'Aksesori Maskot Eksklusif Emas', desc: 'Dapatkan lencana Pro dan skin eksklusif untuk profilmu.' }
+              {
+                title: 'Nyawa Tak Terbatas',
+                hasInfinity: true,
+                desc: 'Belajar dan coba latihan berulang tanpa takut kehabisan nyawa.'
+              },
+              { title: 'Bebas Iklan & Distraksi', hasInfinity: false, desc: 'Fokus penuh pada materi pemrograman tanpa gangguan.' },
+              { title: 'Review Modul Cerdas & Kesalahan', hasInfinity: false, desc: 'Sistem mengenali kelemahan kodemu dan memberi latihan perbaikan.' },
+              { title: 'Aksesori Maskot Eksklusif Emas', hasInfinity: false, desc: 'Dapatkan lencana Pro dan skin eksklusif untuk profilmu.' }
             ].map((f, i) => (
               <div key={i} className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                  f.hasInfinity ? 'bg-[#ef4444]/20 text-[#ef4444]' : 'bg-[#3ecf8e]/20 text-[#3ecf8e]'
+                }`}>
+                  {f.hasInfinity ? (
+                    <Heart className="w-3.5 h-3.5 fill-[#ef4444] text-[#ef4444]" />
+                  ) : (
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  )}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white">{f.title}</h4>
+                  <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span>{f.title}</span>
+                    {f.hasInfinity && (
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md bg-[#ef4444]/15 border border-[#ef4444]/30 text-[#ef4444]">
+                        <Infinity className="w-3.5 h-3.5 text-[#ef4444] stroke-[3]" />
+                      </span>
+                    )}
+                  </h4>
                   <p className="text-[11px] text-[#898989]">{f.desc}</p>
                 </div>
               </div>
