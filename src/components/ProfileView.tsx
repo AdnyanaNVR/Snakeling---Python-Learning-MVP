@@ -112,13 +112,13 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
       {/* Stats 3-Box Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
         {/* Streak Card */}
-        <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+        <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-[#ff9600]/40 transition-colors">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-brand font-bold text-[#898989] uppercase tracking-wider">
               STREAK HARIAN
             </span>
-            <div className="w-8 h-8 rounded-xl bg-[#242424] text-[#ff9600] flex items-center justify-center">
-              <Flame className="w-4 h-4 fill-current" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#ff9600]/25 to-[#ff9600]/5 border border-[#ff9600]/40 text-[#ff9600] flex items-center justify-center shadow-[0_0_12px_rgba(255,150,0,0.25)]">
+              <Flame className="w-5 h-5 fill-current animate-pulse" />
             </div>
           </div>
           <div>
@@ -130,13 +130,13 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
         </div>
 
         {/* Total XP Card */}
-        <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+        <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-[#3ecf8e]/40 transition-colors">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-brand font-bold text-[#898989] uppercase tracking-wider">
               TOTAL XP
             </span>
-            <div className="w-8 h-8 rounded-xl bg-[#242424] text-[#3ecf8e] flex items-center justify-center">
-              <Zap className="w-4 h-4 fill-current" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#3ecf8e]/25 to-[#3ecf8e]/5 border border-[#3ecf8e]/40 text-[#3ecf8e] flex items-center justify-center shadow-[0_0_12px_rgba(62,207,142,0.25)]">
+              <Zap className="w-5 h-5 fill-current" />
             </div>
           </div>
           <div>
@@ -148,13 +148,13 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
         </div>
 
         {/* Modules Completed Card */}
-        <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+        <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group hover:border-[#38bdf8]/40 transition-colors">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-brand font-bold text-[#898989] uppercase tracking-wider">
               PELAJARAN
             </span>
-            <div className="w-8 h-8 rounded-xl bg-[#242424] text-[#38bdf8] flex items-center justify-center">
-              <CheckCircle className="w-4 h-4" />
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#38bdf8]/25 to-[#38bdf8]/5 border border-[#38bdf8]/40 text-[#38bdf8] flex items-center justify-center shadow-[0_0_12px_rgba(56,189,248,0.25)]">
+              <CheckCircle className="w-5 h-5 stroke-[2.2]" />
             </div>
           </div>
           <div>

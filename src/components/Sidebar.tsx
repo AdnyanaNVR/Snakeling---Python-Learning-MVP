@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { ActiveTab } from '../types';
-import { BookOpen, Trophy, ShoppingBag, Settings } from 'lucide-react';
+import { Terminal, Trophy, ShoppingBag, SlidersHorizontal } from 'lucide-react';
 
 interface SidebarProps {
   onOpenSettings: () => void;
@@ -19,39 +19,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSettings }) => {
     {
       id: 'belajar' as ActiveTab,
       label: 'BELAJAR',
-      icon: (
-        <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-          <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" />
-        </svg>
-      )
+      icon: <Terminal className="w-6 h-6 stroke-[2.2] text-[#3ecf8e]" />
     },
     {
       id: 'papan_skor' as ActiveTab,
       label: 'PAPAN SKOR',
-      icon: (
-        <svg className="w-6 h-6 fill-current text-[#facc15]" viewBox="0 0 24 24">
-          <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
-        </svg>
-      )
+      icon: <Trophy className="w-6 h-6 stroke-[2.2] text-[#facc15]" />
     },
     {
       id: 'toko' as ActiveTab,
       label: 'TOKO',
-      icon: (
-        <svg className="w-6 h-6 fill-current text-[#f43f5e]" viewBox="0 0 24 24">
-          <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z" />
-        </svg>
-      )
+      icon: <ShoppingBag className="w-6 h-6 stroke-[2.2] text-[#f43f5e]" />
     },
     {
       id: 'profil' as ActiveTab,
       label: 'PROFIL',
       icon: (
-        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#3ecf8e] to-[#1f6b48] flex items-center justify-center ring-2 ring-[#2e2e2e] overflow-hidden shrink-0">
+        <div className="w-6 h-6 rounded-full overflow-hidden border border-[#38bdf8]/60">
           <img
             src={user.avatarUrl}
             alt="Profil Mascot"
-            className="w-full h-full object-cover scale-110"
+            className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
         </div>
@@ -109,9 +97,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSettings }) => {
               playSound('click');
               onOpenSettings();
             }}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-[#898989] hover:text-[#fafafa] hover:bg-[#1c1b1b] font-brand font-semibold text-xs tracking-wider transition-colors uppercase text-left"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#898989] hover:text-[#fafafa] hover:bg-[#1c1b1b] font-brand font-semibold text-xs tracking-wider transition-colors uppercase text-left group cursor-pointer"
           >
-            <Settings className="w-4 h-4" />
+            <div className="w-7 h-7 rounded-lg bg-[#1f1f1f] border border-[#333] flex items-center justify-center text-[#898989] group-hover:text-[#3ecf8e] group-hover:border-[#3ecf8e]/50 transition-all">
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+            </div>
             <span>PENGATURAN</span>
           </button>
         </div>

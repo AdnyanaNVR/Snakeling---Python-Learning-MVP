@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
-import { Lock, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { Lock, ChevronDown, CheckCircle2, BookOpen, ArrowRight, X, Sparkles } from 'lucide-react';
 
 interface TileData {
   id: number;
@@ -20,39 +20,49 @@ export const LearningMap: React.FC = () => {
 
   const roadmapScrollRef = useRef<HTMLDivElement>(null);
 
-  // Generate multi-unit winding staircase steps
-  const tiles: TileData[] = [
+  // Winding staircase steps matching the isometric serpentine zigzag pattern (Center -> Right -> Center -> Left)
+  const cxPattern = [170, 230, 170, 110];
+  const startCy = 1720;
+  const dyStep = 64;
+
+  const tileMetaData = [
     // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
-    { id: 1, unit: 1, stepNumber: 1, title: 'Perintah print() & Salam Pertama', cx: 170, cy: 1720, status: 'active' },
-    { id: 2, unit: 1, stepNumber: 2, title: 'Variabel & Tipe String', cx: 216, cy: 1664, status: 'locked' },
-    { id: 3, unit: 1, stepNumber: 3, title: 'Penggabungan String', cx: 170, cy: 1608, status: 'locked' },
-    { id: 4, unit: 1, stepNumber: 4, title: 'Aritmatika Dasar Minuman', cx: 124, cy: 1552, status: 'locked' },
-    { id: 5, unit: 1, stepNumber: 5, title: 'Input Pengguna', cx: 170, cy: 1496, status: 'locked' },
-    { id: 6, unit: 1, stepNumber: 6, title: 'Latihan Praktik Terminal', cx: 216, cy: 1440, status: 'locked' },
-    { id: 7, unit: 1, stepNumber: 7, title: 'Format Teks f-string', cx: 170, cy: 1384, status: 'locked' },
-    { id: 8, unit: 1, stepNumber: 8, title: 'Logika Boolean', cx: 124, cy: 1328, status: 'locked' },
-    { id: 9, unit: 1, stepNumber: 9, title: 'Review Cepat Sintaks', cx: 170, cy: 1272, status: 'locked' },
-    { id: 10, unit: 1, stepNumber: 10, title: 'Tantangan Mini Game', cx: 216, cy: 1216, status: 'locked' },
-    { id: 11, unit: 1, stepNumber: 11, title: 'Ujian Sertifikasi Unit 1', cx: 170, cy: 1160, status: 'locked' },
+    { id: 1, unit: 1, stepNumber: 1, title: 'Perintah print() & Salam Pertama', status: 'active' as const },
+    { id: 2, unit: 1, stepNumber: 2, title: 'Variabel & Tipe String', status: 'locked' as const },
+    { id: 3, unit: 1, stepNumber: 3, title: 'Penggabungan String', status: 'locked' as const },
+    { id: 4, unit: 1, stepNumber: 4, title: 'Aritmatika Dasar Minuman', status: 'locked' as const },
+    { id: 5, unit: 1, stepNumber: 5, title: 'Input Pengguna', status: 'locked' as const },
+    { id: 6, unit: 1, stepNumber: 6, title: 'Latihan Praktik Terminal', status: 'locked' as const },
+    { id: 7, unit: 1, stepNumber: 7, title: 'Format Teks f-string', status: 'locked' as const },
+    { id: 8, unit: 1, stepNumber: 8, title: 'Logika Boolean', status: 'locked' as const },
+    { id: 9, unit: 1, stepNumber: 9, title: 'Review Cepat Sintaks', status: 'locked' as const },
+    { id: 10, unit: 1, stepNumber: 10, title: 'Tantangan Mini Game', status: 'locked' as const },
+    { id: 11, unit: 1, stepNumber: 11, title: 'Ujian Sertifikasi Unit 1', status: 'locked' as const },
 
     // UNIT 2: Logika Kondisi & Percabangan (Steps 12 to 18)
-    { id: 12, unit: 2, stepNumber: 12, title: 'Kondisi if & Logika Dasar', cx: 124, cy: 980, status: 'locked' },
-    { id: 13, unit: 2, stepNumber: 13, title: 'Percabangan else & Alternatif', cx: 170, cy: 924, status: 'locked' },
-    { id: 14, unit: 2, stepNumber: 14, title: 'Kondisi Majemuk elif', cx: 216, cy: 868, status: 'locked' },
-    { id: 15, unit: 2, stepNumber: 15, title: 'Operator Logika and & or', cx: 170, cy: 812, status: 'locked' },
-    { id: 16, unit: 2, stepNumber: 16, title: 'Nested if (Kondisi Bersarang)', cx: 124, cy: 756, status: 'locked' },
-    { id: 17, unit: 2, stepNumber: 17, title: 'Studi Kasus Menu Restoran', cx: 170, cy: 700, status: 'locked' },
-    { id: 18, unit: 2, stepNumber: 18, title: 'Evaluasi Akhir Unit 2', cx: 216, cy: 644, status: 'locked' },
+    { id: 12, unit: 2, stepNumber: 12, title: 'Kondisi if & Logika Dasar', status: 'locked' as const },
+    { id: 13, unit: 2, stepNumber: 13, title: 'Percabangan else & Alternatif', status: 'locked' as const },
+    { id: 14, unit: 2, stepNumber: 14, title: 'Kondisi Majemuk elif', status: 'locked' as const },
+    { id: 15, unit: 2, stepNumber: 15, title: 'Operator Logika and & or', status: 'locked' as const },
+    { id: 16, unit: 2, stepNumber: 16, title: 'Nested if (Kondisi Bersarang)', status: 'locked' as const },
+    { id: 17, unit: 2, stepNumber: 17, title: 'Studi Kasus Menu Restoran', status: 'locked' as const },
+    { id: 18, unit: 2, stepNumber: 18, title: 'Evaluasi Akhir Unit 2', status: 'locked' as const },
 
     // UNIT 3: Struktur Data List & Koleksi (Steps 19 to 25)
-    { id: 19, unit: 3, stepNumber: 19, title: 'Mengenal List Python []', cx: 170, cy: 460, status: 'locked' },
-    { id: 20, unit: 3, stepNumber: 20, title: 'Indeks & Mengakses Elemen', cx: 124, cy: 404, status: 'locked' },
-    { id: 21, unit: 3, stepNumber: 21, title: 'Menambah Data: append()', cx: 170, cy: 348, status: 'locked' },
-    { id: 22, unit: 3, stepNumber: 22, title: 'Menghapus Data: remove()', cx: 216, cy: 292, status: 'locked' },
-    { id: 23, unit: 3, stepNumber: 23, title: 'Panjang List dengan len()', cx: 170, cy: 236, status: 'locked' },
-    { id: 24, unit: 3, stepNumber: 24, title: 'Slicing & Potong List', cx: 124, cy: 180, status: 'locked' },
-    { id: 25, unit: 3, stepNumber: 25, title: 'Master Sertifikasi List', cx: 170, cy: 124, status: 'locked' }
+    { id: 19, unit: 3, stepNumber: 19, title: 'Mengenal List Python []', status: 'locked' as const },
+    { id: 20, unit: 3, stepNumber: 20, title: 'Indeks & Mengakses Elemen', status: 'locked' as const },
+    { id: 21, unit: 3, stepNumber: 21, title: 'Menambah Data: append()', status: 'locked' as const },
+    { id: 22, unit: 3, stepNumber: 22, title: 'Menghapus Data: remove()', status: 'locked' as const },
+    { id: 23, unit: 3, stepNumber: 23, title: 'Panjang List dengan len()', status: 'locked' as const },
+    { id: 24, unit: 3, stepNumber: 24, title: 'Slicing & Potong List', status: 'locked' as const },
+    { id: 25, unit: 3, stepNumber: 25, title: 'Master Sertifikasi List', status: 'locked' as const }
   ];
+
+  const tiles: TileData[] = tileMetaData.map((meta, i) => ({
+    ...meta,
+    cx: cxPattern[i % 4],
+    cy: startCy - i * dyStep
+  }));
 
   // Auto-scroll the roadmap container down to Step 1 on initial load
   useEffect(() => {
@@ -122,23 +132,19 @@ export const LearningMap: React.FC = () => {
               playSound('click');
               setShowSyllabus(true);
             }}
-            className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] active:translate-y-0.5 border border-[#393939] shadow-[0_3px_0_#121212] flex items-center justify-center text-white transition-all cursor-pointer"
+            className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] active:translate-y-0.5 border border-[#393939] shadow-[0_3px_0_#121212] flex items-center justify-center text-white transition-all cursor-pointer group"
             title="Daftar Pelajaran / Silabus"
           >
-            <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
-              <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
-            </svg>
+            <BookOpen className="w-5 h-5 text-[#b4b4b4] group-hover:text-[#3ecf8e] transition-colors stroke-[2.2]" />
           </button>
 
           <button
             type="button"
             onClick={startNextLesson}
-            className="flex-1 h-12 rounded-xl bg-[#3ecf8e] hover:bg-[#34b27b] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer"
+            className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
           >
             <span>NEXT LESSON</span>
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-            </svg>
+            <ArrowRight className="w-4 h-4 stroke-[2.8] transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
       </div>
@@ -326,22 +332,32 @@ export const LearningMap: React.FC = () => {
 
               {/* MILESTONE TROPHIES ON THE PATH */}
               {/* Unit 1 Trophy Milestone (Above step 11) */}
-              <g transform="translate(150, 1070)" className="cursor-pointer">
-                <circle cx="20" cy="20" r="18" fill="#171717" stroke="#facc15" strokeWidth="2" />
-                <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#facc15" />
-                <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#facc15" strokeWidth="1.5" />
-                <path d="M28 14 h2 c1.1 0 2 .9 2 2 v1 c0 1.7 -1.3 3 -3 3 h-1" fill="none" stroke="#facc15" strokeWidth="1.5" />
-                <line x1="20" y1="24" x2="20" y2="28" stroke="#facc15" strokeWidth="2" />
-                <line x1="16" y1="28" x2="24" y2="28" stroke="#facc15" strokeWidth="2" />
-              </g>
+              {(() => {
+                const u1End = tiles.find((t) => t.id === 11) || tiles[10];
+                return (
+                  <g transform={`translate(${u1End.cx - 20}, ${u1End.cy - 72})`} className="cursor-pointer">
+                    <circle cx="20" cy="20" r="18" fill="#171717" stroke="#facc15" strokeWidth="2" />
+                    <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#facc15" />
+                    <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#facc15" strokeWidth="1.5" />
+                    <path d="M28 14 h2 c1.1 0 2 .9 2 2 v1 c0 1.7 -1.3 3 -3 3 h-1" fill="none" stroke="#facc15" strokeWidth="1.5" />
+                    <line x1="20" y1="24" x2="20" y2="28" stroke="#facc15" strokeWidth="2" />
+                    <line x1="16" y1="28" x2="24" y2="28" stroke="#facc15" strokeWidth="2" />
+                  </g>
+                );
+              })()}
 
               {/* Unit 2 Trophy Milestone (Above step 18) */}
-              <g transform="translate(150, 560)" className="cursor-pointer opacity-70">
-                <circle cx="20" cy="20" r="18" fill="#171717" stroke="#38bdf8" strokeWidth="2" />
-                <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#38bdf8" />
-                <line x1="20" y1="24" x2="20" y2="28" stroke="#38bdf8" strokeWidth="2" />
-                <line x1="16" y1="28" x2="24" y2="28" stroke="#38bdf8" strokeWidth="2" />
-              </g>
+              {(() => {
+                const u2End = tiles.find((t) => t.id === 18) || tiles[17];
+                return (
+                  <g transform={`translate(${u2End.cx - 20}, ${u2End.cy - 72})`} className="cursor-pointer opacity-70">
+                    <circle cx="20" cy="20" r="18" fill="#171717" stroke="#38bdf8" strokeWidth="2" />
+                    <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#38bdf8" />
+                    <line x1="20" y1="24" x2="20" y2="28" stroke="#38bdf8" strokeWidth="2" />
+                    <line x1="16" y1="28" x2="24" y2="28" stroke="#38bdf8" strokeWidth="2" />
+                  </g>
+                );
+              })()}
             </svg>
           </div>
         </div>
@@ -360,9 +376,10 @@ export const LearningMap: React.FC = () => {
               </div>
               <button
                 onClick={() => setShowSyllabus(false)}
-                className="w-8 h-8 rounded-full bg-[#242424] hover:bg-[#2e2e2e] flex items-center justify-center text-[#b4b4b4] hover:text-white"
+                className="w-8 h-8 rounded-full bg-[#242424] hover:bg-[#2e2e2e] flex items-center justify-center text-[#b4b4b4] hover:text-white transition-colors"
+                title="Tutup"
               >
-                ✕
+                <X className="w-4 h-4 stroke-[2.2]" />
               </button>
             </div>
 

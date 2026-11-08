@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
 import { SnakelingMascot, MascotMood } from './SnakelingMascot';
 import confetti from 'canvas-confetti';
-import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight } from 'lucide-react';
+import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem } from 'lucide-react';
 
 export const InteractiveLessonModal: React.FC = () => {
   const {
@@ -136,9 +136,10 @@ export const InteractiveLessonModal: React.FC = () => {
                   // resumed with 5 hearts
                 }
               }}
-              className="tactile-btn-primary w-full py-3.5 rounded-xl font-brand font-bold text-sm uppercase tracking-wider"
+              className="tactile-btn-primary w-full py-3.5 rounded-xl font-brand font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2"
             >
-              Isi Ulang 5 Nyawa (100 Gems)
+              <Heart className="w-4 h-4 fill-current text-[#ef4444]" />
+              <span>Isi Ulang 5 Nyawa (100 Gems)</span>
             </button>
             <button
               onClick={() => setIsLessonActive(false)}
@@ -175,13 +176,19 @@ export const InteractiveLessonModal: React.FC = () => {
 
           {/* Reward cards */}
           <div className="grid grid-cols-2 gap-4 max-w-xs mx-auto">
-            <div className="p-4 rounded-2xl bg-[#1c1b1b] border border-[#2e2e2e] flex flex-col items-center">
-              <span className="text-xs font-brand font-bold uppercase text-[#3ecf8e]">TOTAL XP</span>
-              <span className="text-2xl font-brand font-black text-white mt-1">+{lesson.xpReward}</span>
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#3ecf8e]/15 to-transparent border border-[#3ecf8e]/30 flex flex-col items-center shadow-[0_0_15px_rgba(62,207,142,0.15)]">
+              <div className="w-8 h-8 rounded-xl bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center mb-1.5 shadow-[0_0_10px_rgba(62,207,142,0.3)]">
+                <Zap className="w-4 h-4 fill-current" />
+              </div>
+              <span className="text-[11px] font-brand font-bold uppercase text-[#3ecf8e]">TOTAL XP</span>
+              <span className="text-2xl font-brand font-black text-white mt-0.5">+{lesson.xpReward}</span>
             </div>
-            <div className="p-4 rounded-2xl bg-[#1c1b1b] border border-[#2e2e2e] flex flex-col items-center">
-              <span className="text-xs font-brand font-bold uppercase text-[#38bdf8]">GEMS DIDAPAT</span>
-              <span className="text-2xl font-brand font-black text-white mt-1">+{lesson.gemReward}</span>
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-[#38bdf8]/15 to-transparent border border-[#38bdf8]/30 flex flex-col items-center shadow-[0_0_15px_rgba(56,189,248,0.15)]">
+              <div className="w-8 h-8 rounded-xl bg-[#38bdf8]/20 text-[#38bdf8] flex items-center justify-center mb-1.5 shadow-[0_0_10px_rgba(56,189,248,0.3)]">
+                <Gem className="w-4 h-4 stroke-[2.2] fill-[#38bdf8]/30" />
+              </div>
+              <span className="text-[11px] font-brand font-bold uppercase text-[#38bdf8]">GEMS DIDAPAT</span>
+              <span className="text-2xl font-brand font-black text-white mt-0.5">+{lesson.gemReward}</span>
             </div>
           </div>
 
@@ -224,8 +231,8 @@ export const InteractiveLessonModal: React.FC = () => {
         </div>
 
         {/* Hearts Indicator */}
-        <div className="flex items-center gap-1.5 font-brand font-bold text-sm text-[#ef4444]">
-          <Heart className="w-5 h-5 fill-current" />
+        <div className="flex items-center gap-2 font-brand font-bold text-sm text-[#ef4444] px-3 py-1.5 rounded-xl bg-[#ef4444]/10 border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+          <Heart className="w-5 h-5 fill-[#ef4444] text-[#ef4444] drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]" />
           <span className="text-base text-white font-extrabold">{stats.hearts}</span>
         </div>
       </header>

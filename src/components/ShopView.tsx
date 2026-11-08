@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 import { INITIAL_SHOP_ITEMS } from '../data/curriculum';
 import { ShopItem } from '../types';
-import { Shield, Heart, Zap, Sparkles, Glasses, Star } from 'lucide-react';
+import { Shield, Heart, Zap, Sparkles, Glasses, Star, Gem, Flame } from 'lucide-react';
 import { SnakelingMascot } from './SnakelingMascot';
 
 export const ShopView: React.FC = () => {
@@ -15,23 +15,43 @@ export const ShopView: React.FC = () => {
     switch (iconName) {
       case 'shield_flame':
         return (
-          <div className="relative">
-            <Shield className="w-8 h-8 text-[#38bdf8]" />
-            <div className="absolute -bottom-1 -right-1 text-[#ff9600]">
-              <Sparkles className="w-4 h-4 fill-current" />
-            </div>
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#38bdf8]/20 via-[#0284c7]/10 to-transparent border border-[#38bdf8]/40 flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.25)]">
+            <Shield className="w-7 h-7 text-[#38bdf8] stroke-[2]" />
+            <Flame className="w-4 h-4 text-[#ff9600] fill-[#ff9600] absolute bottom-1 right-1 drop-shadow-[0_0_6px_rgba(255,150,0,0.8)]" />
           </div>
         );
       case 'heart':
-        return <Heart className="w-8 h-8 fill-current text-[#ef4444]" />;
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#ef4444]/25 via-[#b91c1c]/10 to-transparent border border-[#ef4444]/40 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+            <Heart className="w-7 h-7 fill-[#ef4444] text-[#ef4444] drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+            <Sparkles className="w-3 h-3 text-[#fecaca] absolute top-1 right-1" />
+          </div>
+        );
       case 'lightning':
-        return <Zap className="w-8 h-8 fill-current text-[#facc15]" />;
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#facc15]/25 via-[#ca8a04]/10 to-transparent border border-[#facc15]/40 flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.3)]">
+            <Zap className="w-7 h-7 fill-[#facc15] text-[#facc15] drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]" />
+          </div>
+        );
       case 'glasses':
-        return <Glasses className="w-8 h-8 text-[#38bdf8]" />;
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#38bdf8]/20 via-[#06b6d4]/10 to-transparent border border-[#38bdf8]/40 flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.25)]">
+            <Glasses className="w-7 h-7 text-[#38bdf8] stroke-[2]" />
+          </div>
+        );
       case 'gold':
-        return <Star className="w-8 h-8 fill-current text-[#facc15]" />;
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#fbbf24]/30 via-[#d97706]/15 to-transparent border border-[#fbbf24]/50 flex items-center justify-center shadow-[0_0_18px_rgba(251,191,36,0.4)]">
+            <Star className="w-7 h-7 fill-[#fbbf24] text-[#fbbf24] drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]" />
+            <Sparkles className="w-3.5 h-3.5 text-white absolute -top-1 -right-1" />
+          </div>
+        );
       default:
-        return <Sparkles className="w-8 h-8 text-[#3ecf8e]" />;
+        return (
+          <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-[#3ecf8e]/20 to-transparent border border-[#3ecf8e]/40 flex items-center justify-center shadow-[0_0_12px_rgba(62,207,142,0.25)]">
+            <Sparkles className="w-7 h-7 text-[#3ecf8e] stroke-[2]" />
+          </div>
+        );
     }
   };
 
@@ -114,9 +134,7 @@ export const ShopView: React.FC = () => {
                       onClick={() => purchaseShopItem(item)}
                       className="tactile-btn-primary w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <svg className="w-4 h-4 fill-current text-[#0e0e0e]" viewBox="0 0 24 24">
-                        <path d="M12 2L3.5 8.5L12 22L20.5 8.5L12 2Z" />
-                      </svg>
+                      <Gem className="w-4 h-4 stroke-[2.2] fill-current text-[#0e0e0e]" />
                       <span>{item.costGems} GEMS</span>
                     </button>
                   )}
@@ -213,9 +231,7 @@ export const ShopView: React.FC = () => {
                       onClick={() => purchaseShopItem(item)}
                       className="tactile-btn-primary w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <svg className="w-4 h-4 fill-current text-[#0e0e0e]" viewBox="0 0 24 24">
-                        <path d="M12 2L3.5 8.5L12 22L20.5 8.5L12 2Z" />
-                      </svg>
+                      <Gem className="w-4 h-4 stroke-[2.2] fill-current text-[#0e0e0e]" />
                       <span>{item.costGems} GEMS</span>
                     </button>
                   )}
