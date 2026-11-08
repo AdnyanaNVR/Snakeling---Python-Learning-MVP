@@ -349,13 +349,16 @@ export const LESSON_UNITS: LessonUnit[] = [
 ];
 
 export const INITIAL_LEADERBOARD = [
-  { rank: 1, initials: 'AT', name: 'Aris Thorne', xp: 450 },
-  { rank: 2, initials: 'BS', name: 'Budi Santoso', xp: 380 },
-  { rank: 3, initials: 'DL', name: 'Dewi Lestari', xp: 320 },
-  { rank: 4, initials: 'CW', name: 'Cynthia W.', xp: 290 },
-  { rank: 5, initials: 'FN', name: 'Fajar Nugraha', xp: 210 },
-  { rank: 6, initials: 'GS', name: 'Gita Savitri', xp: 175 },
-  { rank: 7, initials: 'HP', name: 'Hendra Pratama', xp: 120 }
+  { rank: 1, initials: 'RR', name: 'Rizky Ramadhan', xp: 650, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Rizky' },
+  { rank: 2, initials: 'SN', name: 'Siti Nurhaliza', xp: 520, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Siti' },
+  { rank: 3, initials: 'BS', name: 'Budi Santoso', xp: 440, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Budi' },
+  { rank: 4, initials: 'DL', name: 'Dewi Lestari', xp: 390, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dewi' },
+  { rank: 5, initials: 'FN', name: 'Fajar Nugraha', xp: 310, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Fajar' },
+  { rank: 6, initials: 'AP', name: 'Aulia Putri', xp: 260, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Aulia' },
+  { rank: 7, initials: 'AN', name: 'Andi Pratama', xp: 210, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Andi' },
+  { rank: 8, initials: 'CS', name: 'Clara Shinta', xp: 170, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Clara' },
+  { rank: 9, initials: 'BS', name: 'Bayu Skak', xp: 140, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Bayu' },
+  { rank: 10, initials: 'HP', name: 'Hendra Pratama', xp: 90, avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=Hendra' }
 ];
 
 export const INITIAL_SHOP_ITEMS = [

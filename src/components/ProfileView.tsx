@@ -6,7 +6,6 @@ import {
   Zap,
   CheckCircle,
   Calendar as CalendarIcon,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
   Shield,
@@ -176,10 +175,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
               <CalendarIcon className="w-3.5 h-3.5 text-[#3ecf8e]" />
               <span>{user.joinedDate}</span>
             </span>
-            <span className="text-[#393939]">•</span>
-            <span className="text-[#3ecf8e] font-mono font-medium">
-              ID: {user.userCode}
-            </span>
           </div>
         </div>
       </div>
@@ -205,9 +200,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
                 </span>
               )}
             </h3>
-            <p className="text-[11px] text-[#898989] mt-0.5">
-              {isTodayActive ? 'Target hari ini tercapai!' : 'Latihan hari ini untuk menjaga streak'}
-            </p>
           </div>
         </div>
 
@@ -225,9 +217,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
             <h3 className="text-2xl font-brand font-extrabold text-white tracking-tight">
               {stats.xp} XP
             </h3>
-            <p className="text-[11px] text-[#898989] mt-0.5">
-              Tingkat kemahiran kode Python
-            </p>
           </div>
         </div>
 
@@ -245,9 +234,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
             <h3 className="text-2xl font-brand font-extrabold text-white tracking-tight">
               {stats.completedLessons.length} Pelajaran
             </h3>
-            <p className="text-[11px] text-[#898989] mt-0.5">
-              Dari 11 langkah dasar Unit 1
-            </p>
           </div>
         </div>
       </div>
@@ -255,18 +241,10 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onOpenSettings }) => {
       {/* Activity & Streak Calendar Heatmap (REAL DYNAMIC CALENDAR) */}
       <div className="bg-[#171717] border border-[#2e2e2e] rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#242424]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#3ecf8e]/15 border border-[#3ecf8e]/30 flex items-center justify-center text-[#3ecf8e]">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="font-brand font-bold text-base text-white tracking-wide">
-                Riwayat Aktivitas &amp; Kalender Streak
-              </h2>
-              <p className="text-xs text-[#898989]">
-                Merekam setiap hari Anda menyelesaikan misi pemrograman Python
-              </p>
-            </div>
+          <div>
+            <h2 className="font-brand font-bold text-base text-white tracking-wide">
+              Riwayat Aktivitas &amp; Kalender Streak
+            </h2>
           </div>
 
           {/* Legend */}

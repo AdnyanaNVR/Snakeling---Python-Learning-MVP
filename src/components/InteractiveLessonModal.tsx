@@ -168,15 +168,9 @@ export const InteractiveLessonModal: React.FC = () => {
           <SnakelingMascot mood="celebrate" size="xl" className="mx-auto mascot-float" />
 
           <div className="space-y-2">
-            <span className="text-xs font-brand font-bold uppercase tracking-widest text-[#3ecf8e]">
-              UNIT 1 • PELAJARAN SELESAI
-            </span>
             <h2 className="text-3xl font-brand font-extrabold text-white tracking-tight">
               Luar Biasa, Kamu Hebat!
             </h2>
-            <p className="text-sm text-[#b4b4b4] max-w-sm mx-auto">
-              Kamu telah menyelesaikan sesi pemrograman Python kali ini dan mendapatkan hadiah.
-            </p>
           </div>
 
           {/* Reward cards */}

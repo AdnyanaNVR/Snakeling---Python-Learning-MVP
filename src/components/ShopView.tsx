@@ -3,13 +3,11 @@ import { useApp } from '../context/AppContext';
 import { INITIAL_SHOP_ITEMS } from '../data/curriculum';
 import { ShopItem } from '../types';
 import { Shield, Heart, Zap, Sparkles, Gem, Flame, Infinity } from 'lucide-react';
-import { SnakelingMascot } from './SnakelingMascot';
 
 export const ShopView: React.FC = () => {
-  const { stats, user, purchaseShopItem, equipCosmetic } = useApp();
+  const { stats, user, purchaseShopItem } = useApp();
 
   const powerUps = INITIAL_SHOP_ITEMS.filter((i) => i.category === 'powerup');
-  const cosmetics = INITIAL_SHOP_ITEMS.filter((i) => i.category === 'cosmetic');
 
   const renderIcon = (iconName: string) => {
     switch (iconName) {
@@ -43,28 +41,20 @@ export const ShopView: React.FC = () => {
   };
 
   return (
-    <section className="flex-1 max-w-[800px] px-4 sm:px-6 lg:px-12 py-8 mx-auto space-y-10" aria-label="Toko Snakeling">
+    <section className="flex-1 max-w-[800px] px-4 sm:px-6 lg:px-12 py-8 mx-auto space-y-8" aria-label="Toko Snakeling">
       {/* Header */}
-      <header className="space-y-2">
+      <header>
         <h1 className="font-brand text-2xl sm:text-3xl text-white font-extrabold tracking-tight">
           Toko Snakeling
         </h1>
-        <p className="text-sm text-[#898989] max-w-xl">
-          Tukarkan Gems yang kamu kumpulkan untuk perlengkapan belajar.
-        </p>
       </header>
 
-      {/* SECTION 1: KEKUATAN & PEMULIHAN */}
+      {/* SECTION: KEKUATAN & PEMULIHAN */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-[#242424]">
-          <div>
-            <h2 className="font-brand text-lg text-white font-bold tracking-tight">
-              Kekuatan &amp; Pemulihan
-            </h2>
-            <p className="text-xs text-[#898989]">
-              Gunakan item ini untuk menjaga rentetan belajar harian dan latihan tanpa henti.
-            </p>
-          </div>
+        <div className="pb-2 border-b border-[#242424]">
+          <h2 className="font-brand text-lg text-white font-bold tracking-tight">
+            Kekuatan &amp; Pemulihan
+          </h2>
         </div>
 
         <div className="space-y-3">
@@ -135,91 +125,6 @@ export const ShopView: React.FC = () => {
                       className="tactile-btn-secondary opacity-60 cursor-not-allowed w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"
                     >
                       KAPASITAS PENUH
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => purchaseShopItem(item)}
-                      className="tactile-btn-primary w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Gem className="w-4 h-4 stroke-[2.2] fill-current text-[#0e0e0e]" />
-                      <span>{item.costGems} GEMS</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* SECTION 2: AKSESORI & KOSTUM MASKOT */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-[#242424]">
-          <div>
-            <h2 className="font-brand text-lg text-white font-bold tracking-tight flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#facc15]" />
-              <span>Aksesori &amp; Kostum Maskot</span>
-            </h2>
-            <p className="text-xs text-[#898989]">
-              Gunakan Gems untuk mengubah gaya tampilan maskot Snakeling kamu di profil dan saat belajar.
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          {cosmetics.map((item: ShopItem) => {
-            const isOwned = Boolean(stats.inventory[item.id]);
-            const isEquipped = stats.equippedCosmetics.includes(item.id);
-
-            return (
-              <div
-                key={item.id}
-                className={`rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-5 transition-all border ${
-                  isEquipped
-                    ? 'bg-[#18261e] border-[#3ecf8e]/50 shadow-[0_0_15px_rgba(62,207,142,0.15)]'
-                    : 'bg-[#171717] hover:bg-[#1f1e1e] border-[#2e2e2e]'
-                }`}
-              >
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-16 h-16 rounded-2xl bg-[#242424] flex items-center justify-center shrink-0 border border-[#333333] overflow-hidden p-1">
-                    <SnakelingMascot
-                      mood={isEquipped ? 'celebrate' : 'happy'}
-                      size="sm"
-                      equippedCosmetics={[item.id]}
-                    />
-                  </div>
-                  <div className="space-y-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-brand text-sm sm:text-base text-white font-semibold truncate">
-                        {item.name}
-                      </h3>
-                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                        isEquipped
-                          ? 'bg-[#3ecf8e]/20 text-[#3ecf8e] border border-[#3ecf8e]/40 font-bold'
-                          : isOwned
-                          ? 'bg-[#38bdf8]/20 text-[#38bdf8]'
-                          : 'bg-[#242424] text-[#b4b4b4]'
-                      }`}>
-                        {isEquipped ? 'TERPASANG' : isOwned ? 'DIMILIKI' : item.badgeText}
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#898989] max-w-md leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="shrink-0 self-end md:self-center w-full md:w-auto">
-                  {isOwned ? (
-                    <button
-                      onClick={() => equipCosmetic(item.id)}
-                      className={`w-full md:w-auto px-5 py-2.5 rounded-xl font-brand text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all ${
-                        isEquipped
-                          ? 'tactile-btn-secondary border-[#ef4444]/40 hover:border-[#ef4444] text-[#ffb4ab]'
-                          : 'tactile-btn-primary'
-                      }`}
-                    >
-                      {isEquipped ? <span>LEPAS AKSESORI</span> : <span>PASANG KE MASKOT</span>}
                     </button>
                   ) : (
                     <button

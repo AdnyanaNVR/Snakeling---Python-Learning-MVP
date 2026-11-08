@@ -224,6 +224,10 @@ export const LearningMap: React.FC = () => {
                   <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="#3ecf8e" floodOpacity="0.5" />
                   <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
                 </filter>
+                <filter id="completedGlow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="10" floodColor="#3ecf8e" floodOpacity="0.45" />
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
+                </filter>
               </defs>
 
               {/* 1. RENDER BACKGROUND TILES IN ISOMETRIC ORDER (TOP TO BOTTOM) */}
@@ -231,15 +235,65 @@ export const LearningMap: React.FC = () => {
                 .filter((tile) => tile.status !== 'active')
                 .sort((a, b) => a.cy - b.cy)
                 .map((tile) => {
-                  const { id, cx, cy } = tile;
+                  const { id, cx, cy, status } = tile;
+                  const isCompleted = status === 'completed';
                   const isUnit1 = tile.unit === 1;
+
+                  if (isCompleted) {
+                    // TANGGA YANG SUDAH LEWAT: TETAP BERSINAR & MEMILIKI ICON CENTANG SELESAI
+                    return (
+                      <g
+                        key={id}
+                        className="roadmap-tile-group cursor-pointer"
+                        onClick={() => handleTileClick(tile)}
+                      >
+                        {/* Static Hit Target */}
+                        <rect
+                          x={cx - 56}
+                          y={cy - 10}
+                          width={112}
+                          height={100}
+                          fill="transparent"
+                          style={{ pointerEvents: 'all' }}
+                        />
+                        {/* Glowing Completed Slab */}
+                        <g className="roadmap-tile-slab" filter="url(#completedGlow)">
+                          <path d={`M${cx - 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx - 48} ${cy + 48} Z`} fill="url(#glowSideLeft)" />
+                          <path d={`M${cx + 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx + 48} ${cy + 48} Z`} fill="url(#glowSideRight)" />
+                          <path
+                            d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 48} ${cy + 26} C${cx + 52} ${cy + 28} ${cx + 52} ${cy + 32} ${cx + 48} ${cy + 34} L${cx + 4} ${cy + 60} C${cx + 2} ${cy + 61} ${cx - 2} ${cy + 61} ${cx - 4} ${cy + 60} L${cx - 48} ${cy + 34} C${cx - 52} ${cy + 32} ${cx - 52} ${cy + 28} ${cx - 48} ${cy + 26} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
+                            fill="url(#slabTopGlow)"
+                            stroke="#ffffff"
+                            strokeOpacity="0.85"
+                            strokeWidth="1.5"
+                          />
+                          <ellipse cx={cx} cy={cy + 30} rx="16" ry="8" fill="white" fillOpacity="0.35" filter="blur(2px)" />
+
+                          {/* Completed Checkmark Emblem */}
+                          <g transform={`translate(${cx - 9}, ${cy + 21})`}>
+                            <circle cx="9" cy="9" r="9" fill="#14532d" fillOpacity="0.85" stroke="#ffffff" strokeWidth="1.5" />
+                            <path
+                              d="M5.5 9 L8 11.5 L12.5 6.5"
+                              fill="none"
+                              stroke="#ffffff"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </g>
+                        </g>
+                      </g>
+                    );
+                  }
+
+                  // TANGGA TERKUNCI (BELUM DICAPAI)
                   const fillPattern = isUnit1
                     ? tile.id > 6
                       ? 'url(#slabTopBright)'
                       : 'url(#slabTopMuted)'
                     : 'url(#slabTopLocked)';
                   const strokeColor = isUnit1 ? '#336d60' : '#2a2a2a';
-                  const opacity = isUnit1 ? 0.85 : 0.55;
+                  const opacity = isUnit1 ? 0.75 : 0.45;
 
                   return (
                     <g
@@ -276,7 +330,8 @@ export const LearningMap: React.FC = () => {
 
               {/* 2. RENDER ACTIVE TILE + NEXT INDICATOR ON TOP LAYER (PALING ATAS AGAR TIDAK OVERLAP) */}
               {(() => {
-                const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
+                const activeTile = tiles.find((t) => t.status === 'active');
+                if (!activeTile) return null;
                 const { id, cx, cy } = activeTile;
                 return (
                   <g
@@ -390,7 +445,7 @@ export const LearningMap: React.FC = () => {
             <div className="space-y-2.5">
               {LESSON_UNITS.map((item, idx) => {
                 const isCompleted = stats.completedLessons.includes(item.id);
-                const isCurrent = idx === 0;
+                const isCurrent = !isCompleted && (idx === 0 || stats.completedLessons.includes(LESSON_UNITS[idx - 1]?.id));
                 return (
                   <div
                     key={item.id}

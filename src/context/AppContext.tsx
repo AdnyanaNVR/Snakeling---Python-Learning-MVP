@@ -76,11 +76,11 @@ const DEFAULT_STATS: UserStats = {
   gems: 505,
   hearts: 5,
   maxHearts: 5,
-  xp: 120,
+  xp: 0,
   streakFreezeCount: 1,
-  modulesCompleted: 1,
-  currentLessonIndex: 1,
-  completedLessons: ['unit1_lesson1'],
+  modulesCompleted: 0,
+  currentLessonIndex: 0,
+  completedLessons: [],
   inventory: {
     streak_freeze: 1
   },
@@ -111,6 +111,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeLessonModal, setActiveLessonModal] = useState<boolean>(false);
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const [isLessonActive, setIsLessonActive] = useState<boolean>(false);
+  const [dbLeaderboard, setDbLeaderboard] = useState<LeaderboardUser[]>([]);
 
   // Load from LocalStorage
   const [user, setUser] = useState<UserProfile>(() => {
@@ -132,11 +133,54 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [stats, setStats] = useState<UserStats>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_STATS);
-      return saved ? JSON.parse(saved) : DEFAULT_STATS;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Migrasi state di mana unit1_lesson1 otomatis selesai sejak awal
+        if (
+          Array.isArray(parsed.completedLessons) &&
+          (parsed.completedLessons.length === 0 ||
+            (parsed.completedLessons.length === 1 && parsed.completedLessons[0] === 'unit1_lesson1'))
+        ) {
+          parsed.completedLessons = [];
+          parsed.modulesCompleted = 0;
+          parsed.currentLessonIndex = 0;
+          parsed.xp = 0;
+          try {
+            localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(parsed));
+          } catch {
+            // ignore
+          }
+        }
+        return parsed;
+      }
+      return DEFAULT_STATS;
     } catch {
       return DEFAULT_STATS;
     }
   });
+
+  // Sinkronisasi: jika saat ini modul 1 belum diselesaikan, pastikan aktif di modul 1
+  useEffect(() => {
+    if (
+      stats.completedLessons &&
+      stats.completedLessons.length === 1 &&
+      stats.completedLessons[0] === 'unit1_lesson1'
+    ) {
+      setStats((prev) => {
+        const resetStats = {
+          ...prev,
+          completedLessons: [],
+          modulesCompleted: 0,
+          currentLessonIndex: 0,
+          xp: 0
+        };
+        try {
+          localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(resetStats));
+        } catch {}
+        return resetStats;
+      });
+    }
+  }, [stats.completedLessons]);
 
   // Save to LocalStorage
   useEffect(() => {
@@ -150,6 +194,65 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(stats));
   }, [stats]);
+
+  // Fetch real leaderboard users from Supabase database if configured
+  const fetchSupabaseLeaderboard = React.useCallback(async () => {
+    if (!isSupabaseConfigured || !supabase) return;
+    try {
+      const { data: viewData, error: viewError } = await supabase
+        .from('leaderboard_view')
+        .select('*')
+        .limit(30);
+
+      if (!viewError && viewData && viewData.length > 0) {
+        const list: LeaderboardUser[] = viewData.map((row: any, idx: number) => {
+          const name = row.display_name || row.username || 'Siswa Python';
+          const initials = name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase() || 'PY';
+          return {
+            rank: idx + 1,
+            initials,
+            name,
+            xp: Number(row.xp || 0),
+            isCurrentUser: user.id === row.user_id || user.username === row.username,
+            avatarUrl: row.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${name}`
+          };
+        });
+        setDbLeaderboard(list);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('user_stats')
+        .select('xp, streak, user_id, profiles!inner(id, username, display_name, avatar_url)')
+        .order('xp', { ascending: false })
+        .limit(30);
+
+      if (!error && data && data.length > 0) {
+        const list: LeaderboardUser[] = data.map((row: any, idx: number) => {
+          const p = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles;
+          const name = p?.display_name || p?.username || 'Siswa Python';
+          const initials = name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase() || 'PY';
+          return {
+            rank: idx + 1,
+            initials,
+            name,
+            xp: Number(row.xp || 0),
+            isCurrentUser: user.id === row.user_id || user.username === p?.username,
+            avatarUrl: p?.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${name}`
+          };
+        });
+        setDbLeaderboard(list);
+      }
+    } catch {
+      // ignore
+    }
+  }, [user.id, user.username]);
+
+  useEffect(() => {
+    if (isSupabaseConfigured && supabase) {
+      fetchSupabaseLeaderboard();
+    }
+  }, [isSupabaseConfigured, fetchSupabaseLeaderboard]);
 
   // Toast Helper
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -365,12 +468,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       }
 
+      const nextXp = prev.xp + earnedXp;
+
+      if (isSupabaseConfigured && supabase && user.id && !user.id.startsWith('usr_demo')) {
+        supabase
+          .from('user_stats')
+          .upsert({
+            user_id: user.id,
+            xp: nextXp,
+            streak: nextStreak,
+            modules_completed: nextCompleted.length,
+            updated_at: new Date().toISOString()
+          })
+          .then(() => fetchSupabaseLeaderboard());
+      }
+
       return {
         ...prev,
         streak: nextStreak,
         streakFreezeCount: nextFreezeCount,
         lastActiveDate: today,
-        xp: prev.xp + earnedXp,
+        xp: nextXp,
         gems: prev.gems + earnedGems,
         completedLessons: nextCompleted,
         modulesCompleted: nextCompleted.length,

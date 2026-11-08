@@ -1,14 +1,16 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { ActiveTab } from '../types';
-import { Terminal, Trophy, ShoppingBag, SlidersHorizontal } from 'lucide-react';
+import { Terminal, Trophy, ShoppingBag, SlidersHorizontal, Lock } from 'lucide-react';
 
 interface SidebarProps {
   onOpenSettings: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ onOpenSettings }) => {
-  const { activeTab, setActiveTab, user, playSound } = useApp();
+  const { activeTab, setActiveTab, user, stats, playSound } = useApp();
+
+  const isLeaderboardUnlocked = stats.completedLessons.length >= 2;
 
   const handleNavClick = (tab: ActiveTab) => {
     playSound('click');
@@ -24,7 +26,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSettings }) => {
     {
       id: 'papan_skor' as ActiveTab,
       label: 'PAPAN SKOR',
-      icon: <Trophy className="w-6 h-6 stroke-[2.2] text-[#facc15]" />
+      icon: <Trophy className="w-6 h-6 stroke-[2.2] text-[#facc15]" />,
+      isLocked: !isLeaderboardUnlocked
     },
     {
       id: 'toko' as ActiveTab,
@@ -74,16 +77,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSettings }) => {
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl font-brand font-bold text-sm tracking-wide transition-all text-left ${
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl font-brand font-bold text-sm tracking-wide transition-all text-left ${
                     isActive
                       ? 'bg-[#3ecf8e]/10 border-2 border-[#3ecf8e]/80 text-[#3ecf8e] shadow-[0_0_15px_rgba(62,207,142,0.15)]'
                       : 'text-[#b4b4b4] hover:text-white hover:bg-[#1c1b1b] border-2 border-transparent'
                   }`}
                 >
-                  <span className="w-7 h-7 flex items-center justify-center shrink-0">
-                    {item.icon}
-                  </span>
-                  <span>{item.label}</span>
+                  <div className="flex items-center gap-4">
+                    <span className="w-7 h-7 flex items-center justify-center shrink-0">
+                      {item.icon}
+                    </span>
+                    <span>{item.label}</span>
+                  </div>
+                  {item.isLocked && (
+                    <span title="Terkunci - Selesaikan 2 Pelajaran">
+                      <Lock className="w-3.5 h-3.5 text-[#898989] shrink-0" />
+                    </span>
+                  )}
                 </button>
               );
             })}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
-import { Flame, Gem, Heart, Crown, Trophy, CheckCircle2, Sparkles, Zap, Infinity } from 'lucide-react';
+import { Flame, Gem, Heart, Crown, Trophy, CheckCircle2, Sparkles, Zap, Infinity, Lock } from 'lucide-react';
 
 export const RightWidgets: React.FC = () => {
   const { stats, user, setShowProModal, refillHearts, playSound, setActiveTab } = useApp();
@@ -137,18 +137,27 @@ export const RightWidgets: React.FC = () => {
       >
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-brand font-extrabold text-base text-white group-hover:text-[#facc15] transition-colors">
-            Buka Papan Skor!
+            {stats.completedLessons.length >= 2 ? 'Papan Skor Liga' : 'Buka Papan Skor!'}
           </h2>
-          <Trophy className="w-4 h-4 text-[#facc15] opacity-60 group-hover:opacity-100 transition-opacity" />
+          {stats.completedLessons.length >= 2 ? (
+            <Trophy className="w-4 h-4 text-[#facc15] opacity-60 group-hover:opacity-100 transition-opacity" />
+          ) : (
+            <Lock className="w-4 h-4 text-[#898989] opacity-70 group-hover:text-[#facc15] transition-colors" />
+          )}
         </div>
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-14 rounded-2xl bg-gradient-to-br from-[#facc15]/20 to-[#ca8a04]/5 border border-[#facc15]/30 flex items-center justify-center shrink-0 text-[#facc15] shadow-[0_0_12px_rgba(250,204,21,0.2)]">
+          <div className="w-12 h-14 rounded-2xl bg-gradient-to-br from-[#facc15]/20 to-[#ca8a04]/5 border border-[#facc15]/30 flex items-center justify-center shrink-0 text-[#facc15] shadow-[0_0_12px_rgba(250,204,21,0.2)] relative">
             <Trophy className="w-6 h-6 stroke-[2.2] fill-[#facc15]/20" />
+            {stats.completedLessons.length < 2 && (
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#121212] border border-[#facc15] flex items-center justify-center text-[#facc15]">
+                <Lock className="w-2.5 h-2.5" />
+              </div>
+            )}
           </div>
           <p className="text-xs text-[#b4b4b4] leading-relaxed font-medium">
             {stats.completedLessons.length >= 2
               ? `Kamu berada di peringkat kompetisi dengan ${stats.xp} XP!`
-              : 'Selesaikan 2 pelajaran lagi untuk mulai berkompetisi'}
+              : `Selesaikan ${2 - stats.completedLessons.length} pelajaran lagi (${stats.completedLessons.length}/2) untuk mulai berkompetisi!`}
           </p>
         </div>
       </article>
