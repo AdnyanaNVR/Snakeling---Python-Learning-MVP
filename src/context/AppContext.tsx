@@ -134,53 +134,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const saved = localStorage.getItem(STORAGE_KEY_STATS);
       if (saved) {
-        const parsed = JSON.parse(saved);
-        // Migrasi state di mana unit1_lesson1 otomatis selesai sejak awal
-        if (
-          Array.isArray(parsed.completedLessons) &&
-          (parsed.completedLessons.length === 0 ||
-            (parsed.completedLessons.length === 1 && parsed.completedLessons[0] === 'unit1_lesson1'))
-        ) {
-          parsed.completedLessons = [];
-          parsed.modulesCompleted = 0;
-          parsed.currentLessonIndex = 0;
-          parsed.xp = 0;
-          try {
-            localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(parsed));
-          } catch {
-            // ignore
-          }
-        }
-        return parsed;
+        return JSON.parse(saved);
       }
       return DEFAULT_STATS;
     } catch {
       return DEFAULT_STATS;
     }
   });
-
-  // Sinkronisasi: jika saat ini modul 1 belum diselesaikan, pastikan aktif di modul 1
-  useEffect(() => {
-    if (
-      stats.completedLessons &&
-      stats.completedLessons.length === 1 &&
-      stats.completedLessons[0] === 'unit1_lesson1'
-    ) {
-      setStats((prev) => {
-        const resetStats = {
-          ...prev,
-          completedLessons: [],
-          modulesCompleted: 0,
-          currentLessonIndex: 0,
-          xp: 0
-        };
-        try {
-          localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(resetStats));
-        } catch {}
-        return resetStats;
-      });
-    }
-  }, [stats.completedLessons]);
 
   // Save to LocalStorage
   useEffect(() => {

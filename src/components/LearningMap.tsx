@@ -23,8 +23,8 @@ export const LearningMap: React.FC = () => {
 
   // 4 tiles per straight diagonal leg (Leg 1: 4 tiles up-right, Leg 2: 4 tiles up-left, repeating)
   const cxPattern = [95, 145, 195, 245, 195, 145];
-  const startCy = 1720;
-  const dyStep = 52;
+  const startCy = 2550;
+  const dyStep = 100;
 
   const tileMetaData = [
     // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
@@ -144,9 +144,6 @@ export const LearningMap: React.FC = () => {
           <span className="font-brand font-extrabold text-sm uppercase tracking-wider text-white">
             LEARN TO CODE
           </span>
-          <span className="text-[11px] font-mono text-[#3ecf8e]">
-            {stats.completedLessons.length} / {LESSON_UNITS.length} Modul
-          </span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -163,7 +160,7 @@ export const LearningMap: React.FC = () => {
             onClick={startNextLesson}
             className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
           >
-            <span>NEXT LESSON</span>
+            <span>NEXT LESSON ({stats.completedLessons.length}/{LESSON_UNITS.length})</span>
             <ArrowRight className="w-4 h-4 stroke-[2.8] transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
@@ -189,10 +186,10 @@ export const LearningMap: React.FC = () => {
       >
         {/* ISOMETRIC ROADMAP SVG (SCROLLS SMOOTHLY IN CENTER) */}
         <div className="relative w-full flex items-center justify-center py-2 select-none">
-          <div className="relative w-[340px] h-[1840px] flex items-center justify-center overflow-visible">
+          <div className="relative w-[340px] h-[2720px] flex items-center justify-center overflow-visible">
             <svg
               className="w-full h-full overflow-visible"
-              viewBox="0 0 340 1840"
+              viewBox="0 0 340 2720"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -430,6 +427,21 @@ export const LearningMap: React.FC = () => {
                     <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#38bdf8" />
                     <line x1="20" y1="24" x2="20" y2="28" stroke="#38bdf8" strokeWidth="2" />
                     <line x1="16" y1="28" x2="24" y2="28" stroke="#38bdf8" strokeWidth="2" />
+                  </g>
+                );
+              })()}
+
+              {/* Unit 3 Trophy Milestone (Above step 25 - Course Summit) */}
+              {(() => {
+                const u3End = tiles.find((t) => t.id === 25) || tiles[24];
+                return (
+                  <g transform={`translate(${u3End.cx - 20}, ${u3End.cy - 72})`} className="cursor-pointer">
+                    <circle cx="20" cy="20" r="18" fill="#171717" stroke="#a855f7" strokeWidth="2" />
+                    <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#a855f7" />
+                    <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#a855f7" strokeWidth="1.5" />
+                    <path d="M28 14 h2 c1.1 0 2 .9 2 2 v1 c0 1.7 -1.3 3 -3 3 h-1" fill="none" stroke="#a855f7" strokeWidth="1.5" />
+                    <line x1="20" y1="24" x2="20" y2="28" stroke="#a855f7" strokeWidth="2" />
+                    <line x1="16" y1="28" x2="24" y2="28" stroke="#a855f7" strokeWidth="2" />
                   </g>
                 );
               })()}
