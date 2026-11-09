@@ -1,57 +1,38 @@
 import { LessonUnit } from '../types';
+import { MODULE_CATALOG } from './modules';
+
+export const convertModuleToLessonUnit = (mod: any): LessonUnit => ({
+  id: mod.id,
+  unitNumber: mod.unit,
+  unitTitle: mod.unitTitle,
+  lessonOrder: mod.moduleNumber,
+  title: mod.title,
+  subtitle: mod.subtitle,
+  xpReward: mod.xpReward,
+  gemReward: mod.gemReward,
+  tip: mod.tip,
+  questions: mod.quizzes.map((q: any) => ({
+    id: q.id,
+    type: q.type,
+    prompt: q.prompt,
+    code: q.code,
+    codeSnippet: q.code || q.codeSnippet,
+    codeWithBlank: q.codeWithBlank,
+    options: q.options,
+    answerIndex: q.answerIndex,
+    acceptedAnswers: q.acceptedAnswers,
+    correctAnswer: typeof q.answerIndex === 'number' && q.options ? q.options[q.answerIndex] : q.correctAnswer,
+    lines: q.lines,
+    distractors: q.distractors,
+    buggyLineIndex: q.buggyLineIndex,
+    fixedLine: q.fixedLine,
+    explanation: q.explanation,
+    hint: q.hint
+  }))
+});
 
 export const LESSON_UNITS: LessonUnit[] = [
-  {
-    id: 'unit1_lesson1',
-    unitNumber: 1,
-    unitTitle: 'Menawarkan dan menerima minuman',
-    lessonOrder: 1,
-    title: 'Perintah print() & Salam Pertama',
-    subtitle: 'Mencetak teks ucapan dan menyapa teman di terminal',
-    xpReward: 30,
-    gemReward: 15,
-    questions: [
-      {
-        id: 'q1',
-        type: 'multiple_choice',
-        prompt: 'Fungsi mana yang digunakan di Python untuk mencetak teks ke layar terminal?',
-        options: ['print()', 'echo()', 'display()', 'console.log()'],
-        correctAnswer: 'print()',
-        explanation: 'Di Python, fungsi standar bawaan untuk menampilkan teks ke layar adalah `print()`.'
-      },
-      {
-        id: 'q2',
-        type: 'code_predict',
-        prompt: 'Perhatikan kode berikut. Apa hasil keluaran yang akan tercetak?',
-        codeSnippet: 'print("Silakan minum teh hangat!")',
-        options: [
-          'Silakan minum teh hangat!',
-          '"Silakan minum teh hangat!"',
-          'print("Silakan minum teh hangat!")',
-          'Error: tanda kutip salah'
-        ],
-        correctAnswer: 'Silakan minum teh hangat!',
-        explanation: 'Fungsi `print()` mencetak isi teks di dalam tanda kutip tanpa tanda kutip itu sendiri.'
-      },
-      {
-        id: 'q3',
-        type: 'fill_blank',
-        prompt: 'Lengkapi kode berikut agar mencetak "Mau jus jeruk?":',
-        codeSnippet: '____("Mau jus jeruk?")',
-        options: ['print', 'show', 'write', 'say'],
-        correctAnswer: 'print',
-        explanation: 'Gunakan kata kunci `print` diikuti tanda kurung untuk memanggil fungsi cetak.'
-      },
-      {
-        id: 'q4',
-        type: 'code_order',
-        prompt: 'Susun kata-kata berikut agar membentuk baris kode Python yang valid:',
-        options: ['print', '(', '"Kopi hangat"', ')'],
-        correctAnswer: ['print', '(', '"Kopi hangat"', ')'],
-        explanation: 'Urutan pemanggilan fungsi: nama fungsi `print`, buka kurung `(`, teks `"Kopi hangat"`, lalu tutup kurung `)`.'
-      }
-    ]
-  },
+  convertModuleToLessonUnit(MODULE_CATALOG[0]),
   {
     id: 'unit1_lesson2',
     unitNumber: 1,

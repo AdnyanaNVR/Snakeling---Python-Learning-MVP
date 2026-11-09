@@ -1,0 +1,111 @@
+{
+  "id": "module-01",
+  "unit": 1,
+  "unitTitle": "Unit 1: Mulai",
+  "moduleNumber": 1,
+  "title": "Hello World & print",
+  "subtitle": "Mencetak teks dan salam pertama di Python",
+  "xpReward": 30,
+  "gemReward": 15,
+  "tip": {
+    "title": "Fungsi print() di Python",
+    "body": "Fungsi print() digunakan untuk menampilkan pesan teks atau hasil program ke layar terminal. Teks di dalam tanda kurung harus diapit oleh tanda kutip tunggal ('...') atau tanda kutip ganda (\"...\").",
+    "codeExample": "print(\"Halo, Dunia!\")\nprint('Belajar Python di Snakeling')"
+  },
+  "quizzes": [
+    {
+      "id": "m01_q01",
+      "type": "mc",
+      "prompt": "Fungsi bawaan Python apa yang digunakan untuk menampilkan teks ke layar terminal?",
+      "code": "",
+      "options": ["print()", "echo()", "console.log()", "display()"],
+      "answerIndex": 0,
+      "explanation": "Di Python, fungsi standar bawaan untuk mencetak output ke terminal adalah print()."
+    },
+    {
+      "id": "m01_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kode berikut agar mencetak ucapan salam 'Halo Python!':",
+      "codeWithBlank": "___(\"Halo Python!\")",
+      "options": ["print", "show", "write", "say"],
+      "acceptedAnswers": ["print"],
+      "answerIndex": 0,
+      "explanation": "Gunakan kata kunci print diikuti tanda kurung untuk memanggil fungsi cetak."
+    },
+    {
+      "id": "m01_q03",
+      "type": "ro",
+      "prompt": "Susun baris kode berikut agar program membuat teks lalu mencetaknya ke layar:",
+      "lines": [
+        "pesan = \"Selamat Datang\"",
+        "print(pesan)"
+      ],
+      "distractors": [],
+      "explanation": "Variabel pesan harus didefinisikan terlebih dahulu sebelum dicetak oleh fungsi print()."
+    },
+    {
+      "id": "m01_q04",
+      "type": "mc",
+      "prompt": "Perhatikan kode berikut. Apa hasil keluaran yang akan tercetak di layar terminal?",
+      "code": "print(\"Belajar Koding\")",
+      "options": [
+        "Belajar Koding",
+        "\"Belajar Koding\"",
+        "print(\"Belajar Koding\")",
+        "Error: Sintaks salah"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi print() menampilkan isi string tanpa tanda kutip pembungkusnya."
+    },
+    {
+      "id": "m01_q05",
+      "type": "fb",
+      "prompt": "Lengkapi pemanggilan fungsi print berikut dengan tanda kurung buka yang tepat:",
+      "codeWithBlank": "print___\"Semangat Belajar!\")",
+      "options": ["(", "[", "{", "<"],
+      "acceptedAnswers": ["("],
+      "answerIndex": 0,
+      "explanation": "Setiap pemanggilan fungsi di Python selalu diawali tanda kurung buka '(' dan diakhiri ')'."
+    },
+    {
+      "id": "m01_q06",
+      "type": "ro",
+      "prompt": "Susun baris kode berikut dengan urutan eksekusi yang benar dari baris pertama ke baris kedua:",
+      "lines": [
+        "print(\"Baris Pertama\")",
+        "print(\"Baris Kedua\")"
+      ],
+      "distractors": [],
+      "explanation": "Program Python dieksekusi secara berurutan baris demi baris dari atas ke bawah."
+    },
+    {
+      "id": "m01_q07",
+      "type": "mc",
+      "prompt": "Manakah penulisan pemanggilan fungsi cetak yang benar di Python?",
+      "code": "",
+      "options": [
+        "print(\"Halo\")",
+        "Print(\"Halo\")",
+        "PRINT(\"Halo\")",
+        "print \"Halo\""
+      ],
+      "answerIndex": 0,
+      "explanation": "Python bersifat case-sensitive (peka huruf besar-kecil). Nama fungsi bawaan harus menggunakan huruf kecil 'print'."
+    },
+    {
+      "id": "m01_q08",
+      "type": "fb",
+      "prompt": "Lengkapi argumen teks di dalam tanda kurung agar mencetak teks 'Ular Python':",
+      "codeWithBlank": "print(___)",
+      "options": [
+        "\"Ular Python\"",
+        "Ular Python",
+        "(Ular Python)",
+        "'Ular Python"
+      ],
+      "acceptedAnswers": ["\"Ular Python\"", "'Ular Python'"],
+      "answerIndex": 0,
+      "explanation": "Nilai teks (string) harus diapit dengan sepasang tanda kutip yang lengkap."
+    }
+  ]
+}

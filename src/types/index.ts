@@ -46,15 +46,37 @@ export interface LeaderboardUser {
   isCurrentUser?: boolean;
 }
 
-export type QuestionType = 'multiple_choice' | 'fill_blank' | 'code_order' | 'code_predict';
+export type QuestionType =
+  | 'multiple_choice'
+  | 'fill_blank'
+  | 'code_order'
+  | 'code_predict'
+  | 'mc'
+  | 'fb'
+  | 'ro'
+  | 'sb';
+
+export interface LessonTip {
+  title: string;
+  body: string;
+  codeExample: string;
+}
 
 export interface QuizQuestion {
   id: string;
   type: QuestionType;
   prompt: string;
   codeSnippet?: string;
+  code?: string;
+  codeWithBlank?: string;
   options?: string[];
-  correctAnswer: string | string[];
+  correctAnswer?: string | string[];
+  answerIndex?: number;
+  acceptedAnswers?: string[];
+  lines?: string[];
+  distractors?: string[];
+  buggyLineIndex?: number;
+  fixedLine?: string;
   explanation: string;
   hint?: string;
 }
@@ -68,6 +90,7 @@ export interface LessonUnit {
   subtitle: string;
   xpReward: number;
   gemReward: number;
+  tip?: LessonTip;
   questions: QuizQuestion[];
 }
 

@@ -14,6 +14,16 @@ interface TileData {
   status: 'active' | 'completed' | 'locked';
 }
 
+// Mathematically symmetric 3D isometric rounded squircle slab paths matching reference
+const getTopSlabPath = (cx: number, cy: number) =>
+  `M ${cx - 8} ${cy - 20} Q ${cx} ${cy - 24} ${cx + 8} ${cy - 20} L ${cx + 34} ${cy - 4} Q ${cx + 42} ${cy} ${cx + 34} ${cy + 4} L ${cx + 8} ${cy + 20} Q ${cx} ${cy + 24} ${cx - 8} ${cy + 20} L ${cx - 34} ${cy + 4} Q ${cx - 42} ${cy} ${cx - 34} ${cy - 4} Z`;
+
+const getLeftSidePath = (cx: number, cy: number) =>
+  `M ${cx - 42} ${cy} Q ${cx - 42} ${cy + 4} ${cx - 34} ${cy + 4} L ${cx - 8} ${cy + 20} Q ${cx} ${cy + 24} ${cx} ${cy + 24} L ${cx} ${cy + 39} Q ${cx} ${cy + 39} ${cx - 8} ${cy + 35} L ${cx - 34} ${cy + 19} Q ${cx - 42} ${cy + 19} ${cx - 42} ${cy + 15} Z`;
+
+const getRightSidePath = (cx: number, cy: number) =>
+  `M ${cx} ${cy + 24} Q ${cx} ${cy + 24} ${cx + 8} ${cy + 20} L ${cx + 34} ${cy + 4} Q ${cx + 42} ${cy + 4} ${cx + 42} ${cy} L ${cx + 42} ${cy + 15} Q ${cx + 42} ${cy + 19} ${cx + 34} ${cy + 19} L ${cx + 8} ${cy + 35} Q ${cx} ${cy + 39} ${cx} ${cy + 39} Z`;
+
 export const LearningMap: React.FC = () => {
   const { stats, setIsLessonActive, setSelectedLessonId, playSound, showToast } = useApp();
   const [showSyllabus, setShowSyllabus] = useState(false);
@@ -21,14 +31,15 @@ export const LearningMap: React.FC = () => {
 
   const roadmapScrollRef = useRef<HTMLDivElement>(null);
 
-  // 4 tiles per straight diagonal leg (Leg 1: 4 tiles up-right, Leg 2: 4 tiles up-left, repeating)
-  const cxPattern = [95, 145, 195, 245, 195, 145];
-  const startCy = 2550;
-  const dyStep = 100;
+  // Perfectly symmetrical zigzag around midline X=190: [109, 163, 217, 271, 217, 163]
+  // 190 - 109 = 81, 271 - 190 = 81 | 190 - 163 = 27, 217 - 190 = 27
+  const cxPattern = [109, 163, 217, 271, 217, 163];
+  const startCy = 2920;
+  const dyStep = 115; // Generous breathing room between stairs to prevent crowding
 
   const tileMetaData = [
     // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
-    { id: 1, unit: 1, stepNumber: 1, lessonId: 'unit1_lesson1', title: 'Perintah print() & Salam Pertama' },
+    { id: 1, unit: 1, stepNumber: 1, lessonId: 'module-01', title: 'Hello World & print' },
     { id: 2, unit: 1, stepNumber: 2, lessonId: 'unit1_lesson2', title: 'Variabel & Tipe String' },
     { id: 3, unit: 1, stepNumber: 3, lessonId: 'unit1_lesson3', title: 'Penggabungan String' },
     { id: 4, unit: 1, stepNumber: 4, lessonId: 'unit1_lesson4', title: 'Aritmatika Dasar Minuman' },
@@ -61,11 +72,19 @@ export const LearningMap: React.FC = () => {
 
   const completedCount = stats.completedLessons.length;
 
+  const isLessonCompleted = (lId: string) => {
+    return (
+      stats.completedLessons.includes(lId) ||
+      (lId === 'module-01' && stats.completedLessons.includes('unit1_lesson1')) ||
+      (lId === 'unit1_lesson1' && stats.completedLessons.includes('module-01'))
+    );
+  };
+
   const tiles: TileData[] = tileMetaData.map((meta, i) => {
     let status: 'completed' | 'active' | 'locked' = 'locked';
-    if (stats.completedLessons.includes(meta.lessonId)) {
+    if (isLessonCompleted(meta.lessonId)) {
       status = 'completed';
-    } else if (i === 0 || (i > 0 && stats.completedLessons.includes(tileMetaData[i - 1]?.lessonId))) {
+    } else if (i === 0 || (i > 0 && isLessonCompleted(tileMetaData[i - 1]?.lessonId))) {
       status = 'active';
     }
 
@@ -114,10 +133,21 @@ export const LearningMap: React.FC = () => {
     }
   };
 
+  const findLessonUnit = (lId: string) => {
+    return (
+      LESSON_UNITS.find(
+        (u) =>
+          u.id === lId ||
+          (lId === 'module-01' && u.id === 'unit1_lesson1') ||
+          (lId === 'unit1_lesson1' && u.id === 'module-01')
+      ) || LESSON_UNITS[0]
+    );
+  };
+
   const startNextLesson = () => {
     playSound('click');
     const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
-    const lesson = LESSON_UNITS.find((u) => u.id === activeTile.lessonId) || LESSON_UNITS[0];
+    const lesson = findLessonUnit(activeTile.lessonId);
     setSelectedLessonId(lesson.id);
     setIsLessonActive(true);
   };
@@ -125,7 +155,7 @@ export const LearningMap: React.FC = () => {
   const handleTileClick = (tile: TileData) => {
     playSound('click');
     if (tile.status === 'active' || tile.status === 'completed') {
-      const lesson = LESSON_UNITS.find((u) => u.id === tile.lessonId) || LESSON_UNITS[0];
+      const lesson = findLessonUnit(tile.lessonId);
       setSelectedLessonId(lesson.id);
       setIsLessonActive(true);
     } else {
@@ -186,60 +216,62 @@ export const LearningMap: React.FC = () => {
       >
         {/* ISOMETRIC ROADMAP SVG (SCROLLS SMOOTHLY IN CENTER) */}
         <div className="relative w-full flex items-center justify-center py-2 select-none">
-          <div className="relative w-[340px] h-[2720px] flex items-center justify-center overflow-visible">
+          <div className="relative w-[360px] sm:w-[380px] h-[3150px] flex items-center justify-center overflow-visible">
             <svg
               className="w-full h-full overflow-visible"
-              viewBox="0 0 340 2720"
+              viewBox="0 0 380 3150"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <defs>
-                <linearGradient id="slabTopGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                {/* Active glowing emerald slab top */}
+                <linearGradient id="slabTopActive" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#3ecf8e" />
-                  <stop offset="100%" stopColor="#228258" />
+                  <stop offset="100%" stopColor="#1ea672" />
                 </linearGradient>
-                <linearGradient id="slabTopBright" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#265c52" />
-                  <stop offset="100%" stopColor="#163b34" />
+
+                {/* Completed emerald slab top */}
+                <linearGradient id="slabTopCompleted" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#228258" />
+                  <stop offset="100%" stopColor="#15583b" />
                 </linearGradient>
-                <linearGradient id="slabTopMuted" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#1f4b43" />
-                  <stop offset="100%" stopColor="#112925" />
-                </linearGradient>
+
+                {/* Dark teal-slate default/locked slab top matching reference screenshot */}
                 <linearGradient id="slabTopDark" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#183a34" />
-                  <stop offset="100%" stopColor="#0d1e1b" />
+                  <stop offset="0%" stopColor="#1e3d36" />
+                  <stop offset="100%" stopColor="#0e1f1c" />
                 </linearGradient>
-                <linearGradient id="slabTopLocked" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#1a1a1a" />
-                  <stop offset="100%" stopColor="#111111" />
-                </linearGradient>
+
+                {/* 3D Side extrusion facets for normal tiles */}
                 <linearGradient id="sideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#142e2a" />
+                  <stop offset="0%" stopColor="#102621" />
                   <stop offset="100%" stopColor="#081412" />
                 </linearGradient>
                 <linearGradient id="sideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#0f2421" />
-                  <stop offset="100%" stopColor="#050c0a" />
+                  <stop offset="0%" stopColor="#0d201c" />
+                  <stop offset="100%" stopColor="#050e0c" />
                 </linearGradient>
-                <linearGradient id="glowSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#1f6e4a" />
-                  <stop offset="100%" stopColor="#0d3623" />
+
+                {/* 3D Side extrusion facets for active/completed tiles */}
+                <linearGradient id="activeSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#165e3d" />
+                  <stop offset="100%" stopColor="#0b3320" />
                 </linearGradient>
-                <linearGradient id="glowSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#175438" />
-                  <stop offset="100%" stopColor="#092618" />
+                <linearGradient id="activeSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#124f33" />
+                  <stop offset="100%" stopColor="#072416" />
                 </linearGradient>
+
                 <filter id="tileShadow" x="-30%" y="-20%" width="160%" height="160%">
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.6" />
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.65" />
                 </filter>
-                <filter id="activeGlow" x="-40%" y="-40%" width="180%" height="180%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="12" floodColor="#3ecf8e" floodOpacity="0.5" />
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
+                <filter id="activeNeonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="14" floodColor="#3ecf8e" floodOpacity="0.6" />
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.75" />
                 </filter>
                 <filter id="completedGlow" x="-40%" y="-40%" width="180%" height="180%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="10" floodColor="#3ecf8e" floodOpacity="0.45" />
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
+                  <feDropShadow dx="0" dy="0" stdDeviation="10" floodColor="#3ecf8e" floodOpacity="0.4" />
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.65" />
                 </filter>
               </defs>
 
@@ -253,7 +285,7 @@ export const LearningMap: React.FC = () => {
                   const isUnit1 = tile.unit === 1;
 
                   if (isCompleted) {
-                    // TANGGA YANG SUDAH LEWAT: TETAP BERSINAR & MEMILIKI ICON CENTANG SELESAI
+                    // TANGGA SELESAI: BERSINAR & MEMILIKI ICON CENTANG HIJAU
                     return (
                       <g
                         key={id}
@@ -262,34 +294,34 @@ export const LearningMap: React.FC = () => {
                       >
                         {/* Static Hit Target */}
                         <rect
-                          x={cx - 56}
-                          y={cy - 10}
-                          width={112}
-                          height={100}
+                          x={cx - 48}
+                          y={cy - 26}
+                          width={96}
+                          height={74}
                           fill="transparent"
                           style={{ pointerEvents: 'all' }}
                         />
                         {/* Glowing Completed Slab */}
                         <g className="roadmap-tile-slab" filter="url(#completedGlow)">
-                          <path d={`M${cx - 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx - 48} ${cy + 48} Z`} fill="url(#glowSideLeft)" />
-                          <path d={`M${cx + 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx + 48} ${cy + 48} Z`} fill="url(#glowSideRight)" />
+                          <path d={getLeftSidePath(cx, cy)} fill="url(#activeSideLeft)" />
+                          <path d={getRightSidePath(cx, cy)} fill="url(#activeSideRight)" />
                           <path
-                            d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 48} ${cy + 26} C${cx + 52} ${cy + 28} ${cx + 52} ${cy + 32} ${cx + 48} ${cy + 34} L${cx + 4} ${cy + 60} C${cx + 2} ${cy + 61} ${cx - 2} ${cy + 61} ${cx - 4} ${cy + 60} L${cx - 48} ${cy + 34} C${cx - 52} ${cy + 32} ${cx - 52} ${cy + 28} ${cx - 48} ${cy + 26} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
-                            fill="url(#slabTopGlow)"
-                            stroke="#ffffff"
-                            strokeOpacity="0.85"
+                            d={getTopSlabPath(cx, cy)}
+                            fill="url(#slabTopCompleted)"
+                            stroke="#3ecf8e"
+                            strokeOpacity="0.9"
                             strokeWidth="1.5"
                           />
-                          <ellipse cx={cx} cy={cy + 30} rx="16" ry="8" fill="white" fillOpacity="0.35" filter="blur(2px)" />
+                          <ellipse cx={cx} cy={cy} rx="16" ry="8" fill="white" fillOpacity="0.3" filter="blur(2px)" />
 
                           {/* Completed Checkmark Emblem */}
-                          <g transform={`translate(${cx - 9}, ${cy + 21})`}>
-                            <circle cx="9" cy="9" r="9" fill="#14532d" fillOpacity="0.85" stroke="#ffffff" strokeWidth="1.5" />
+                          <g transform={`translate(${cx - 8}, ${cy - 8})`}>
+                            <circle cx="8" cy="8" r="8" fill="#14532d" fillOpacity="0.9" stroke="#ffffff" strokeWidth="1.2" />
                             <path
-                              d="M5.5 9 L8 11.5 L12.5 6.5"
+                              d="M4.5 8 L7 10.5 L11.5 5.5"
                               fill="none"
                               stroke="#ffffff"
-                              strokeWidth="2"
+                              strokeWidth="1.8"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             />
@@ -299,49 +331,38 @@ export const LearningMap: React.FC = () => {
                     );
                   }
 
-                  // TANGGA TERKUNCI (BELUM DICAPAI)
-                  const fillPattern = isUnit1
-                    ? tile.id > 6
-                      ? 'url(#slabTopBright)'
-                      : 'url(#slabTopMuted)'
-                    : 'url(#slabTopLocked)';
-                  const strokeColor = isUnit1 ? '#336d60' : '#2a2a2a';
-                  const opacity = isUnit1 ? 0.75 : 0.45;
-
+                  // TANGGA TERKUNCI / NORMAL (SESUAI DENGAN GAMBAR REFERENSI PENGGUNA)
                   return (
                     <g
                       key={id}
-                      className="roadmap-tile-group"
+                      className="roadmap-tile-group cursor-pointer"
                       onClick={() => handleTileClick(tile)}
                     >
                       {/* Static Hit Target */}
                       <rect
-                        x={cx - 56}
-                        y={cy - 10}
-                        width={112}
-                        height={100}
+                        x={cx - 48}
+                        y={cy - 26}
+                        width={96}
+                        height={74}
                         fill="transparent"
                         style={{ pointerEvents: 'all' }}
                       />
                       {/* Visual Slab: Moves down smoothly on hover without dribble */}
-                      <g className="roadmap-tile-slab" filter="url(#tileShadow)" opacity={opacity}>
-                        <path d={`M${cx - 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx - 48} ${cy + 42} Z`} fill="url(#sideLeft)" />
-                        <path d={`M${cx + 48} ${cy + 26} L${cx} ${cy + 54} L${cx} ${cy + 70} L${cx + 48} ${cy + 42} Z`} fill="url(#sideRight)" />
+                      <g className="roadmap-tile-slab" filter="url(#tileShadow)" opacity={isUnit1 ? 0.95 : 0.65}>
+                        <path d={getLeftSidePath(cx, cy)} fill="url(#sideLeft)" />
+                        <path d={getRightSidePath(cx, cy)} fill="url(#sideRight)" />
                         <path
-                          d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 46} ${cy + 24} C${cx + 50} ${cy + 26} ${cx + 50} ${cy + 30} ${cx + 46} ${cy + 32} L${cx + 4} ${cy + 56} C${cx + 2} ${cy + 57} ${cx - 2} ${cy + 57} ${cx - 4} ${cy + 56} L${cx - 46} ${cy + 32} C${cx - 50} ${cy + 30} ${cx - 50} ${cy + 26} ${cx - 46} ${cy + 24} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
-                          fill={fillPattern}
-                          stroke={strokeColor}
-                          strokeWidth="1.5"
+                          d={getTopSlabPath(cx, cy)}
+                          fill="url(#slabTopDark)"
+                          stroke="#2e584f"
+                          strokeWidth="1.4"
                         />
-                        {!isUnit1 && (
-                          <circle cx={cx} cy={cy + 28} r="6" fill="#0e0e0e" fillOpacity="0.6" />
-                        )}
                       </g>
                     </g>
                   );
                 })}
 
-              {/* 2. RENDER ACTIVE TILE + NEXT INDICATOR ON TOP LAYER (PALING ATAS AGAR TIDAK OVERLAP) */}
+              {/* 2. RENDER ACTIVE TILE + NEXT INDICATOR ON TOP LAYER */}
               {(() => {
                 const activeTile = tiles.find((t) => t.status === 'active');
                 if (!activeTile) return null;
@@ -349,46 +370,46 @@ export const LearningMap: React.FC = () => {
                 return (
                   <g
                     key={id}
-                    className="roadmap-tile-group"
+                    className="roadmap-tile-group cursor-pointer"
                     onClick={() => handleTileClick(activeTile)}
                   >
-                    {/* Static Hit Target: Covers badge & slab, stays stationary so hover is never lost */}
+                    {/* Static Hit Target: Covers badge & slab */}
                     <rect
-                      x={cx - 56}
-                      y={cy - 52}
-                      width={112}
-                      height={144}
+                      x={cx - 48}
+                      y={cy - 56}
+                      width={96}
+                      height={104}
                       fill="transparent"
                       style={{ pointerEvents: 'all' }}
                     />
                     {/* Visual Slab: Moves down smoothly on hover without dribble */}
-                    <g className="roadmap-tile-slab" filter="url(#activeGlow)">
+                    <g className="roadmap-tile-slab" filter="url(#activeNeonGlow)">
                       {/* Active glowing slab geometry */}
-                      <path d={`M${cx - 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx - 48} ${cy + 48} Z`} fill="url(#glowSideLeft)" />
-                      <path d={`M${cx + 48} ${cy + 28} L${cx} ${cy + 58} L${cx} ${cy + 78} L${cx + 48} ${cy + 48} Z`} fill="url(#glowSideRight)" />
+                      <path d={getLeftSidePath(cx, cy)} fill="url(#activeSideLeft)" />
+                      <path d={getRightSidePath(cx, cy)} fill="url(#activeSideRight)" />
                       <path
-                        d={`M${cx} ${cy} C${cx + 4} ${cy} ${cx + 8} ${cy + 2} ${cx + 48} ${cy + 26} C${cx + 52} ${cy + 28} ${cx + 52} ${cy + 32} ${cx + 48} ${cy + 34} L${cx + 4} ${cy + 60} C${cx + 2} ${cy + 61} ${cx - 2} ${cy + 61} ${cx - 4} ${cy + 60} L${cx - 48} ${cy + 34} C${cx - 52} ${cy + 32} ${cx - 52} ${cy + 28} ${cx - 48} ${cy + 26} L${cx - 6} ${cy + 2} C${cx - 4} ${cy} ${cx - 2} ${cy} ${cx} ${cy} Z`}
-                        fill="url(#slabTopGlow)"
+                        d={getTopSlabPath(cx, cy)}
+                        fill="url(#slabTopActive)"
                         stroke="#ffffff"
-                        strokeOpacity="0.85"
-                        strokeWidth="1.5"
+                        strokeOpacity="0.95"
+                        strokeWidth="1.8"
                       />
-                      <ellipse cx={cx} cy={cy + 30} rx="18" ry="9" fill="white" fillOpacity="0.4" filter="blur(2px)" />
+                      <ellipse cx={cx} cy={cy} rx="16" ry="8" fill="white" fillOpacity="0.45" filter="blur(2px)" />
 
-                      {/* NEXT Indicator Badge (PALING ATAS: Digambar di atas slab aktif & di layer paling depan) */}
-                      <g transform={`translate(${cx - 28}, ${cy - 44})`}>
+                      {/* NEXT Indicator Speech Bubble Badge (Persis seperti gambar referensi) */}
+                      <g transform={`translate(${cx}, ${cy - 46})`}>
                         {/* Glow halo */}
-                        <rect x="-2" y="-2" width="60" height="28" rx="14" fill="#3ecf8e" fillOpacity="0.3" filter="blur(3px)" />
-                        {/* White pill */}
-                        <rect x="0" y="0" width="56" height="24" rx="12" fill="#ffffff" filter="drop-shadow(0 4px 12px rgba(62,207,142,0.8))" />
+                        <rect x="-31" y="-14" width="62" height="28" rx="14" fill="#3ecf8e" fillOpacity="0.4" filter="blur(4px)" />
+                        {/* White speech bubble */}
+                        <rect x="-29" y="-12" width="58" height="24" rx="12" fill="#ffffff" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.45))" />
                         {/* Downward triangle pointer */}
-                        <polygon points="22,24 34,24 28,30" fill="#ffffff" />
+                        <polygon points="-6,12 6,12 0,18" fill="#ffffff" />
                         {/* Bold NEXT label */}
                         <text
-                          x="28"
-                          y="16"
+                          x="0"
+                          y="4"
                           textAnchor="middle"
-                          fill="#0e0e0e"
+                          fill="#0c1a16"
                           fontFamily="Montserrat, sans-serif"
                           fontWeight="900"
                           fontSize="11"
@@ -407,7 +428,7 @@ export const LearningMap: React.FC = () => {
               {(() => {
                 const u1End = tiles.find((t) => t.id === 11) || tiles[10];
                 return (
-                  <g transform={`translate(${u1End.cx - 20}, ${u1End.cy - 72})`} className="cursor-pointer">
+                  <g transform={`translate(${u1End.cx - 20}, ${u1End.cy - 68})`} className="cursor-pointer">
                     <circle cx="20" cy="20" r="18" fill="#171717" stroke="#facc15" strokeWidth="2" />
                     <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#facc15" />
                     <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#facc15" strokeWidth="1.5" />
@@ -422,7 +443,7 @@ export const LearningMap: React.FC = () => {
               {(() => {
                 const u2End = tiles.find((t) => t.id === 18) || tiles[17];
                 return (
-                  <g transform={`translate(${u2End.cx - 20}, ${u2End.cy - 72})`} className="cursor-pointer opacity-70">
+                  <g transform={`translate(${u2End.cx - 20}, ${u2End.cy - 68})`} className="cursor-pointer opacity-70">
                     <circle cx="20" cy="20" r="18" fill="#171717" stroke="#38bdf8" strokeWidth="2" />
                     <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#38bdf8" />
                     <line x1="20" y1="24" x2="20" y2="28" stroke="#38bdf8" strokeWidth="2" />
@@ -435,7 +456,7 @@ export const LearningMap: React.FC = () => {
               {(() => {
                 const u3End = tiles.find((t) => t.id === 25) || tiles[24];
                 return (
-                  <g transform={`translate(${u3End.cx - 20}, ${u3End.cy - 72})`} className="cursor-pointer">
+                  <g transform={`translate(${u3End.cx - 20}, ${u3End.cy - 68})`} className="cursor-pointer">
                     <circle cx="20" cy="20" r="18" fill="#171717" stroke="#a855f7" strokeWidth="2" />
                     <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#a855f7" />
                     <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#a855f7" strokeWidth="1.5" />

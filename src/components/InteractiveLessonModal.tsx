@@ -3,7 +3,21 @@ import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
 import { SnakelingMascot, MascotMood } from './SnakelingMascot';
 import confetti from 'canvas-confetti';
-import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem, Infinity, Flame } from 'lucide-react';
+import {
+  X,
+  Heart,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  ArrowRight,
+  Zap,
+  Gem,
+  Infinity,
+  Flame,
+  Bug,
+  Award,
+  BookOpen
+} from 'lucide-react';
 
 export const InteractiveLessonModal: React.FC = () => {
   const {
@@ -21,27 +35,49 @@ export const InteractiveLessonModal: React.FC = () => {
 
   const isDemo = user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account';
 
-  const lesson = LESSON_UNITS.find((u) => u.id === selectedLessonId) || LESSON_UNITS[0];
+  const lesson =
+    LESSON_UNITS.find((u) => u.id === selectedLessonId || u.id === 'module-01') ||
+    LESSON_UNITS[0];
   const questions = lesson.questions;
 
+  // Lesson flow states
+  const [showTipCard, setShowTipCard] = useState<boolean>(() => Boolean(lesson.tip));
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
+
+  // User input states
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedTokens, setSelectedTokens] = useState<string[]>([]);
+  const [selectedLines, setSelectedLines] = useState<string[]>([]);
+  const [selectedBuggyLineIndex, setSelectedBuggyLineIndex] = useState<number | null>(null);
+
+  // Validation & status
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [mascotMood, setMascotMood] = useState<MascotMood>('thinking');
   const [isCompleted, setIsCompleted] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
 
-  const currentQ = questions[currentIndex];
+  const currentQ = questions[currentIndex] || questions[0];
 
+  // Reset input when question changes
   useEffect(() => {
     setSelectedOption(null);
     setSelectedTokens([]);
+    setSelectedLines([]);
+    setSelectedBuggyLineIndex(null);
     setIsAnswerChecked(false);
     setIsCorrect(null);
     setMascotMood('thinking');
   }, [currentIndex]);
+
+  // Reset whole modal when selectedLessonId changes
+  useEffect(() => {
+    setCurrentIndex(0);
+    setCorrectCount(0);
+    setIsCompleted(false);
+    setShowTipCard(Boolean(lesson.tip));
+  }, [selectedLessonId, lesson.tip]);
 
   const handleSelectOption = (opt: string) => {
     if (isAnswerChecked) return;
@@ -57,6 +93,22 @@ export const InteractiveLessonModal: React.FC = () => {
     } else {
       setSelectedTokens((prev) => [...prev, token]);
     }
+  };
+
+  const handleToggleLine = (line: string) => {
+    if (isAnswerChecked) return;
+    playSound('click');
+    if (selectedLines.includes(line)) {
+      setSelectedLines((prev) => prev.filter((l) => l !== line));
+    } else {
+      setSelectedLines((prev) => [...prev, line]);
+    }
+  };
+
+  const handleSelectBuggyLine = (idx: number) => {
+    if (isAnswerChecked) return;
+    playSound('click');
+    setSelectedBuggyLineIndex(idx);
   };
 
   const handleCheckAnswer = () => {
@@ -84,18 +136,43 @@ export const InteractiveLessonModal: React.FC = () => {
 
     // Checking logic
     let correct = false;
-    if (currentQ.type === 'code_order') {
-      const expected = (currentQ.correctAnswer as string[]).join(' ');
-      const actual = selectedTokens.join(' ');
-      correct = expected === actual;
+
+    if (currentQ.type === 'code_order' || currentQ.type === 'ro') {
+      if (currentQ.lines && currentQ.lines.length > 0) {
+        const expected = currentQ.lines.join('\n').trim();
+        const actual = selectedLines.join('\n').trim();
+        correct = expected === actual;
+      } else {
+        const expected = Array.isArray(currentQ.correctAnswer)
+          ? currentQ.correctAnswer.join(' ')
+          : String(currentQ.correctAnswer);
+        const actual = selectedTokens.join(' ');
+        correct = expected === actual;
+      }
+    } else if (currentQ.type === 'sb') {
+      correct = selectedBuggyLineIndex === currentQ.buggyLineIndex;
+    } else if (currentQ.type === 'fb') {
+      if (currentQ.acceptedAnswers && currentQ.acceptedAnswers.length > 0) {
+        correct = currentQ.acceptedAnswers.includes(selectedOption || '');
+      } else if (typeof currentQ.answerIndex === 'number' && currentQ.options) {
+        correct = selectedOption === currentQ.options[currentQ.answerIndex];
+      } else {
+        correct = selectedOption === currentQ.correctAnswer;
+      }
     } else {
-      correct = selectedOption === currentQ.correctAnswer;
+      // mc or multiple_choice or code_predict
+      if (typeof currentQ.answerIndex === 'number' && currentQ.options) {
+        correct = selectedOption === currentQ.options[currentQ.answerIndex];
+      } else {
+        correct = selectedOption === currentQ.correctAnswer;
+      }
     }
 
     setIsAnswerChecked(true);
     setIsCorrect(correct);
 
     if (correct) {
+      setCorrectCount((prev) => prev + 1);
       playSound('correct');
       setMascotMood('excited');
     } else {
@@ -111,9 +188,23 @@ export const InteractiveLessonModal: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
+        if (showTipCard) {
+          setShowTipCard(false);
+          playSound('click');
+          return;
+        }
+
+        const canCheckNow =
+          currentQ.type === 'code_order' || currentQ.type === 'ro'
+            ? currentQ.lines
+              ? selectedLines.length > 0
+              : selectedTokens.length > 0
+            : currentQ.type === 'sb'
+            ? selectedBuggyLineIndex !== null
+            : selectedOption !== null;
+
         if (!isAnswerChecked) {
-          const hasInput = currentQ.type === 'code_order' ? selectedTokens.length > 0 : selectedOption !== null;
-          if (hasInput) handleCheckAnswer();
+          if (canCheckNow) handleCheckAnswer();
         } else {
           handleCheckAnswer();
         }
@@ -121,7 +212,15 @@ export const InteractiveLessonModal: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isAnswerChecked, selectedOption, selectedTokens, currentQ]);
+  }, [
+    isAnswerChecked,
+    showTipCard,
+    selectedOption,
+    selectedTokens,
+    selectedLines,
+    selectedBuggyLineIndex,
+    currentQ
+  ]);
 
   // If user runs out of hearts
   if (stats.hearts <= 0 && !isCompleted && !user.isPro) {
@@ -159,47 +258,139 @@ export const InteractiveLessonModal: React.FC = () => {
     );
   }
 
-  // Completion Screen
+  // 1. TIP CARD VIEW (Duolingo style pre-quiz primer)
+  if (showTipCard && lesson.tip) {
+    return (
+      <div className="fixed inset-0 z-50 bg-[#121212] flex flex-col justify-between select-none animate-in fade-in duration-200">
+        <header className="w-full max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+          <button
+            onClick={() => setIsLessonActive(false)}
+            className="text-[#898989] hover:text-white transition-colors p-1"
+            aria-label="Tutup Pelajaran"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-brand font-bold uppercase tracking-wider text-[#3ecf8e]">
+              {lesson.unitTitle || `Unit ${lesson.unitNumber}`}
+            </span>
+            <span className="text-xs text-[#898989]">• Modul {lesson.lessonOrder}</span>
+          </div>
+          <div className="w-6" />
+        </header>
+
+        <main className="flex-1 flex flex-col items-center justify-center max-w-xl w-full mx-auto px-6 py-4 overflow-y-auto">
+          <div className="w-full bg-[#171717] border-2 border-[#2e2e2e] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-2xl bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(62,207,142,0.25)]">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-[11px] font-brand font-bold uppercase tracking-wider text-[#3ecf8e]">
+                  TIPS BELAJAR SEBELUM KUIS
+                </span>
+                <h2 className="text-xl sm:text-2xl font-brand font-extrabold text-white tracking-tight">
+                  {lesson.tip.title}
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-[#d4d4d4] leading-relaxed">
+              {lesson.tip.body}
+            </p>
+
+            {lesson.tip.codeExample && (
+              <div className="bg-[#0e0e0e] border border-[#2e2e2e] rounded-2xl p-4 font-mono text-sm shadow-inner">
+                <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-[#242424] text-[11px] text-[#898989]">
+                  <span className="w-2 h-2 rounded-full bg-[#3ecf8e]" />
+                  <span>contoh_kode.py</span>
+                </div>
+                <pre className="whitespace-pre-wrap leading-relaxed text-[#3ecf8e]">
+                  <code>{lesson.tip.codeExample}</code>
+                </pre>
+              </div>
+            )}
+          </div>
+        </main>
+
+        <footer className="w-full border-t border-[#2e2e2e] bg-[#121212] py-5 px-6">
+          <div className="max-w-xl mx-auto flex justify-end">
+            <button
+              onClick={() => {
+                playSound('click');
+                setShowTipCard(false);
+              }}
+              className="tactile-btn-primary w-full sm:w-auto min-w-[200px] py-3.5 px-6 rounded-xl font-brand font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+            >
+              <span>MULAI LATIHAN</span>
+              <ArrowRight className="w-4 h-4 stroke-[2.8]" />
+            </button>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+
+  // 2. COMPLETION SCREEN
   if (isCompleted) {
+    const accuracy = Math.round((correctCount / Math.max(1, questions.length)) * 100);
+
     return (
       <div className="fixed inset-0 z-50 bg-[#121212] flex items-center justify-center p-4 animate-in fade-in duration-200">
         <div className="w-full max-w-lg bg-[#171717] border-2 border-[#3ecf8e]/40 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#3ecf8e] to-[#38bdf8]" />
-          
+
           <SnakelingMascot mood="celebrate" size="xl" className="mx-auto mascot-float" />
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             <h2 className="text-3xl font-brand font-extrabold text-white tracking-tight">
               Luar Biasa, Kamu Hebat!
             </h2>
+            <p className="text-xs text-[#898989]">
+              Modul {lesson.lessonOrder}: {lesson.title} selesai
+            </p>
           </div>
 
-          {/* Reward cards */}
-          <div className="grid grid-cols-3 gap-2.5 max-w-sm mx-auto">
-            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#3ecf8e]/15 to-transparent border border-[#3ecf8e]/30 flex flex-col items-center shadow-[0_0_15px_rgba(62,207,142,0.15)]">
-              <div className="w-8 h-8 rounded-xl bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center mb-1 shadow-[0_0_10px_rgba(62,207,142,0.3)]">
-                <Zap className="w-4 h-4 fill-current" />
+          {/* Reward cards with XP, Akurasi, Gems, Streak */}
+          <div className="grid grid-cols-4 gap-2 max-w-md mx-auto">
+            {/* XP */}
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-[#3ecf8e]/15 to-transparent border border-[#3ecf8e]/30 flex flex-col items-center">
+              <div className="w-7 h-7 rounded-lg bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center mb-1">
+                <Zap className="w-3.5 h-3.5 fill-current" />
               </div>
-              <span className="text-[10px] font-brand font-bold uppercase text-[#3ecf8e]">TOTAL XP</span>
-              <span className="text-xl font-brand font-black text-white mt-0.5">+{lesson.xpReward}</span>
+              <span className="text-[9px] font-brand font-bold uppercase text-[#3ecf8e]">TOTAL XP</span>
+              <span className="text-lg font-brand font-black text-white mt-0.5">+{lesson.xpReward}</span>
             </div>
-            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#38bdf8]/15 to-transparent border border-[#38bdf8]/30 flex flex-col items-center shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-              <div className="w-8 h-8 rounded-xl bg-[#38bdf8]/20 text-[#38bdf8] flex items-center justify-center mb-1 shadow-[0_0_10px_rgba(56,189,248,0.3)]">
-                <Gem className="w-4 h-4 stroke-[2.2] fill-[#38bdf8]/30" />
+
+            {/* AKURASI */}
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-[#a855f7]/15 to-transparent border border-[#a855f7]/30 flex flex-col items-center">
+              <div className="w-7 h-7 rounded-lg bg-[#a855f7]/20 text-[#a855f7] flex items-center justify-center mb-1">
+                <Award className="w-3.5 h-3.5 stroke-[2.2]" />
               </div>
-              <span className="text-[10px] font-brand font-bold uppercase text-[#38bdf8]">GEMS</span>
-              <span className="text-xl font-brand font-black text-white mt-0.5">+{lesson.gemReward}</span>
+              <span className="text-[9px] font-brand font-bold uppercase text-[#a855f7]">AKURASI</span>
+              <span className="text-lg font-brand font-black text-white mt-0.5">{accuracy}%</span>
             </div>
-            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[#ff9600]/15 to-transparent border border-[#ff9600]/30 flex flex-col items-center shadow-[0_0_15px_rgba(255,150,0,0.15)]">
-              <div className="w-8 h-8 rounded-xl bg-[#ff9600]/20 text-[#ff9600] flex items-center justify-center mb-1 shadow-[0_0_10px_rgba(255,150,0,0.3)]">
-                <Flame className="w-4 h-4 fill-current animate-pulse" />
+
+            {/* GEMS */}
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-[#38bdf8]/15 to-transparent border border-[#38bdf8]/30 flex flex-col items-center">
+              <div className="w-7 h-7 rounded-lg bg-[#38bdf8]/20 text-[#38bdf8] flex items-center justify-center mb-1">
+                <Gem className="w-3.5 h-3.5 stroke-[2.2] fill-[#38bdf8]/30" />
               </div>
-              <span className="text-[10px] font-brand font-bold uppercase text-[#ff9600]">STREAK</span>
-              <span className="text-xl font-brand font-black text-white mt-0.5">{stats.streak} HARI</span>
+              <span className="text-[9px] font-brand font-bold uppercase text-[#38bdf8]">GEMS</span>
+              <span className="text-lg font-brand font-black text-white mt-0.5">+{lesson.gemReward}</span>
+            </div>
+
+            {/* STREAK */}
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-[#ff9600]/15 to-transparent border border-[#ff9600]/30 flex flex-col items-center">
+              <div className="w-7 h-7 rounded-lg bg-[#ff9600]/20 text-[#ff9600] flex items-center justify-center mb-1">
+                <Flame className="w-3.5 h-3.5 fill-current animate-pulse" />
+              </div>
+              <span className="text-[9px] font-brand font-bold uppercase text-[#ff9600]">STREAK</span>
+              <span className="text-lg font-brand font-black text-white mt-0.5">{stats.streak} HARI</span>
             </div>
           </div>
 
-          {/* Action Buttons: Next Lesson or Return to Map */}
+          {/* Action Buttons */}
           {(() => {
             const currentLessonIndex = LESSON_UNITS.findIndex((u) => u.id === lesson.id);
             const nextLesson = LESSON_UNITS[currentLessonIndex + 1];
@@ -211,8 +402,12 @@ export const InteractiveLessonModal: React.FC = () => {
                 setSelectedLessonId(nextLesson.id);
                 setIsCompleted(false);
                 setCurrentIndex(0);
+                setCorrectCount(0);
+                setShowTipCard(Boolean(nextLesson.tip));
                 setSelectedOption(null);
                 setSelectedTokens([]);
+                setSelectedLines([]);
+                setSelectedBuggyLineIndex(null);
                 setIsAnswerChecked(false);
                 setIsCorrect(null);
                 setMascotMood('thinking');
@@ -252,8 +447,16 @@ export const InteractiveLessonModal: React.FC = () => {
     );
   }
 
+  // 3. QUIZ SCREEN
   const progressPercent = ((currentIndex + 1) / questions.length) * 100;
-  const canCheck = currentQ.type === 'code_order' ? selectedTokens.length > 0 : selectedOption !== null;
+  const canCheck =
+    currentQ.type === 'code_order' || currentQ.type === 'ro'
+      ? currentQ.lines
+        ? selectedLines.length > 0
+        : selectedTokens.length > 0
+      : currentQ.type === 'sb'
+      ? selectedBuggyLineIndex !== null
+      : selectedOption !== null;
 
   return (
     <div className="fixed inset-0 z-50 bg-[#121212] flex flex-col justify-between select-none">
@@ -300,12 +503,11 @@ export const InteractiveLessonModal: React.FC = () => {
 
       {/* Main Question Arena */}
       <main className="flex-1 flex flex-col items-center justify-center max-w-2xl w-full mx-auto px-6 py-4 overflow-y-auto">
-        <div className="w-full space-y-6">
+        <div className="w-full space-y-5">
           {/* Mascot with Question Prompt */}
           <div className="flex items-start gap-4">
             <SnakelingMascot mood={mascotMood} size="md" className="shrink-0 -mt-2" />
             <div className="flex-1 bg-[#171717] border border-[#2e2e2e] rounded-2xl p-4 relative shadow-lg">
-              {/* Chat bubble tail */}
               <div className="absolute top-6 -left-2 w-0 h-0 border-y-6 border-y-transparent border-r-8 border-r-[#171717]" />
               <h2 className="text-base sm:text-lg font-brand font-bold text-white leading-snug">
                 {currentQ.prompt}
@@ -313,88 +515,171 @@ export const InteractiveLessonModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Optional Code Snippet block */}
-          {currentQ.codeSnippet && (
+          {/* Optional Code Snippet block (For MC or Code Predict) */}
+          {(currentQ.code || currentQ.codeSnippet) && (
             <div className="bg-[#0e0e0e] border border-[#2e2e2e] rounded-xl p-4 font-mono text-sm text-[#fafafa] shadow-inner">
               <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-[#242424] text-[11px] text-[#898989]">
                 <span className="w-2 h-2 rounded-full bg-[#3ecf8e]" />
                 <span>python.py</span>
               </div>
               <pre className="whitespace-pre-wrap leading-relaxed">
-                <code>{currentQ.codeSnippet}</code>
+                <code>{currentQ.code || currentQ.codeSnippet}</code>
               </pre>
             </div>
           )}
 
-          {/* Multiple Choice / Prediction Options */}
-          {(currentQ.type === 'multiple_choice' || currentQ.type === 'code_predict' || currentQ.type === 'fill_blank') && currentQ.options && (
-            <div className="grid grid-cols-1 gap-3 pt-2">
-              {currentQ.options.map((opt) => {
-                const isSelected = selectedOption === opt;
-                return (
-                  <button
-                    key={opt}
-                    onClick={() => handleSelectOption(opt)}
-                    disabled={isAnswerChecked}
-                    className={`w-full p-4 rounded-2xl border-2 text-left font-medium text-sm transition-all flex items-center justify-between cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#3ecf8e]/10 border-[#3ecf8e] text-white shadow-[0_0_15px_rgba(62,207,142,0.15)]'
-                        : 'bg-[#171717] border-[#2e2e2e] text-[#fafafa] hover:bg-[#202020] hover:border-[#393939]'
-                    }`}
-                  >
-                    <span className="font-mono text-sm">{opt}</span>
-                    <div
-                      className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
-                        isSelected ? 'border-[#3ecf8e] bg-[#3ecf8e]' : 'border-[#444444]'
-                      }`}
-                    >
-                      {isSelected && <div className="w-2 h-2 rounded-full bg-[#0e0e0e]" />}
-                    </div>
-                  </button>
-                );
-              })}
+          {/* Fill the Blank preview box */}
+          {currentQ.type === 'fb' && currentQ.codeWithBlank && (
+            <div className="bg-[#0e0e0e] border border-[#2e2e2e] rounded-xl p-4 font-mono text-sm shadow-inner">
+              <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-[#242424] text-[11px] text-[#898989]">
+                <span className="w-2 h-2 rounded-full bg-[#3ecf8e]" />
+                <span>lengkapi_kode.py</span>
+              </div>
+              <div className="text-base leading-loose whitespace-pre-wrap font-mono">
+                {currentQ.codeWithBlank.split('___').map((part, pIdx, arr) => (
+                  <React.Fragment key={pIdx}>
+                    <span className="text-[#fafafa]">{part}</span>
+                    {pIdx < arr.length - 1 && (
+                      <span
+                        className={`inline-block px-3 py-1 mx-1.5 rounded-lg border-2 font-bold font-mono text-sm transition-all ${
+                          selectedOption
+                            ? 'bg-[#3ecf8e]/20 border-[#3ecf8e] text-[#3ecf8e] shadow-[0_0_10px_rgba(62,207,142,0.3)]'
+                            : 'bg-[#202020] border-dashed border-[#555] text-[#888]'
+                        }`}
+                      >
+                        {selectedOption || '...'}
+                      </span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           )}
 
-          {/* Code Order arrangement */}
-          {currentQ.type === 'code_order' && currentQ.options && (
-            <div className="space-y-4 pt-2">
-              {/* Construction slot */}
-              <div className="min-h-16 p-3 rounded-2xl border-2 border-dashed border-[#393939] bg-[#141414] flex flex-wrap gap-2 items-center">
-                {selectedTokens.length === 0 ? (
-                  <span className="text-xs text-[#898989] font-medium italic">
-                    Ketuk kata di bawah untuk menyusun kode...
+          {/* Multiple Choice & Fill Blank Option Cards */}
+          {(currentQ.type === 'mc' ||
+            currentQ.type === 'multiple_choice' ||
+            currentQ.type === 'code_predict' ||
+            currentQ.type === 'fb' ||
+            currentQ.type === 'fill_blank') &&
+            currentQ.options && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                {currentQ.options.map((opt) => {
+                  const isSelected = selectedOption === opt;
+                  return (
+                    <button
+                      key={opt}
+                      onClick={() => handleSelectOption(opt)}
+                      disabled={isAnswerChecked}
+                      className={`w-full p-3.5 rounded-2xl border-2 text-left font-medium text-sm transition-all flex items-center justify-between cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#3ecf8e]/10 border-[#3ecf8e] text-white shadow-[0_0_15px_rgba(62,207,142,0.15)]'
+                          : 'bg-[#171717] border-[#2e2e2e] text-[#fafafa] hover:bg-[#202020] hover:border-[#393939]'
+                      }`}
+                    >
+                      <span className="font-mono text-sm">{opt}</span>
+                      <div
+                        className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
+                          isSelected ? 'border-[#3ecf8e] bg-[#3ecf8e]' : 'border-[#444444]'
+                        }`}
+                      >
+                        {isSelected && <div className="w-2 h-2 rounded-full bg-[#0e0e0e]" />}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+          {/* Reorder: Line-Based Reorder */}
+          {(currentQ.type === 'ro' || currentQ.type === 'code_order') && currentQ.lines && (
+            <div className="space-y-4 pt-1">
+              <div className="min-h-24 p-3.5 rounded-2xl border-2 border-dashed border-[#393939] bg-[#141414] flex flex-col gap-2">
+                <span className="text-[11px] font-brand font-bold uppercase tracking-wider text-[#898989] mb-1">
+                  Urutan Baris Kode (Ketuk untuk menghapus):
+                </span>
+                {selectedLines.length === 0 ? (
+                  <span className="text-xs text-[#666] italic py-3 text-center">
+                    Ketuk baris di bawah untuk menyusun urutan kode yang tepat
                   </span>
                 ) : (
-                  selectedTokens.map((token, idx) => (
+                  selectedLines.map((line, idx) => (
                     <button
                       key={idx}
-                      onClick={() => handleToggleToken(token)}
+                      onClick={() => handleToggleLine(line)}
                       disabled={isAnswerChecked}
-                      className="px-4 py-2 rounded-xl bg-[#3ecf8e] text-[#0e0e0e] font-mono font-bold text-sm shadow-[0_3px_0_#1b6343] cursor-pointer"
+                      className="w-full text-left px-4 py-2.5 rounded-xl bg-[#202020] hover:bg-[#262626] border border-[#3ecf8e]/50 text-white font-mono text-sm flex items-center gap-3 cursor-pointer shadow-sm"
                     >
-                      {token}
+                      <span className="w-5 h-5 rounded-md bg-[#3ecf8e] text-[#0e0e0e] text-xs font-bold flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+                      <span className="flex-1">{line}</span>
                     </button>
                   ))
                 )}
               </div>
 
-              {/* Available word bank */}
-              <div className="flex flex-wrap gap-2 justify-center pt-2">
-                {currentQ.options.map((token, idx) => {
-                  const isUsed = selectedTokens.includes(token);
+              {/* Available lines bank */}
+              <div className="flex flex-col gap-2">
+                <span className="text-[11px] font-brand font-bold uppercase tracking-wider text-[#898989]">
+                  Pilihan Baris Tersedia:
+                </span>
+                {currentQ.lines.map((line, idx) => {
+                  const isUsed = selectedLines.includes(line);
                   return (
                     <button
                       key={idx}
-                      onClick={() => handleToggleToken(token)}
+                      onClick={() => handleToggleLine(line)}
                       disabled={isUsed || isAnswerChecked}
-                      className={`px-4 py-2.5 rounded-xl font-mono text-sm transition-all ${
+                      className={`w-full text-left px-4 py-3 rounded-xl font-mono text-sm transition-all border ${
                         isUsed
-                          ? 'opacity-20 cursor-not-allowed bg-[#242424] text-[#898989]'
-                          : 'tactile-btn-secondary text-white font-medium cursor-pointer'
+                          ? 'opacity-20 cursor-not-allowed bg-[#181818] border-[#252525] text-[#666]'
+                          : 'tactile-btn-secondary text-white font-medium border-[#333] cursor-pointer'
                       }`}
                     >
-                      {token}
+                      {line}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Spot the Bug (`sb`) Interactive Line Selector */}
+          {currentQ.type === 'sb' && currentQ.lines && (
+            <div className="space-y-3 pt-1">
+              <div className="flex items-center gap-2 text-xs font-brand font-bold uppercase tracking-wider text-[#ef4444]">
+                <Bug className="w-4 h-4" />
+                <span>Klik tepat 1 baris yang mengandung bug/kesalahan:</span>
+              </div>
+              <div className="bg-[#0e0e0e] border border-[#2e2e2e] rounded-2xl overflow-hidden shadow-inner">
+                {currentQ.lines.map((line, idx) => {
+                  const isSelected = selectedBuggyLineIndex === idx;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleSelectBuggyLine(idx)}
+                      disabled={isAnswerChecked}
+                      className={`w-full text-left px-4 py-3 flex items-center gap-4 font-mono text-sm border-b last:border-b-0 transition-colors cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#ef4444]/20 border-[#ef4444]/60 text-white'
+                          : 'border-[#1f1f1f] hover:bg-[#1a1a1a] text-[#d4d4d4]'
+                      }`}
+                    >
+                      <span
+                        className={`w-6 text-right text-xs select-none ${
+                          isSelected ? 'text-[#ef4444] font-bold' : 'text-[#666]'
+                        }`}
+                      >
+                        {idx + 1}
+                      </span>
+                      <span className="flex-1 whitespace-pre">{line}</span>
+                      {isSelected && (
+                        <div className="px-2 py-0.5 rounded bg-[#ef4444] text-white text-[10px] font-brand font-bold uppercase">
+                          Bug
+                        </div>
+                      )}
                     </button>
                   );
                 })}
@@ -434,6 +719,11 @@ export const InteractiveLessonModal: React.FC = () => {
                 <p className="text-xs text-[#b4b4b4] max-w-md">
                   {currentQ.explanation}
                 </p>
+                {currentQ.type === 'sb' && currentQ.fixedLine && (
+                  <p className="text-xs font-mono text-[#3ecf8e] mt-1">
+                    Perbaikan: <code className="bg-black/40 px-1.5 py-0.5 rounded">{currentQ.fixedLine}</code>
+                  </p>
+                )}
               </div>
             </div>
           ) : (
@@ -490,3 +780,4 @@ export const InteractiveLessonModal: React.FC = () => {
     </div>
   );
 };
+
