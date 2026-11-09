@@ -47,8 +47,26 @@ interface AppContextType {
 }
 
 const STORAGE_KEY_USER = 'snakeling_user_profile';
-const STORAGE_KEY_STATS = 'snakeling_user_stats';
+const STORAGE_KEY_USER_STATS_PREFIX = 'snakeling_user_stats_';
 const STORAGE_KEY_CREATED_ACCOUNTS = 'snakeling_all_registered_accounts';
+
+export const getScopedStatsKey = (userId: string) => `${STORAGE_KEY_USER_STATS_PREFIX}${userId}`;
+
+export const getScopedUserStats = (userId: string): UserStats | null => {
+  if (!userId) return null;
+  try {
+    const raw = localStorage.getItem(getScopedStatsKey(userId));
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return null;
+};
+
+export const saveScopedUserStats = (userId: string, userStats: UserStats) => {
+  if (!userId) return;
+  try {
+    localStorage.setItem(getScopedStatsKey(userId), JSON.stringify(userStats));
+  } catch {}
+};
 
 export interface StoredAccount {
   id: string;
@@ -81,7 +99,7 @@ const saveAccountToStore = (account: StoredAccount) => {
       current[idx] = {
         ...current[idx],
         ...account,
-        xp: Math.max(current[idx].xp || 0, account.xp || 0)
+        xp: account.xp || 0
       };
     } else {
       current.push(account);
@@ -102,6 +120,24 @@ const getDayDifference = (dateStr1: string, dateStr2: string): number => {
   return Math.round(diffTime / (1000 * 60 * 60 * 24));
 };
 
+export const createCleanStats = (initialXp = 0): UserStats => ({
+  streak: 1,
+  gems: 505,
+  hearts: 5,
+  maxHearts: 5,
+  xp: initialXp,
+  streakFreezeCount: 1,
+  modulesCompleted: 0,
+  currentLessonIndex: 0,
+  completedLessons: [],
+  inventory: {
+    streak_freeze: 1
+  },
+  equippedCosmetics: [],
+  activityDates: [getTodayStr()],
+  lastActiveDate: getTodayStr()
+});
+
 const DEFAULT_USER: UserProfile = {
   id: 'usr_adnyana_default',
   username: 'adnyana_py',
@@ -113,23 +149,7 @@ const DEFAULT_USER: UserProfile = {
   userCode: 'SNK-9402'
 };
 
-const DEFAULT_STATS: UserStats = {
-  streak: 1,
-  gems: 505,
-  hearts: 5,
-  maxHearts: 5,
-  xp: 0,
-  streakFreezeCount: 1,
-  modulesCompleted: 0,
-  currentLessonIndex: 0,
-  completedLessons: [],
-  inventory: {
-    streak_freeze: 1
-  },
-  equippedCosmetics: [],
-  activityDates: [getTodayStr()],
-  lastActiveDate: getTodayStr()
-};
+const DEFAULT_STATS: UserStats = createCleanStats();
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -155,7 +175,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isLessonActive, setIsLessonActive] = useState<boolean>(false);
   const [dbLeaderboard, setDbLeaderboard] = useState<LeaderboardUser[]>([]);
 
-  // Load from LocalStorage
+  // Load user from LocalStorage
   const [user, setUser] = useState<UserProfile>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_USER);
@@ -172,15 +192,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
+  // Load isolated scoped stats for this specific user
   const [stats, setStats] = useState<UserStats>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY_STATS);
-      if (saved) {
-        return JSON.parse(saved);
+      const storedUser = localStorage.getItem(STORAGE_KEY_USER);
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser?.id) {
+          const scoped = getScopedUserStats(parsedUser.id);
+          if (scoped) return scoped;
+        }
       }
-      return DEFAULT_STATS;
+      return createCleanStats();
     } catch {
-      return DEFAULT_STATS;
+      return createCleanStats();
     }
   });
 
@@ -190,12 +215,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [isLoggedIn]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
-  }, [user]);
+    if (isLoggedIn && user?.id) {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+    }
+  }, [user, isLoggedIn]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(stats));
-  }, [stats]);
+    if (isLoggedIn && user?.id) {
+      saveScopedUserStats(user.id, stats);
+    }
+  }, [stats, user.id, isLoggedIn]);
 
   // Sync active user to persistent created accounts
   useEffect(() => {
@@ -279,11 +308,102 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  useEffect(() => {
+  const loadUserProgressFromSupabase = React.useCallback(async (userId: string, userEmail: string): Promise<{ profile: UserProfile; stats: UserStats }> => {
+    let profileData: any = null;
+    let statsData: any = null;
+    let progressData: any[] = [];
+
     if (isSupabaseConfigured && supabase) {
-      fetchSupabaseLeaderboard();
+      try {
+        const [profRes, statsRes, progRes] = await Promise.all([
+          supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
+          supabase.from('user_stats').select('*').eq('user_id', userId).maybeSingle(),
+          supabase.from('user_progress').select('lesson_id, completed').eq('user_id', userId).eq('completed', true)
+        ]);
+        profileData = profRes.data;
+        statsData = statsRes.data;
+        progressData = progRes.data || [];
+      } catch (err) {
+        console.warn('Gagal memuat data pengguna dari Supabase:', err);
+      }
     }
-  }, [isSupabaseConfigured, fetchSupabaseLeaderboard]);
+
+    const scoped = getScopedUserStats(userId);
+    const dbCompletedLessons = progressData.map((r) => r.lesson_id).filter(Boolean);
+    const completedLessons = dbCompletedLessons.length > 0
+      ? Array.from(new Set(dbCompletedLessons))
+      : (scoped?.completedLessons || []);
+
+    const loadedStats: UserStats = {
+      streak: statsData?.streak ?? scoped?.streak ?? 1,
+      gems: statsData?.gems ?? scoped?.gems ?? 505,
+      hearts: statsData?.hearts ?? scoped?.hearts ?? 5,
+      maxHearts: statsData?.max_hearts ?? scoped?.maxHearts ?? 5,
+      xp: statsData?.xp ?? scoped?.xp ?? 0,
+      streakFreezeCount: statsData?.streak_freeze_count ?? scoped?.streakFreezeCount ?? 1,
+      modulesCompleted: completedLessons.length,
+      currentLessonIndex: completedLessons.length,
+      completedLessons,
+      inventory: scoped?.inventory || { streak_freeze: 1 },
+      equippedCosmetics: scoped?.equippedCosmetics || [],
+      activityDates: scoped?.activityDates || [getTodayStr()],
+      lastActiveDate: statsData?.last_active_date || scoped?.lastActiveDate || getTodayStr()
+    };
+
+    const username = profileData?.username || (userEmail.includes('@') ? userEmail.split('@')[0] : userEmail) || 'Siswa';
+    const loadedProfile: UserProfile = {
+      id: userId,
+      username,
+      displayName: profileData?.display_name || username,
+      email: userEmail,
+      avatarUrl: profileData?.avatar_url || '/logo_snakepreview.png',
+      isPro: Boolean(profileData?.is_pro),
+      joinedDate: profileData?.created_at
+        ? `Bergabung ${new Date(profileData.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`
+        : 'Bergabung 2025',
+      userCode: `SNK-${username.slice(0, 3).toUpperCase()}`
+    };
+
+    return { profile: loadedProfile, stats: loadedStats };
+  }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+
+    fetchSupabaseLeaderboard();
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        loadUserProgressFromSupabase(session.user.id, session.user.email || '').then(({ profile, stats: loadedStats }) => {
+          setUser(profile);
+          setStats(loadedStats);
+          saveScopedUserStats(session.user.id, loadedStats);
+          setIsLoggedIn(true);
+        });
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        loadUserProgressFromSupabase(session.user.id, session.user.email || '').then(({ profile, stats: loadedStats }) => {
+          setUser(profile);
+          setStats(loadedStats);
+          saveScopedUserStats(session.user.id, loadedStats);
+          setIsLoggedIn(true);
+        });
+      } else if (event === 'SIGNED_OUT') {
+        setIsLoggedIn(false);
+        setUser(DEFAULT_USER);
+        setStats(createCleanStats());
+        localStorage.removeItem(STORAGE_KEY_USER);
+        localStorage.removeItem('snakeling_is_logged_in');
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [isSupabaseConfigured, fetchSupabaseLeaderboard, loadUserProgressFromSupabase]);
 
   // Toast Helper
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -502,6 +622,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const nextXp = prev.xp + earnedXp;
 
       if (isSupabaseConfigured && supabase && user.id && !user.id.startsWith('usr_demo')) {
+        // Record completed lesson to user_progress
+        supabase
+          .from('user_progress')
+          .upsert({
+            user_id: user.id,
+            lesson_id: lessonId,
+            completed: true,
+            completed_at: new Date().toISOString()
+          }, { onConflict: 'user_id,lesson_id' })
+          .then(({ error: progErr }) => {
+            if (progErr) console.warn('Gagal mencatat kemajuan user_progress:', progErr);
+          });
+
         supabase
           .from('user_stats')
           .upsert({
@@ -509,6 +642,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             xp: nextXp,
             streak: nextStreak,
             modules_completed: nextCompleted.length,
+            lessons_completed: nextCompleted.length,
             updated_at: new Date().toISOString()
           })
           .then(() => fetchSupabaseLeaderboard());
@@ -558,8 +692,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const cleanIdent = emailOrUser.trim().toLowerCase();
       // Khusus akun demo: nama 'demo' dengan kata sandi kosong atau apa saja
       if (cleanIdent === 'demo' || cleanIdent === 'demo@snakeling.app') {
-        setUser({
-          id: 'usr_demo_account',
+        const demoUserId = 'usr_demo_account';
+        const existingStats = getScopedUserStats(demoUserId);
+        const demoStats: UserStats = existingStats || {
+          ...createCleanStats(),
+          gems: 999999
+        };
+        const demoProfile: UserProfile = {
+          id: demoUserId,
           username: 'demo',
           displayName: 'Akun Demo',
           email: 'demo@snakeling.app',
@@ -567,11 +707,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           isPro: false,
           joinedDate: 'Bergabung 2025 (Mode Demo)',
           userCode: 'SNK-DEMO'
-        });
-        setStats((prev) => ({
-          ...prev,
-          gems: 999999
-        }));
+        };
+        setUser(demoProfile);
+        setStats(demoStats);
+        saveScopedUserStats(demoUserId, demoStats);
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(demoProfile));
         setIsLoggedIn(true);
         setShowLoginModal(false);
         playSound('correct');
@@ -580,7 +720,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       if (isSupabaseConfigured && supabase) {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data: authData, error } = await supabase.auth.signInWithPassword({
           email: emailOrUser,
           password: _pass
         });
@@ -597,18 +737,49 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           showToast(msg, 'error');
           return { success: false, error: msg };
         }
+
+        if (authData?.user) {
+          const { profile: loadedUser, stats: loadedStats } = await loadUserProgressFromSupabase(
+            authData.user.id,
+            authData.user.email || emailOrUser
+          );
+          setUser(loadedUser);
+          setStats(loadedStats);
+          saveScopedUserStats(authData.user.id, loadedStats);
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(loadedUser));
+          setIsLoggedIn(true);
+          setShowLoginModal(false);
+          playSound('correct');
+          showToast(`Selamat datang kembali, ${loadedUser.displayName}!`);
+          return { success: true };
+        }
       }
 
-      // Local state update
-      setUser((prev) => ({
-        ...prev,
-        username: emailOrUser.includes('@') ? emailOrUser.split('@')[0] : emailOrUser,
-        displayName: emailOrUser.includes('@') ? emailOrUser.split('@')[0] : emailOrUser
-      }));
+      // Local state fallback login
+      const uname = emailOrUser.includes('@') ? emailOrUser.split('@')[0] : emailOrUser;
+      const localUserId = `usr_local_${uname.toLowerCase()}`;
+      const existingScoped = getScopedUserStats(localUserId);
+      const localStats: UserStats = existingScoped || createCleanStats();
+
+      const localProfile: UserProfile = {
+        id: localUserId,
+        username: uname,
+        displayName: uname,
+        email: emailOrUser.includes('@') ? emailOrUser : `${uname.toLowerCase()}@snakeling.app`,
+        avatarUrl: '/logo_snakepreview.png',
+        isPro: false,
+        joinedDate: 'Bergabung 2025 (Akun Lokal)',
+        userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
+      };
+
+      setUser(localProfile);
+      setStats(localStats);
+      saveScopedUserStats(localUserId, localStats);
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(localProfile));
       setIsLoggedIn(true);
       setShowLoginModal(false);
       playSound('correct');
-      showToast(`Selamat datang kembali, ${emailOrUser.split('@')[0]}!`);
+      showToast(`Selamat datang kembali, ${uname}!`);
       return { success: true };
     } catch (e: unknown) {
       const origMsg = (e as Error).message || '';
@@ -631,6 +802,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         showToast(msg, 'error');
         return { success: false, error: msg };
       }
+
+      const freshStats = createCleanStats();
 
       if (isSupabaseConfigured && supabase) {
         const { data, error } = await supabase.auth.signUp({
@@ -661,7 +834,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
 
         if (data?.user) {
-          setUser({
+          const newProfile: UserProfile = {
             id: data.user.id,
             username,
             displayName: username,
@@ -670,11 +843,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             isPro: false,
             joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
             userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
-          });
+          };
+          setUser(newProfile);
+          setStats(freshStats);
+          saveScopedUserStats(data.user.id, freshStats);
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(newProfile));
         }
       } else {
-        setUser({
-          id: `usr_${Date.now()}`,
+        const localUserId = `usr_local_${username.toLowerCase()}_${Date.now()}`;
+        const newProfile: UserProfile = {
+          id: localUserId,
           username,
           displayName: username,
           email,
@@ -682,7 +860,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           isPro: false,
           joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
           userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
-        });
+        };
+        setUser(newProfile);
+        setStats(freshStats);
+        saveScopedUserStats(localUserId, freshStats);
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(newProfile));
       }
 
       setIsLoggedIn(true);
@@ -706,17 +888,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Instant local/demo entry
   const continueWithDemo = (customUsername?: string, customEmail?: string) => {
     const finalUsername = customUsername?.trim() || 'SiswaPython';
-    const finalEmail = customEmail?.trim() || `${finalUsername.toLowerCase()}@snakeling.app`;
-    setUser({
-      id: `usr_${Date.now()}`,
+    const demoId = `usr_demo_${finalUsername.toLowerCase()}`;
+    const existingStats = getScopedUserStats(demoId);
+    const demoStats: UserStats = existingStats || {
+      ...createCleanStats(),
+      gems: 999999
+    };
+    const demoProfile: UserProfile = {
+      id: demoId,
       username: finalUsername,
       displayName: finalUsername,
-      email: finalEmail,
+      email: customEmail?.trim() || `${finalUsername.toLowerCase()}@snakeling.app`,
       avatarUrl: DEFAULT_USER.avatarUrl,
       isPro: false,
-      joinedDate: `Bergabung ${new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`,
+      joinedDate: 'Mode Demo',
       userCode: `SNK-${Math.floor(1000 + Math.random() * 9000)}`
-    });
+    };
+    setUser(demoProfile);
+    setStats(demoStats);
+    saveScopedUserStats(demoId, demoStats);
+    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(demoProfile));
     setIsLoggedIn(true);
     setShowLoginModal(false);
     setShowRegisterModal(false);
@@ -727,9 +918,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Auth: Logout
   const logoutUser = () => {
     if (isSupabaseConfigured && supabase) {
-      supabase.auth.signOut();
+      supabase.auth.signOut().catch(() => {});
     }
     setIsLoggedIn(false);
+    setUser(DEFAULT_USER);
+    setStats(createCleanStats());
+    localStorage.setItem('snakeling_is_logged_in', 'false');
+    localStorage.removeItem(STORAGE_KEY_USER);
+    localStorage.removeItem('snakeling_user_stats');
     showToast('Kamu telah keluar dari akun.', 'info');
   };
 
