@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile, UserStats, ShopItem, ActiveTab, LeaderboardUser } from '../types';
-import { INITIAL_LEADERBOARD, INITIAL_SHOP_ITEMS } from '../data/curriculum';
+import { INITIAL_SHOP_ITEMS } from '../data/curriculum';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 interface ToastNotification {
@@ -37,6 +37,7 @@ interface AppContextType {
   continueWithDemo: (username?: string, email?: string) => void;
   logoutUser: () => void;
   leaderboard: LeaderboardUser[];
+  refreshLeaderboard: () => Promise<void>;
   activeLessonModal: boolean;
   setActiveLessonModal: (open: boolean) => void;
   selectedLessonId: string | null;
@@ -47,6 +48,47 @@ interface AppContextType {
 
 const STORAGE_KEY_USER = 'snakeling_user_profile';
 const STORAGE_KEY_STATS = 'snakeling_user_stats';
+const STORAGE_KEY_CREATED_ACCOUNTS = 'snakeling_all_registered_accounts';
+
+export interface StoredAccount {
+  id: string;
+  username: string;
+  displayName: string;
+  avatarUrl: string;
+  xp: number;
+  streak: number;
+  joinedDate: string;
+}
+
+const getStoredAccounts = (): StoredAccount[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_CREATED_ACCOUNTS);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {}
+  return [];
+};
+
+const saveAccountToStore = (account: StoredAccount) => {
+  try {
+    const current = getStoredAccounts();
+    const idx = current.findIndex(
+      (a) => a.id === account.id || a.username.toLowerCase() === account.username.toLowerCase()
+    );
+    if (idx !== -1) {
+      current[idx] = {
+        ...current[idx],
+        ...account,
+        xp: Math.max(current[idx].xp || 0, account.xp || 0)
+      };
+    } else {
+      current.push(account);
+    }
+    localStorage.setItem(STORAGE_KEY_CREATED_ACCOUNTS, JSON.stringify(current));
+  } catch {}
+};
 
 const getTodayStr = (): string => {
   const d = new Date();
@@ -155,6 +197,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(stats));
   }, [stats]);
 
+  // Sync active user to persistent created accounts
+  useEffect(() => {
+    if (isLoggedIn && user.username) {
+      saveAccountToStore({
+        id: user.id,
+        username: user.username,
+        displayName: user.displayName || user.username,
+        avatarUrl: user.avatarUrl || '/logo_snakepreview.png',
+        xp: stats.xp || 0,
+        streak: stats.streak || 1,
+        joinedDate: user.joinedDate
+      });
+    }
+  }, [user, stats.xp, stats.streak, isLoggedIn]);
+
   // Fetch real leaderboard users from Supabase database if configured
   const fetchSupabaseLeaderboard = React.useCallback(async () => {
     if (!isSupabaseConfigured || !supabase) return;
@@ -162,10 +219,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const { data: viewData, error: viewError } = await supabase
         .from('leaderboard_view')
         .select('*')
-        .limit(30);
+        .order('xp', { ascending: false })
+        .limit(50);
 
-      if (!viewError && viewData && viewData.length > 0) {
-        const list: LeaderboardUser[] = viewData.map((row: any, idx: number) => {
+      if (!viewError && viewData) {
+        // Filter out legacy dummy seeds (starts with a0eebc99)
+        const realData = viewData.filter((row: any) => !row.user_id?.startsWith('a0eebc99'));
+        const list: LeaderboardUser[] = realData.map((row: any, idx: number) => {
           const name = row.display_name || row.username || 'Siswa Python';
           const initials = name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase() || 'PY';
           return {
@@ -173,7 +233,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             initials,
             name,
             xp: Number(row.xp || 0),
-            isCurrentUser: user.id === row.user_id || user.username === row.username,
+            isCurrentUser: user.id === row.user_id || user.username.toLowerCase() === (row.username || '').toLowerCase(),
             avatarUrl: row.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${name}`
           };
         });
@@ -185,10 +245,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         .from('user_stats')
         .select('xp, streak, user_id, profiles!inner(id, username, display_name, avatar_url)')
         .order('xp', { ascending: false })
-        .limit(30);
+        .limit(50);
 
-      if (!error && data && data.length > 0) {
-        const list: LeaderboardUser[] = data.map((row: any, idx: number) => {
+      if (!error && data) {
+        const realData = data.filter((row: any) => !row.user_id?.startsWith('a0eebc99'));
+        const list: LeaderboardUser[] = realData.map((row: any, idx: number) => {
           const p = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles;
           const name = p?.display_name || p?.username || 'Siswa Python';
           const initials = name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase() || 'PY';
@@ -197,7 +258,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             initials,
             name,
             xp: Number(row.xp || 0),
-            isCurrentUser: user.id === row.user_id || user.username === p?.username,
+            isCurrentUser: user.id === row.user_id || user.username.toLowerCase() === (p?.username || '').toLowerCase(),
             avatarUrl: p?.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${name}`
           };
         });
@@ -207,6 +268,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // ignore
     }
   }, [user.id, user.username]);
+
+  const refreshLeaderboard = async () => {
+    playSound('click');
+    if (isSupabaseConfigured && supabase) {
+      await fetchSupabaseLeaderboard();
+      showToast('Papan skor berhasil disegarkan dari database!', 'info');
+    } else {
+      showToast('Papan skor all-time diperbarui!', 'info');
+    }
+  };
 
   useEffect(() => {
     if (isSupabaseConfigured && supabase) {
@@ -662,31 +733,88 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast('Kamu telah keluar dari akun.', 'info');
   };
 
-  // Build dynamic leaderboard list that places current user accurately
+  // Build dynamic leaderboard list that contains ONLY real accounts ever created
   const leaderboard: LeaderboardUser[] = React.useMemo(() => {
-    const list: LeaderboardUser[] = [...INITIAL_LEADERBOARD];
+    // 1. If connected to Supabase and database users are fetched:
+    if (isSupabaseConfigured && dbLeaderboard.length > 0) {
+      const userExistsInDb = dbLeaderboard.some(
+        (u) => u.isCurrentUser || (user.id && u.name.includes(user.displayName)) || u.name.includes(user.username)
+      );
 
-    const userInitials = (user.displayName || user.username || 'U')
-      .split(' ')
-      .map((w) => w[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+      const list = dbLeaderboard.map((item) => {
+        const isCurrent = item.isCurrentUser || (user.id && item.name.includes(user.displayName)) || item.name.includes(user.username);
+        return {
+          ...item,
+          name: isCurrent ? `${user.displayName} (Kamu)` : item.name,
+          xp: isCurrent ? Math.max(item.xp, stats.xp) : item.xp,
+          isCurrentUser: isCurrent
+        };
+      });
 
-    // Insert or update current user in leaderboard
-    list.push({
-      rank: 0,
-      initials: userInitials || 'SN',
-      name: `${user.displayName} (Kamu)`,
-      xp: stats.xp,
-      isCurrentUser: true,
-      avatarUrl: user.avatarUrl
+      // If current user is logged in but not yet returned in dbLeaderboard, include current user
+      if (isLoggedIn && !userExistsInDb) {
+        const userInitials = (user.displayName || user.username || 'U')
+          .split(' ')
+          .map((w) => w[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2);
+
+        list.push({
+          rank: 0,
+          initials: userInitials || 'SN',
+          name: `${user.displayName} (Kamu)`,
+          xp: stats.xp,
+          isCurrentUser: true,
+          avatarUrl: user.avatarUrl
+        });
+      }
+
+      list.sort((a, b) => b.xp - a.xp);
+      return list.map((item, idx) => ({ ...item, rank: idx + 1 }));
+    }
+
+    // 2. Fallback to local persistent store of accounts ever created:
+    const stored = getStoredAccounts();
+    // Ensure current user is in stored accounts if logged in
+    if (isLoggedIn && user.username) {
+      const exists = stored.some(
+        (a) => a.id === user.id || a.username.toLowerCase() === user.username.toLowerCase()
+      );
+      if (!exists) {
+        stored.push({
+          id: user.id,
+          username: user.username,
+          displayName: user.displayName || user.username,
+          avatarUrl: user.avatarUrl || '/logo_snakepreview.png',
+          xp: stats.xp || 0,
+          streak: stats.streak || 1,
+          joinedDate: user.joinedDate
+        });
+      }
+    }
+
+    const list: LeaderboardUser[] = stored.map((acc) => {
+      const isCur = acc.id === user.id || acc.username.toLowerCase() === user.username.toLowerCase();
+      const initials = (acc.displayName || acc.username || 'U')
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+      return {
+        rank: 0,
+        initials,
+        name: isCur ? `${acc.displayName} (Kamu)` : acc.displayName,
+        xp: isCur ? Math.max(acc.xp, stats.xp) : acc.xp,
+        avatarUrl: acc.avatarUrl,
+        isCurrentUser: isCur
+      };
     });
 
-    // Sort descending by XP
     list.sort((a, b) => b.xp - a.xp);
     return list.map((item, idx) => ({ ...item, rank: idx + 1 }));
-  }, [user.displayName, user.username, user.avatarUrl, stats.xp]);
+  }, [dbLeaderboard, isSupabaseConfigured, user.id, user.displayName, user.username, user.avatarUrl, stats.xp, isLoggedIn]);
 
   return (
     <AppContext.Provider
@@ -718,6 +846,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         continueWithDemo,
         logoutUser,
         leaderboard,
+        refreshLeaderboard,
         activeLessonModal,
         setActiveLessonModal,
         selectedLessonId,

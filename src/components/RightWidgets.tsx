@@ -137,7 +137,7 @@ export const RightWidgets: React.FC = () => {
       >
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-brand font-extrabold text-base text-white group-hover:text-[#facc15] transition-colors">
-            {stats.completedLessons.length >= 2 ? 'Papan Skor Liga' : 'Buka Papan Skor!'}
+            {stats.completedLessons.length >= 2 ? 'Papan Skor All-Time' : 'Buka Papan Skor!'}
           </h2>
           {stats.completedLessons.length >= 2 ? (
             <Trophy className="w-4 h-4 text-[#facc15] opacity-60 group-hover:opacity-100 transition-opacity" />

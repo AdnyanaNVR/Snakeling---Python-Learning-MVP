@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Crown, Medal, Award, Zap, Trophy, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Crown, Medal, Award, Zap, Trophy, Lock, ArrowRight, Sparkles, RotateCw, Database, Users } from 'lucide-react';
 
 export const LeaderboardView: React.FC = () => {
-  const { leaderboard, user, stats, setActiveTab, setSelectedLessonId, setIsLessonActive, playSound } = useApp();
+  const { leaderboard, user, stats, setActiveTab, setSelectedLessonId, setIsLessonActive, playSound, refreshLeaderboard } = useApp();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const isUnlocked = stats.completedLessons.length >= 2;
   const completedCount = stats.completedLessons.length;
@@ -13,6 +14,12 @@ export const LeaderboardView: React.FC = () => {
     playSound('click');
     setActiveTab('belajar');
     setIsLessonActive(true);
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refreshLeaderboard();
+    setTimeout(() => setIsRefreshing(false), 500);
   };
 
   // LOCKED STATE (Less than 2 lessons completed)
@@ -31,10 +38,10 @@ export const LeaderboardView: React.FC = () => {
 
             <div className="space-y-2">
               <h1 className="font-brand font-extrabold text-2xl text-white tracking-wide">
-                Buka Papan Skor Liga!
+                Buka Papan Skor All-Time!
               </h1>
               <p className="text-sm text-[#b4b4b4] leading-relaxed max-w-sm mx-auto">
-                Selesaikan <strong className="text-white font-bold">{remainingCount} pelajaran lagi</strong> ({completedCount}/2 diselesaikan) untuk membuka Papan Skor dan mulai berkompetisi dengan pembelajar Python lainnya!
+                Selesaikan <strong className="text-white font-bold">{remainingCount} pelajaran lagi</strong> ({completedCount}/2 diselesaikan) untuk membuka Papan Skor dan mulai berkompetisi dengan seluruh akun yang pernah dibuat!
               </p>
             </div>
 
@@ -65,7 +72,7 @@ export const LeaderboardView: React.FC = () => {
           {/* Locked Teaser Preview */}
           <div className="w-full mt-6 opacity-40 pointer-events-none relative blur-[1px] select-none">
             <div className="text-center mb-3">
-              <span className="text-xs font-mono text-[#898989]">Pratinjau Papan Skor Liga</span>
+              <span className="text-xs font-mono text-[#898989]">Pratinjau Papan Skor All-Time</span>
             </div>
             <div className="bg-[#171717] border border-[#2e2e2e] rounded-2xl p-3 space-y-2">
               {leaderboard.slice(0, 3).map((item) => (
@@ -93,17 +100,52 @@ export const LeaderboardView: React.FC = () => {
           <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-[#facc15]/25 via-[#eab308]/10 to-transparent border border-[#facc15]/40 flex items-center justify-center text-[#facc15] shadow-[0_0_20px_rgba(250,204,21,0.25)]">
             <Trophy className="w-6 h-6 stroke-[2.2] fill-[#facc15]/20" />
           </div>
-          <h1 className="font-brand font-extrabold text-2xl text-white tracking-wide">
-            Papan Skor Liga
-          </h1>
-          <p className="text-sm text-[#898989] mt-1.5 mb-6 max-w-md mx-auto leading-relaxed">
-            Peringkat dan perolehan XP pembelajar Python teratas minggu ini
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <h1 className="font-brand font-extrabold text-2xl text-white tracking-wide">
+              Papan Skor All-Time
+            </h1>
+            <button
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="p-1.5 rounded-lg bg-[#242424] hover:bg-[#2e2e2e] text-[#898989] hover:text-[#3ecf8e] transition-colors cursor-pointer"
+              title="Segarkan Papan Skor dari Database"
+            >
+              <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#3ecf8e]' : ''}`} />
+            </button>
+          </div>
+          <p className="text-xs sm:text-sm text-[#898989] mt-1 mb-3 max-w-md mx-auto leading-relaxed">
+            Peringkat akumulasi XP seluruh akun terdaftar yang pernah dibuat
           </p>
+
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18261e] border border-[#3ecf8e]/30 text-[11px] font-mono text-[#3ecf8e]">
+            <Database className="w-3 h-3" />
+            <span>Terhubung ke Database • {leaderboard.length} Akun Terdaftar</span>
+          </div>
         </div>
 
+        {/* Callout if only current user is registered */}
+        {leaderboard.length === 1 && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-[#1c1b1b] border border-[#2e2e2e] text-xs text-[#b4b4b4] flex items-center gap-3">
+            <span className="text-lg">👑</span>
+            <div className="flex-1">
+              <strong className="text-white block mb-0.5">Kamu memimpin peringkat all-time!</strong>
+              <span>Hanya akun yang pernah dibuat yang tampil di papan skor. Buat akun baru atau ajak teman belajar untuk bersaing secara langsung.</span>
+            </div>
+          </div>
+        )}
+
         {/* Leaderboard Standings List */}
-        <div className="flex flex-col gap-1 w-full bg-[#171717] border border-[#2e2e2e] rounded-2xl p-3 shadow-xl">
-          {leaderboard.map((item) => {
+        {leaderboard.length === 0 ? (
+          <div className="w-full bg-[#171717] border border-[#2e2e2e] rounded-2xl p-8 text-center space-y-3">
+            <Users className="w-10 h-10 text-[#898989] mx-auto opacity-50" />
+            <h3 className="font-brand font-bold text-base text-white">Belum Ada Akun Terdaftar</h3>
+            <p className="text-xs text-[#898989] max-w-xs mx-auto">
+              Akun yang pernah dibuat akan otomatis tampil di sini dan diperingkatkan berdasarkan perolehan XP all-time.
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1 w-full bg-[#171717] border border-[#2e2e2e] rounded-2xl p-3 shadow-xl">
+            {leaderboard.map((item) => {
             const isRank1 = item.rank === 1;
             const isRank2 = item.rank === 2;
             const isRank3 = item.rank === 3;
@@ -176,6 +218,7 @@ export const LeaderboardView: React.FC = () => {
             );
           })}
         </div>
+        )}
 
         {/* User Fixed / Pinned Status Card */}
         <div className="mt-6 bg-[#18261e] border border-[#3ecf8e]/30 rounded-2xl p-4 flex items-center justify-between shadow-[0_8px_20px_rgba(0,0,0,0.5)]">
