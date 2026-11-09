@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Crown, Medal, Award, Zap, Trophy, Lock, ArrowRight, Sparkles, RotateCw, Database, Users } from 'lucide-react';
+import { Crown, Medal, Award, Zap, Trophy, Lock, ArrowRight, Sparkles, RotateCw, Users } from 'lucide-react';
 
 export const LeaderboardView: React.FC = () => {
   const { leaderboard, user, stats, setActiveTab, setSelectedLessonId, setIsLessonActive, playSound, refreshLeaderboard } = useApp();
@@ -113,14 +113,9 @@ export const LeaderboardView: React.FC = () => {
               <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#3ecf8e]' : ''}`} />
             </button>
           </div>
-          <p className="text-xs sm:text-sm text-[#898989] mt-1 mb-3 max-w-md mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#898989] mt-1 mb-4 max-w-md mx-auto leading-relaxed">
             Peringkat akumulasi XP seluruh akun terdaftar yang pernah dibuat
           </p>
-
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#18261e] border border-[#3ecf8e]/30 text-[11px] font-mono text-[#3ecf8e]">
-            <Database className="w-3 h-3" />
-            <span>Terhubung ke Database • {leaderboard.length} Akun Terdaftar</span>
-          </div>
         </div>
 
         {/* Callout if only current user is registered */}

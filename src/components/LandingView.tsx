@@ -57,16 +57,16 @@ export const LandingView: React.FC<LandingViewProps> = ({ onEnterApp }) => {
           <p className="text-[#b4b4b4] text-sm sm:text-base md:text-lg max-w-lg mx-auto mb-6 sm:mb-8 font-normal leading-relaxed">
             Kuasai pemrograman Python lewat misi interaktif, latihan visual, dan pengalaman terminal yang seru.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto">
             <button
               onClick={handleStart}
-              className="tactile-btn-primary w-full sm:w-[220px] font-brand font-bold text-xs sm:text-sm tracking-wider uppercase py-3 px-6 rounded-xl cursor-pointer"
+              className="tactile-btn-primary w-full sm:w-[230px] h-12 flex items-center justify-center border border-transparent font-brand font-bold text-xs sm:text-sm tracking-wider uppercase px-6 rounded-xl cursor-pointer"
             >
               MULAI BELAJAR
             </button>
             <button
               onClick={handleOpenLogin}
-              className="tactile-btn-secondary w-full sm:w-[220px] font-brand font-semibold text-xs sm:text-sm tracking-wider uppercase py-3 px-6 rounded-xl cursor-pointer"
+              className="tactile-btn-secondary w-full sm:w-[230px] h-12 flex items-center justify-center font-brand font-bold text-xs sm:text-sm tracking-wider uppercase px-6 rounded-xl cursor-pointer"
             >
               SUDAH PUNYA AKUN?
             </button>
