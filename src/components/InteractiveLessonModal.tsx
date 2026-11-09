@@ -8,6 +8,7 @@ import { X, Heart, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Zap, Gem, In
 export const InteractiveLessonModal: React.FC = () => {
   const {
     selectedLessonId,
+    setSelectedLessonId,
     setIsLessonActive,
     user,
     stats,
@@ -198,16 +199,54 @@ export const InteractiveLessonModal: React.FC = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => {
+          {/* Action Buttons: Next Lesson or Return to Map */}
+          {(() => {
+            const currentLessonIndex = LESSON_UNITS.findIndex((u) => u.id === lesson.id);
+            const nextLesson = LESSON_UNITS[currentLessonIndex + 1];
+
+            const handleNextLesson = () => {
               playSound('click');
+              showToast(`+${lesson.xpReward} XP dan +${lesson.gemReward} Gems ditambahkan!`);
+              if (nextLesson) {
+                setSelectedLessonId(nextLesson.id);
+                setIsCompleted(false);
+                setCurrentIndex(0);
+                setSelectedOption(null);
+                setSelectedTokens([]);
+                setIsAnswerChecked(false);
+                setIsCorrect(null);
+                setMascotMood('thinking');
+              } else {
+                setIsLessonActive(false);
+              }
+            };
+
+            const handleReturnToMap = () => {
+              playSound('click');
+              showToast(`+${lesson.xpReward} XP dan +${lesson.gemReward} Gems ditambahkan!`);
               setIsLessonActive(false);
-              showToast(`+${lesson.xpReward} XP dan +${lesson.gemReward} Gems telah ditambahkan!`);
-            }}
-            className="tactile-btn-primary w-full py-4 rounded-2xl font-brand font-black text-base uppercase tracking-wider text-[#0e0e0e]"
-          >
-            SELESAI &amp; KEMBALI
-          </button>
+            };
+
+            return (
+              <div className="flex flex-col gap-3 pt-2">
+                {nextLesson && (
+                  <button
+                    onClick={handleNextLesson}
+                    className="tactile-btn-primary w-full py-3.5 rounded-2xl font-brand font-black text-sm uppercase tracking-wider text-[#0e0e0e] flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+                  >
+                    <span>PELAJARAN BERIKUTNYA</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.8]" />
+                  </button>
+                )}
+                <button
+                  onClick={handleReturnToMap}
+                  className="tactile-btn-secondary w-full py-3 rounded-2xl font-brand font-bold text-xs uppercase tracking-wider text-[#b4b4b4] hover:text-white cursor-pointer"
+                >
+                  KEMBALI KE PETA BELAJAR
+                </button>
+              </div>
+            );
+          })()}
         </div>
       </div>
     );

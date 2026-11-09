@@ -63,9 +63,9 @@ export const LearningMap: React.FC = () => {
 
   const tiles: TileData[] = tileMetaData.map((meta, i) => {
     let status: 'completed' | 'active' | 'locked' = 'locked';
-    if (stats.completedLessons.includes(meta.lessonId) || meta.stepNumber <= completedCount) {
+    if (stats.completedLessons.includes(meta.lessonId)) {
       status = 'completed';
-    } else if (meta.stepNumber === completedCount + 1) {
+    } else if (i === 0 || (i > 0 && stats.completedLessons.includes(tileMetaData[i - 1]?.lessonId))) {
       status = 'active';
     }
 

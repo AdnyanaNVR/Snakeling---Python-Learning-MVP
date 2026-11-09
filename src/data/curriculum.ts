@@ -345,6 +345,308 @@ export const LESSON_UNITS: LessonUnit[] = [
         explanation: 'Mendefinisikan variabel nama terlebih dahulu sebelum menggunakannya di dalam fungsi print f-string.'
       }
     ]
+  },
+
+  // UNIT 2: Logika Kondisi & Percabangan
+  {
+    id: 'unit2_lesson1',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 1,
+    title: 'Kondisi if & Logika Dasar',
+    subtitle: 'Mengecek syarat kebenaran kondisi dengan perintah if',
+    xpReward: 35,
+    gemReward: 15,
+    questions: [
+      {
+        id: 'u2_q1_1',
+        type: 'code_predict',
+        prompt: 'Apa keluaran dari blok kode logika kondisi berikut?',
+        codeSnippet: 'umur = 18\nif umur >= 17:\n    print("Bisa pesan kopi espresso")',
+        options: ['Bisa pesan kopi espresso', 'Tidak tercetak apapun', 'Error: indentasi salah', 'False'],
+        correctAnswer: 'Bisa pesan kopi espresso',
+        explanation: 'Karena `18 >= 17` bernilai `True`, blok di dalam `if` akan dieksekusi.'
+      },
+      {
+        id: 'u2_q1_2',
+        type: 'multiple_choice',
+        prompt: 'Simbol apa yang wajib ditulis di akhir baris pernyataan `if` sebelum blok kode baru?',
+        options: [': (titik dua)', '; (titik koma)', '{ (kurung kurawal)', '=> (panah)'],
+        correctAnswer: ': (titik dua)',
+        explanation: 'Di Python, pernyataan `if`, `else`, dan `elif` harus diakhiri dengan titik dua `:`.'
+      }
+    ]
+  },
+  {
+    id: 'unit2_lesson2',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 2,
+    title: 'Percabangan else & Alternatif',
+    subtitle: 'Menyediakan jalur alternatif jika kondisi bernilai False',
+    xpReward: 35,
+    gemReward: 15,
+    questions: [
+      {
+        id: 'u2_q2_1',
+        type: 'code_predict',
+        prompt: 'Perhatikan kondisi berikut. Teks mana yang akan tercetak?',
+        codeSnippet: 'stok = 0\nif stok > 0:\n    print("Minuman Siap!")\nelse:\n    print("Stok Habis!")',
+        options: ['Stok Habis!', 'Minuman Siap!', 'Error', 'stok > 0'],
+        correctAnswer: 'Stok Habis!',
+        explanation: 'Karena `stok > 0` adalah `False` (0 tidak lebih besar dari 0), blok `else` yang akan dijalankan.'
+      }
+    ]
+  },
+  {
+    id: 'unit2_lesson3',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 3,
+    title: 'Kondisi Majemuk elif',
+    subtitle: 'Memeriksa banyak pilihan cabang keputusan sekaligus',
+    xpReward: 40,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'u2_q3_1',
+        type: 'code_predict',
+        prompt: 'Berapa harga yang akan ditampilkan oleh program?',
+        codeSnippet: 'ukuran = "L"\nif ukuran == "S":\n    print("15000")\nelif ukuran == "M":\n    print("20000")\nelif ukuran == "L":\n    print("25000")',
+        options: ['25000', '20000', '15000', 'None'],
+        correctAnswer: '25000',
+        explanation: 'Kondisi `ukuran == "L"` cocok, sehingga harga 25000 yang akan dicetak.'
+      }
+    ]
+  },
+  {
+    id: 'unit2_lesson4',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 4,
+    title: 'Operator Logika and & or',
+    subtitle: 'Menggabungkan beberapa syarat kondisi sekaligus',
+    xpReward: 40,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'u2_q4_1',
+        type: 'multiple_choice',
+        prompt: 'Operator logika mana yang membutuhkan KEDUA syarat bernilai True agar bernilai True?',
+        options: ['and', 'or', 'not', 'xor'],
+        correctAnswer: 'and',
+        explanation: 'Operator `and` hanya akan menghasilkan `True` jika seluruh syarat di kiri dan kanannya bernilai `True`.'
+      }
+    ]
+  },
+  {
+    id: 'unit2_lesson5',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 5,
+    title: 'Nested if (Kondisi Bersarang)',
+    subtitle: 'Membuat kondisi di dalam percabangan kondisi lainnya',
+    xpReward: 45,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'u2_q5_1',
+        type: 'code_predict',
+        prompt: 'Apa pesan yang akan ditampilkan?',
+        codeSnippet: 'buka = True\nmember = True\nif buka:\n    if member:\n        print("Diskon Member 20%")\n    else:\n        print("Harga Normal")',
+        options: ['Diskon Member 20%', 'Harga Normal', 'Toko Tutup', 'Error'],
+        correctAnswer: 'Diskon Member 20%',
+        explanation: 'Karena `buka` dan `member` keduanya `True`, blok bersarang `print("Diskon Member 20%")` dieksekusi.'
+      }
+    ]
+  },
+  {
+    id: 'unit2_lesson6',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 6,
+    title: 'Studi Kasus Menu Restoran',
+    subtitle: 'Menerapkan logika percabangan pada aplikasi kasir',
+    xpReward: 50,
+    gemReward: 25,
+    questions: [
+      {
+        id: 'u2_q6_1',
+        type: 'fill_blank',
+        prompt: 'Lengkapi kata kunci kondisi alternatif:',
+        codeSnippet: 'if poin >= 100:\n    print("Voucher Kopi Gratis")\n____:\n    print("Kumpulkan poin lagi!")',
+        options: ['else', 'elif', 'then', 'stop'],
+        correctAnswer: 'else',
+        explanation: 'Gunakan `else:` untuk menangkap semua kondisi lainnya jika syarat `if` tidak terpenuhi.'
+      }
+    ]
+  },
+  {
+    id: 'unit2_lesson7',
+    unitNumber: 2,
+    unitTitle: 'Logika Kondisi & Percabangan',
+    lessonOrder: 7,
+    title: 'Evaluasi Akhir Unit 2',
+    subtitle: 'Ujian komprehensif logika percabangan Python',
+    xpReward: 80,
+    gemReward: 50,
+    questions: [
+      {
+        id: 'u2_q7_1',
+        type: 'code_predict',
+        prompt: 'Apa hasil akhir dari evaluasi logika berikut?',
+        codeSnippet: 'x = 10\ny = 5\nprint(x > 5 and y < 3)',
+        options: ['False', 'True', '10', 'Error'],
+        correctAnswer: 'False',
+        explanation: '`x > 5` adalah True, tetapi `y < 3` adalah False (5 tidak kurang dari 3). Karena operator `and`, hasilnya `False`.'
+      }
+    ]
+  },
+
+  // UNIT 3: Struktur Data List & Koleksi
+  {
+    id: 'unit3_lesson1',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 1,
+    title: 'Mengenal List Python []',
+    subtitle: 'Menyimpan banyak barang dalam satu variabel',
+    xpReward: 35,
+    gemReward: 15,
+    questions: [
+      {
+        id: 'u3_q1_1',
+        type: 'multiple_choice',
+        prompt: 'Simbol kurung apa yang digunakan untuk membuat List di Python?',
+        options: ['[ ] (kurung siku)', '( ) (kurung biasa)', '{ } (kurung kurawal)', '< > (kurung sudut)'],
+        correctAnswer: '[ ] (kurung siku)',
+        explanation: 'List di Python dibuat dengan mengapit elemen-elemen menggunakan kurung siku `[ ]`.'
+      }
+    ]
+  },
+  {
+    id: 'unit3_lesson2',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 2,
+    title: 'Indeks & Mengakses Elemen',
+    subtitle: 'Mengambil item pertama dengan indeks 0',
+    xpReward: 35,
+    gemReward: 15,
+    questions: [
+      {
+        id: 'u3_q2_1',
+        type: 'code_predict',
+        prompt: 'Item manakah yang tercetak dari list berikut?',
+        codeSnippet: 'menu = ["Teh", "Kopi", "Jus"]\nprint(menu[0])',
+        options: ['Teh', 'Kopi', 'Jus', 'menu[0]'],
+        correctAnswer: 'Teh',
+        explanation: 'Di Python, indeks list dimulai dari angka `0`. Jadi `menu[0]` adalah item pertama: "Teh".'
+      }
+    ]
+  },
+  {
+    id: 'unit3_lesson3',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 3,
+    title: 'Menambah Data: append()',
+    subtitle: 'Menambahkan barang baru ke urutan paling akhir',
+    xpReward: 40,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'u3_q3_1',
+        type: 'fill_blank',
+        prompt: 'Lengkapi metode untuk menambahkan item "Susu" ke dalam list:',
+        codeSnippet: 'menu.____("Susu")',
+        options: ['append', 'add', 'push', 'insert'],
+        correctAnswer: 'append',
+        explanation: 'Metode `.append(item)` menambahkan elemen baru ke bagian akhir dari List.'
+      }
+    ]
+  },
+  {
+    id: 'unit3_lesson4',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 4,
+    title: 'Menghapus Data: remove()',
+    subtitle: 'Menghapus item tertentu dari daftar koleksi',
+    xpReward: 40,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'u3_q4_1',
+        type: 'code_predict',
+        prompt: 'Berapa sisa isi list setelah perintah remove berikut?',
+        codeSnippet: 'buah = ["Apel", "Jeruk", "Pisang"]\nbuah.remove("Jeruk")\nprint(len(buah))',
+        options: ['2', '3', '1', '0'],
+        correctAnswer: '2',
+        explanation: 'Setelah "Jeruk" dihapus dengan `.remove()`, sisa elemen di dalam list adalah 2 ("Apel" dan "Pisang").'
+      }
+    ]
+  },
+  {
+    id: 'unit3_lesson5',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 5,
+    title: 'Panjang List dengan len()',
+    subtitle: 'Menghitung total jumlah elemen dalam list',
+    xpReward: 45,
+    gemReward: 20,
+    questions: [
+      {
+        id: 'u3_q5_1',
+        type: 'multiple_choice',
+        prompt: 'Fungsi mana yang digunakan untuk mengetahui total jumlah item di dalam List?',
+        options: ['len()', 'count()', 'size()', 'length()'],
+        correctAnswer: 'len()',
+        explanation: 'Fungsi `len(nama_list)` mengembalikan total jumlah elemen di dalam list.'
+      }
+    ]
+  },
+  {
+    id: 'unit3_lesson6',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 6,
+    title: 'Slicing & Potong List',
+    subtitle: 'Mengambil sebagian isi list dengan rentang indeks',
+    xpReward: 50,
+    gemReward: 25,
+    questions: [
+      {
+        id: 'u3_q6_1',
+        type: 'code_predict',
+        prompt: 'Apa hasil pemotongan list berikut?',
+        codeSnippet: 'angka = [10, 20, 30, 40, 50]\nsub = angka[1:3]\nprint(sub)',
+        options: ['[20, 30]', '[10, 20]', '[20, 30, 40]', '[30, 40]'],
+        correctAnswer: '[20, 30]',
+        explanation: 'Slicing `[1:3]` mengambil elemen dari indeks 1 sampai sebelum indeks 3 (indeks 1 dan 2, yaitu 20 dan 30).'
+      }
+    ]
+  },
+  {
+    id: 'unit3_lesson7',
+    unitNumber: 3,
+    unitTitle: 'Struktur Data List & Koleksi',
+    lessonOrder: 7,
+    title: 'Master Sertifikasi List',
+    subtitle: 'Ujian kelulusan materi struktur data List Python',
+    xpReward: 100,
+    gemReward: 50,
+    questions: [
+      {
+        id: 'u3_q7_1',
+        type: 'code_order',
+        prompt: 'Susun kode lengkap membuat list dan menambahkan elemen baru:',
+        options: ['kopi = ["Espresso"]', 'kopi.append("Latte")', 'print(len(kopi))'],
+        correctAnswer: ['kopi = ["Espresso"]', 'kopi.append("Latte")', 'print(len(kopi))'],
+        explanation: 'Membuat list awal, menambah elemen "Latte", lalu mencetak panjang total list.'
+      }
+    ]
   }
 ];
 
