@@ -144,6 +144,9 @@ export const LearningMap: React.FC = () => {
           <span className="font-brand font-extrabold text-sm uppercase tracking-wider text-white">
             LEARN TO CODE
           </span>
+          <span className="text-[11px] font-mono text-[#3ecf8e]">
+            {stats.completedLessons.length} / {LESSON_UNITS.length} Modul
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
