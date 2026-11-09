@@ -77,30 +77,38 @@ export const LearningMap: React.FC = () => {
     };
   });
 
-  // Auto-scroll the roadmap container down to Step 1 on initial load
+  // Auto-scroll the roadmap container to the active step on initial load & lesson updates
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (roadmapScrollRef.current) {
-        roadmapScrollRef.current.scrollTop = roadmapScrollRef.current.scrollHeight;
+      const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
+      if (activeTile && roadmapScrollRef.current) {
+        const targetScrollTop = Math.max(0, activeTile.cy - 300);
+        roadmapScrollRef.current.scrollTo({
+          top: targetScrollTop,
+          behavior: 'smooth'
+        });
       }
-    }, 120);
+    }, 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [stats.completedLessons.length]);
 
   // Track roadmap scroll position to show quick "Jump to Active Step" button
   const handleRoadmapScroll = () => {
     if (!roadmapScrollRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = roadmapScrollRef.current;
-    // Scrolled up more than 150px from bottom
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-    setIsScrolledUp(distanceFromBottom > 150);
+    const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
+    const targetScrollTop = Math.max(0, activeTile.cy - 300);
+    const isFarFromActive = Math.abs(scrollTop - targetScrollTop) > 150;
+    setIsScrolledUp(isFarFromActive);
   };
 
   const scrollToActiveStep = () => {
     playSound('click');
+    const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
     if (roadmapScrollRef.current) {
+      const targetScrollTop = Math.max(0, activeTile.cy - 300);
       roadmapScrollRef.current.scrollTo({
-        top: roadmapScrollRef.current.scrollHeight,
+        top: targetScrollTop,
         behavior: 'smooth'
       });
     }
@@ -136,16 +144,21 @@ export const LearningMap: React.FC = () => {
           <span className="font-brand font-extrabold text-sm uppercase tracking-wider text-white">
             LEARN TO CODE
           </span>
-          <span className="text-[11px] font-mono text-[#3ecf8e]">
-            {stats.completedLessons.length} / 11 Modul
-          </span>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             type="button"
+            onClick={() => setShowSyllabus(true)}
+            className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] border border-[#393939] flex items-center justify-center text-[#3ecf8e] hover:text-white transition-all cursor-pointer"
+            title="Daftar Pelajaran / Silabus"
+          >
+            <BookOpen className="w-5 h-5 stroke-[2.2]" />
+          </button>
+          <button
+            type="button"
             onClick={startNextLesson}
-            className="w-full h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
+            className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
           >
             <span>NEXT LESSON</span>
             <ArrowRight className="w-4 h-4 stroke-[2.8] transition-transform group-hover:translate-x-0.5" />
