@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
+import { QuizQuestion } from '../types';
 import { SnakelingMascot, MascotMood } from './SnakelingMascot';
 import confetti from 'canvas-confetti';
 import {
@@ -40,7 +41,79 @@ export const InteractiveLessonModal: React.FC = () => {
   const lesson =
     LESSON_UNITS.find((u) => u.id === selectedLessonId || u.id === 'module-01') ||
     LESSON_UNITS[0];
-  const questions = lesson.questions;
+  // Helper function to shuffle an array uniformly (Fisher-Yates)
+  const shuffleArray = <T,>(array: readonly T[] | T[]): T[] => {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  // Helper to shuffle options and ensure correct answer is not stuck at the first index
+  const shuffleOptions = (options: string[], correctVal?: string): string[] => {
+    if (!options || options.length <= 1) return options ? [...options] : [];
+    const shuffled = shuffleArray(options);
+
+    // If correct answer randomly still lands at index 0 and options > 1,
+    // swap with a random non-zero index to ensure it truly randomizes away from the 1st position
+    if (correctVal && shuffled.length > 1 && shuffled[0] === correctVal) {
+      const swapIdx = 1 + Math.floor(Math.random() * (shuffled.length - 1));
+      [shuffled[0], shuffled[swapIdx]] = [shuffled[swapIdx], shuffled[0]];
+    }
+    return shuffled;
+  };
+
+  // Prepare questions with randomized options before questions are loaded
+  const prepareLessonQuestions = (rawQuestions: QuizQuestion[]): QuizQuestion[] => {
+    return rawQuestions.map((q) => {
+      const qCopy: QuizQuestion = { ...q };
+
+      // 1. Resolve string value of correct answer
+      let correctVal: string | undefined = undefined;
+      if (typeof qCopy.correctAnswer === 'string') {
+        correctVal = qCopy.correctAnswer;
+      } else if (typeof qCopy.answerIndex === 'number' && qCopy.options && qCopy.options[qCopy.answerIndex]) {
+        correctVal = qCopy.options[qCopy.answerIndex];
+        qCopy.correctAnswer = correctVal;
+      } else if (qCopy.acceptedAnswers && qCopy.acceptedAnswers.length > 0) {
+        correctVal = qCopy.acceptedAnswers[0];
+        if (!qCopy.correctAnswer) {
+          qCopy.correctAnswer = correctVal;
+        }
+      }
+
+      // 2. Randomly shuffle options for MC, Fill in the Blank, and Code Predict
+      if (qCopy.options && qCopy.options.length > 1) {
+        const shuffled = shuffleOptions(qCopy.options, correctVal);
+        qCopy.options = shuffled;
+        if (correctVal) {
+          const newIdx = shuffled.indexOf(correctVal);
+          if (newIdx !== -1) {
+            qCopy.answerIndex = newIdx;
+          }
+        }
+      }
+
+      // 3. Randomly shuffle line bank for reorder questions
+      if (qCopy.lines && qCopy.lines.length > 1) {
+        const allLines = [...qCopy.lines, ...(qCopy.distractors || [])];
+        let shuffledLines = shuffleArray(allLines);
+        if (shuffledLines.join('\n') === qCopy.lines.join('\n') && shuffledLines.length > 1) {
+          [shuffledLines[0], shuffledLines[1]] = [shuffledLines[1], shuffledLines[0]];
+        }
+        qCopy.availableLines = shuffledLines;
+      }
+
+      return qCopy;
+    });
+  };
+
+  // Questions state: options are randomized before the questions load
+  const [questions, setQuestions] = useState<QuizQuestion[]>(() =>
+    prepareLessonQuestions(lesson.questions)
+  );
 
   // Lesson flow states
   const [showTipCard, setShowTipCard] = useState<boolean>(() => Boolean(lesson.tip));
@@ -73,13 +146,14 @@ export const InteractiveLessonModal: React.FC = () => {
     setMascotMood('thinking');
   }, [currentIndex]);
 
-  // Reset whole modal when selectedLessonId changes
+  // Reset whole modal and reshuffle options when selectedLessonId or lesson changes
   useEffect(() => {
+    setQuestions(prepareLessonQuestions(lesson.questions));
     setCurrentIndex(0);
     setCorrectCount(0);
     setIsCompleted(false);
     setShowTipCard(Boolean(lesson.tip));
-  }, [selectedLessonId, lesson.tip]);
+  }, [selectedLessonId, lesson.id]);
 
   const handleSelectOption = (opt: string) => {
     if (isAnswerChecked) return;
@@ -156,17 +230,17 @@ export const InteractiveLessonModal: React.FC = () => {
     } else if (currentQ.type === 'fb') {
       if (currentQ.acceptedAnswers && currentQ.acceptedAnswers.length > 0) {
         correct = currentQ.acceptedAnswers.includes(selectedOption || '');
+      } else if (currentQ.correctAnswer !== undefined) {
+        correct = String(selectedOption).trim() === String(currentQ.correctAnswer).trim();
       } else if (typeof currentQ.answerIndex === 'number' && currentQ.options) {
         correct = selectedOption === currentQ.options[currentQ.answerIndex];
-      } else {
-        correct = selectedOption === currentQ.correctAnswer;
       }
     } else {
       // mc or multiple_choice or code_predict
-      if (typeof currentQ.answerIndex === 'number' && currentQ.options) {
+      if (currentQ.correctAnswer !== undefined) {
+        correct = String(selectedOption).trim() === String(currentQ.correctAnswer).trim();
+      } else if (typeof currentQ.answerIndex === 'number' && currentQ.options) {
         correct = selectedOption === currentQ.options[currentQ.answerIndex];
-      } else {
-        correct = selectedOption === currentQ.correctAnswer;
       }
     }
 
@@ -688,7 +762,7 @@ export const InteractiveLessonModal: React.FC = () => {
                 <span className="text-[11px] font-brand font-bold uppercase tracking-wider text-[#898989]">
                   Pilihan Baris Tersedia:
                 </span>
-                {currentQ.lines.map((line, idx) => {
+                {(currentQ.availableLines || currentQ.lines).map((line, idx) => {
                   const isUsed = selectedLines.includes(line);
                   return (
                     <button

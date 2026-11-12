@@ -84,6 +84,7 @@ export interface QuizQuestion {
   answerIndex?: number;
   acceptedAnswers?: string[];
   lines?: string[];
+  availableLines?: string[];
   distractors?: string[];
   buggyLineIndex?: number;
   fixedLine?: string;
