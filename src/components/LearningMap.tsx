@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { LESSON_UNITS } from '../data/curriculum';
-import { Lock, ChevronDown, CheckCircle2, BookOpen, ArrowRight, X, Sparkles } from 'lucide-react';
+import { Lock, ChevronDown, CheckCircle2, ArrowRight, X } from 'lucide-react';
 
 interface TileData {
   id: number;
@@ -9,20 +9,173 @@ interface TileData {
   stepNumber: number;
   lessonId: string;
   title: string;
+  iconType: string;
   cx: number;
   cy: number;
   status: 'active' | 'completed' | 'locked';
 }
 
-// Mathematically symmetric 3D isometric rounded squircle slab paths matching reference
-const getTopSlabPath = (cx: number, cy: number) =>
-  `M ${cx - 8} ${cy - 20} Q ${cx} ${cy - 24} ${cx + 8} ${cy - 20} L ${cx + 34} ${cy - 4} Q ${cx + 42} ${cy} ${cx + 34} ${cy + 4} L ${cx + 8} ${cy + 20} Q ${cx} ${cy + 24} ${cx - 8} ${cy + 20} L ${cx - 34} ${cy + 4} Q ${cx - 42} ${cy} ${cx - 34} ${cy - 4} Z`;
+// Enlarged 3D Isometric Rounded Rhombus Slab (Width: 108px, Height: 58px, Depth: 16px)
+// Symmetrically constructed around (cx, cy)
+const getSlabTopPath = (cx: number, cy: number, hw = 54, hh = 29, r = 10) => {
+  const k = (hh / hw); // 29 / 54 ≈ 0.537
+  return `M ${cx - r} ${cy - hh + r * k} 
+    Q ${cx} ${cy - hh} ${cx + r} ${cy - hh + r * k} 
+    L ${cx + hw - r} ${cy - r * k} 
+    Q ${cx + hw} ${cy} ${cx + hw - r} ${cy + r * k} 
+    L ${cx + r} ${cy + hh - r * k} 
+    Q ${cx} ${cy + hh} ${cx - r} ${cy + hh - r * k} 
+    L ${cx - hw + r} ${cy + r * k} 
+    Q ${cx - hw} ${cy} ${cx - hw + r} ${cy - r * k} Z`;
+};
 
-const getLeftSidePath = (cx: number, cy: number) =>
-  `M ${cx - 42} ${cy} Q ${cx - 42} ${cy + 4} ${cx - 34} ${cy + 4} L ${cx - 8} ${cy + 20} Q ${cx} ${cy + 24} ${cx} ${cy + 24} L ${cx} ${cy + 39} Q ${cx} ${cy + 39} ${cx - 8} ${cy + 35} L ${cx - 34} ${cy + 19} Q ${cx - 42} ${cy + 19} ${cx - 42} ${cy + 15} Z`;
+// Left 3D drop side (depth: 16px)
+const getSlabLeftSidePath = (cx: number, cy: number, hw = 54, hh = 29, depth = 16, r = 10) => {
+  const k = (hh / hw);
+  return `M ${cx - hw + r} ${cy + r * k} 
+    L ${cx - r} ${cy + hh - r * k} 
+    Q ${cx} ${cy + hh} ${cx} ${cy + hh} 
+    L ${cx} ${cy + hh + depth} 
+    L ${cx - r} ${cy + hh + depth - r * k} 
+    L ${cx - hw + r} ${cy + depth + r * k} 
+    Q ${cx - hw} ${cy + depth} ${cx - hw} ${cy + depth - r * k} 
+    L ${cx - hw} ${cy} 
+    Q ${cx - hw} ${cy} ${cx - hw + r} ${cy - r * k} Z`;
+};
 
-const getRightSidePath = (cx: number, cy: number) =>
-  `M ${cx} ${cy + 24} Q ${cx} ${cy + 24} ${cx + 8} ${cy + 20} L ${cx + 34} ${cy + 4} Q ${cx + 42} ${cy + 4} ${cx + 42} ${cy} L ${cx + 42} ${cy + 15} Q ${cx + 42} ${cy + 19} ${cx + 34} ${cy + 19} L ${cx + 8} ${cy + 35} Q ${cx} ${cy + 39} ${cx} ${cy + 39} Z`;
+// Right 3D drop side (depth: 16px)
+const getSlabRightSidePath = (cx: number, cy: number, hw = 54, hh = 29, depth = 16, r = 10) => {
+  const k = (hh / hw);
+  return `M ${cx} ${cy + hh} 
+    Q ${cx} ${cy + hh} ${cx + r} ${cy + hh - r * k} 
+    L ${cx + hw - r} ${cy + r * k} 
+    Q ${cx + hw} ${cy} ${cx + hw} ${cy} 
+    L ${cx + hw} ${cy + depth} 
+    Q ${cx + hw} ${cy + depth} ${cx + hw - r} ${cy + depth + r * k} 
+    L ${cx + r} ${cy + hh + depth - r * k} 
+    L ${cx} ${cy + hh + depth} Z`;
+};
+
+// Circular 3D dais for milestone tiles (enlarged: rx = 48, ry = 26)
+const getRoundTopPath = (cx: number, cy: number, rx = 48, ry = 26) =>
+  `M ${cx - rx} ${cy} A ${rx} ${ry} 0 1 0 ${cx + rx} ${cy} A ${rx} ${ry} 0 1 0 ${cx - rx} ${cy} Z`;
+
+const getRoundSidePath = (cx: number, cy: number, depth = 16, rx = 48, ry = 26) =>
+  `M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy} L ${cx + rx} ${cy + depth} A ${rx} ${ry} 0 0 1 ${cx - rx} ${cy + depth} Z`;
+
+// Render embossed SVG icons on the surface of each tile, scaled proportionally for the larger slab
+const renderEmbossedIcon = (iconType: string, isBright: boolean) => {
+  const fill = isBright ? '#ffffff' : '#2f766f';
+  const stroke = isBright ? '#ffffff' : '#28625b';
+
+  switch (iconType) {
+    case 'king':
+      return (
+        <g fill={fill} transform="translate(-13, -14) scale(1.3)">
+          <path d="M4 17h14v2H4z" />
+          <path d="M5 15h12l1-6-4 3-3-5-3 5-4-3 1 6z" />
+          <path d="M10 2h2v4h-2z" />
+          <path d="M9 3h4v1.5H9z" />
+        </g>
+      );
+    case 'queen':
+      return (
+        <g fill={fill} transform="translate(-13, -13) scale(1.25)">
+          <path d="M4 18h14v2H4z" />
+          <path d="M4.5 16h13l1.5-8-4 3-4-6-4 6-4-3 1.5 8z" />
+          <circle cx="4" cy="7" r="1.5" />
+          <circle cx="8.5" cy="4" r="1.5" />
+          <circle cx="11" cy="2" r="1.5" />
+          <circle cx="13.5" cy="4" r="1.5" />
+          <circle cx="18" cy="7" r="1.5" />
+        </g>
+      );
+    case 'rook':
+      return (
+        <g fill={fill} transform="translate(-12, -13) scale(1.25)">
+          <path d="M4 18h12v2H4z" />
+          <path d="M5 16h10l-1-7h1V5h-2.5v2h-2V5h-2v2h-2V5H4v4h1l-1 7z" />
+        </g>
+      );
+    case 'bishop':
+      return (
+        <g fill={fill} stroke={stroke} strokeWidth="0.5" transform="translate(-12, -14) scale(1.25)">
+          <path d="M5 18h10v2H5z" />
+          <path d="M6 16h8c0-3-1-6-4-8-3 2-4 5-4 8z" />
+          <circle cx="10" cy="6.5" r="1.5" />
+          <path d="M10 10l2 2" stroke="#133634" strokeWidth="1.2" />
+        </g>
+      );
+    case 'knight':
+      return (
+        <g fill={fill} transform="translate(-12, -14) scale(1.25)">
+          <path d="M4 18h12v2H4z" />
+          <path d="M5 16h10c0-4-2-7-5-9l-2 1-3 2v3l3-1c0 2-1 3-3 4z" />
+        </g>
+      );
+    case 'pawn':
+      return (
+        <g fill={fill} transform="translate(-11, -13) scale(1.25)">
+          <path d="M4 17h10v2H4z" />
+          <path d="M5 15h8l-1.5-6h-5L5 15z" />
+          <circle cx="9" cy="6" r="3" />
+        </g>
+      );
+    case 'graduation':
+      return (
+        <g fill={fill} stroke={stroke} strokeWidth="0.5" transform="translate(-15, -12) scale(1.3)">
+          <path d="M11 3L1 8l10 5 10-5-10-5z" />
+          <path d="M5 10.5v5c0 2.5 3 4.5 6 4.5s6-2 6-4.5v-5" fill="none" stroke={stroke} strokeWidth="1.8" />
+          <path d="M21 8.5v6" fill="none" stroke={stroke} strokeWidth="1.5" />
+          <circle cx="21" cy="15" r="1" />
+        </g>
+      );
+    case 'plus':
+      return (
+        <g fill={fill} transform="translate(-9, -9) scale(1.25)">
+          <rect x="5" y="0" width="4" height="14" rx="1.5" />
+          <rect x="0" y="5" width="14" height="4" rx="1.5" />
+        </g>
+      );
+    case 'lightning':
+      return (
+        <g fill={fill} transform="translate(-9, -12) scale(1.25)">
+          <polygon points="8,0 1,9 7,9 5,16 13,7 7,7" />
+        </g>
+      );
+    case 'hash':
+      return (
+        <g stroke={fill} strokeWidth="2.6" strokeLinecap="round" transform="translate(-9, -9) scale(1.25)">
+          <line x1="4" y1="0" x2="2" y2="14" />
+          <line x1="10" y1="0" x2="8" y2="14" />
+          <line x1="0" y1="4" x2="14" y2="4" />
+          <line x1="0" y1="10" x2="14" y2="10" />
+        </g>
+      );
+    case 'castling':
+      return (
+        <g fill={fill} transform="translate(-14, -10) scale(1.25)">
+          <path d="M2 14h6v2H2zM14 14h6v2h-6z" />
+          <path d="M3 12h4l-.5-5h.5V5H5v1H4V5H2v2h.5l.5 5z" />
+          <path d="M15 12h4l-.5-5h.5V5H17v1h-1V5h-2v2h.5l.5 5z" />
+          <path d="M8 9h6v2H8z" opacity="0.6" />
+        </g>
+      );
+    case 'brackets':
+      return (
+        <g stroke={fill} strokeWidth="2.4" strokeLinecap="round" fill="none" transform="translate(-11, -10) scale(1.25)">
+          <path d="M4 1c-2 0-3 1.5-3 3.5v2c0 1.5-1 2-1 2s1 .5 1 2v2c0 2 1 3.5 3 3.5" />
+          <path d="M14 1c2 0 3 1.5 3 3.5v2c0 1.5 1 2 1 2s-1 .5-1 2v2c0 2-1 3.5-3 3.5" />
+        </g>
+      );
+    default:
+      return (
+        <g fill={fill} transform="translate(-9, -9) scale(1.25)">
+          <polygon points="7,1 9,5 13,6 10,9 11,13 7,11 3,13 4,9 1,6 5,5" />
+        </g>
+      );
+  }
+};
 
 export const LearningMap: React.FC = () => {
   const { stats, setIsLessonActive, setSelectedLessonId, playSound, showToast } = useApp();
@@ -31,46 +184,46 @@ export const LearningMap: React.FC = () => {
 
   const roadmapScrollRef = useRef<HTMLDivElement>(null);
 
-  // Perfectly symmetrical zigzag around midline X=190: [109, 163, 217, 271, 217, 163]
-  // 190 - 109 = 81, 271 - 190 = 81 | 190 - 163 = 27, 217 - 190 = 27
-  const cxPattern = [109, 163, 217, 271, 217, 163];
-  const startCy = 2920;
-  const dyStep = 115; // Generous breathing room between stairs to prevent crowding
+  // Perfectly symmetrical 4-tile diagonal leg around midline X = 210 in viewBox 0 0 420:
+  // Col 0: 114 | Col 1: 178 | Col 2: 242 | Col 3: 306
+  // (114 + 306)/2 = 210, (178 + 242)/2 = 210 (100% symmetric!)
+  // 4 steps up-right: [114, 178, 242, 306], then 4 steps up-left: [306, 242, 178, 114]
+  const cxPattern = [114, 178, 242, 306, 242, 178];
+  const startCy = 2150;
+  const dyStep = 74; // Generous vertical step matching enlarged tile proportion
 
   const tileMetaData = [
-    // UNIT 1: Menawarkan dan menerima minuman (Steps 1 to 11)
-    { id: 1, unit: 1, stepNumber: 1, lessonId: 'module-01', title: 'Hello World & print' },
-    { id: 2, unit: 1, stepNumber: 2, lessonId: 'unit1_lesson2', title: 'Variabel & Tipe String' },
-    { id: 3, unit: 1, stepNumber: 3, lessonId: 'unit1_lesson3', title: 'Penggabungan String' },
-    { id: 4, unit: 1, stepNumber: 4, lessonId: 'unit1_lesson4', title: 'Aritmatika Dasar Minuman' },
-    { id: 5, unit: 1, stepNumber: 5, lessonId: 'unit1_lesson5', title: 'Input Pengguna' },
-    { id: 6, unit: 1, stepNumber: 6, lessonId: 'unit1_lesson6', title: 'Latihan Praktik Terminal' },
-    { id: 7, unit: 1, stepNumber: 7, lessonId: 'unit1_lesson7', title: 'Format Teks f-string' },
-    { id: 8, unit: 1, stepNumber: 8, lessonId: 'unit1_lesson8', title: 'Logika Boolean' },
-    { id: 9, unit: 1, stepNumber: 9, lessonId: 'unit1_lesson9', title: 'Review Cepat Sintaks' },
-    { id: 10, unit: 1, stepNumber: 10, lessonId: 'unit1_lesson10', title: 'Tantangan Mini Game' },
-    { id: 11, unit: 1, stepNumber: 11, lessonId: 'unit1_lesson11', title: 'Ujian Sertifikasi Unit 1' },
+    // UNIT 1 (Steps 1 to 11)
+    { id: 1, unit: 1, stepNumber: 1, lessonId: 'module-01', title: 'Hello World & print', iconType: 'king' },
+    { id: 2, unit: 1, stepNumber: 2, lessonId: 'unit1_lesson2', title: 'Variabel & Tipe String', iconType: 'queen' },
+    { id: 3, unit: 1, stepNumber: 3, lessonId: 'unit1_lesson3', title: 'Penggabungan String', iconType: 'rook' },
+    { id: 4, unit: 1, stepNumber: 4, lessonId: 'unit1_lesson4', title: 'Aritmatika Dasar Minuman', iconType: 'bishop' },
+    { id: 5, unit: 1, stepNumber: 5, lessonId: 'unit1_lesson5', title: 'Input Pengguna', iconType: 'knight' },
+    { id: 6, unit: 1, stepNumber: 6, lessonId: 'unit1_lesson6', title: 'Latihan Praktik Terminal', iconType: 'pawn' },
+    { id: 7, unit: 1, stepNumber: 7, lessonId: 'unit1_lesson7', title: 'Format Teks f-string', iconType: 'pawn' },
+    { id: 8, unit: 1, stepNumber: 8, lessonId: 'unit1_lesson8', title: 'Logika Boolean', iconType: 'plus' },
+    { id: 9, unit: 1, stepNumber: 9, lessonId: 'unit1_lesson9', title: 'Review Cepat Sintaks', iconType: 'lightning' },
+    { id: 10, unit: 1, stepNumber: 10, lessonId: 'unit1_lesson10', title: 'Tantangan Mini Game', iconType: 'hash' },
+    { id: 11, unit: 1, stepNumber: 11, lessonId: 'unit1_lesson11', title: 'Ujian Sertifikasi Unit 1', iconType: 'castling' },
 
-    // UNIT 2: Logika Kondisi & Percabangan (Steps 12 to 18)
-    { id: 12, unit: 2, stepNumber: 12, lessonId: 'unit2_lesson1', title: 'Kondisi if & Logika Dasar' },
-    { id: 13, unit: 2, stepNumber: 13, lessonId: 'unit2_lesson2', title: 'Percabangan else & Alternatif' },
-    { id: 14, unit: 2, stepNumber: 14, lessonId: 'unit2_lesson3', title: 'Kondisi Majemuk elif' },
-    { id: 15, unit: 2, stepNumber: 15, lessonId: 'unit2_lesson4', title: 'Operator Logika and & or' },
-    { id: 16, unit: 2, stepNumber: 16, lessonId: 'unit2_lesson5', title: 'Nested if (Kondisi Bersarang)' },
-    { id: 17, unit: 2, stepNumber: 17, lessonId: 'unit2_lesson6', title: 'Studi Kasus Menu Restoran' },
-    { id: 18, unit: 2, stepNumber: 18, lessonId: 'unit2_lesson7', title: 'Evaluasi Akhir Unit 2' },
+    // UNIT 2 (Steps 12 to 18)
+    { id: 12, unit: 2, stepNumber: 12, lessonId: 'unit2_lesson1', title: 'Kondisi if & Logika Dasar', iconType: 'graduation' },
+    { id: 13, unit: 2, stepNumber: 13, lessonId: 'unit2_lesson2', title: 'Percabangan else & Alternatif', iconType: 'king' },
+    { id: 14, unit: 2, stepNumber: 14, lessonId: 'unit2_lesson3', title: 'Kondisi Majemuk elif', iconType: 'queen' },
+    { id: 15, unit: 2, stepNumber: 15, lessonId: 'unit2_lesson4', title: 'Operator Logika and & or', iconType: 'bishop' },
+    { id: 16, unit: 2, stepNumber: 16, lessonId: 'unit2_lesson5', title: 'Nested if (Kondisi Bersarang)', iconType: 'knight' },
+    { id: 17, unit: 2, stepNumber: 17, lessonId: 'unit2_lesson6', title: 'Studi Kasus Menu Restoran', iconType: 'pawn' },
+    { id: 18, unit: 2, stepNumber: 18, lessonId: 'unit2_lesson7', title: 'Evaluasi Akhir Unit 2', iconType: 'rook' },
 
-    // UNIT 3: Struktur Data List & Koleksi (Steps 19 to 25)
-    { id: 19, unit: 3, stepNumber: 19, lessonId: 'unit3_lesson1', title: 'Mengenal List Python []' },
-    { id: 20, unit: 3, stepNumber: 20, lessonId: 'unit3_lesson2', title: 'Indeks & Mengakses Elemen' },
-    { id: 21, unit: 3, stepNumber: 21, lessonId: 'unit3_lesson3', title: 'Menambah Data: append()' },
-    { id: 22, unit: 3, stepNumber: 22, lessonId: 'unit3_lesson4', title: 'Menghapus Data: remove()' },
-    { id: 23, unit: 3, stepNumber: 23, lessonId: 'unit3_lesson5', title: 'Panjang List dengan len()' },
-    { id: 24, unit: 3, stepNumber: 24, lessonId: 'unit3_lesson6', title: 'Slicing & Potong List' },
-    { id: 25, unit: 3, stepNumber: 25, lessonId: 'unit3_lesson7', title: 'Master Sertifikasi List' }
+    // UNIT 3 (Steps 19 to 25)
+    { id: 19, unit: 3, stepNumber: 19, lessonId: 'unit3_lesson1', title: 'Mengenal List Python []', iconType: 'brackets' },
+    { id: 20, unit: 3, stepNumber: 20, lessonId: 'unit3_lesson2', title: 'Indeks & Mengakses Elemen', iconType: 'hash' },
+    { id: 21, unit: 3, stepNumber: 21, lessonId: 'unit3_lesson3', title: 'Menambah Data: append()', iconType: 'plus' },
+    { id: 22, unit: 3, stepNumber: 22, lessonId: 'unit3_lesson4', title: 'Menghapus Data: remove()', iconType: 'knight' },
+    { id: 23, unit: 3, stepNumber: 23, lessonId: 'unit3_lesson5', title: 'Panjang List dengan len()', iconType: 'bishop' },
+    { id: 24, unit: 3, stepNumber: 24, lessonId: 'unit3_lesson6', title: 'Slicing & Potong List', iconType: 'queen' },
+    { id: 25, unit: 3, stepNumber: 25, lessonId: 'unit3_lesson7', title: 'Master Sertifikasi List', iconType: 'king' }
   ];
-
-  const completedCount = stats.completedLessons.length;
 
   const isLessonCompleted = (lId: string) => {
     return (
@@ -96,12 +249,12 @@ export const LearningMap: React.FC = () => {
     };
   });
 
-  // Auto-scroll the roadmap container to the active step on initial load & lesson updates
+  // Auto-scroll the roadmap container to active step
   useEffect(() => {
     const timer = setTimeout(() => {
       const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
       if (activeTile && roadmapScrollRef.current) {
-        const targetScrollTop = Math.max(0, activeTile.cy - 300);
+        const targetScrollTop = Math.max(0, activeTile.cy - 340);
         roadmapScrollRef.current.scrollTo({
           top: targetScrollTop,
           behavior: 'smooth'
@@ -111,13 +264,12 @@ export const LearningMap: React.FC = () => {
     return () => clearTimeout(timer);
   }, [stats.completedLessons.length]);
 
-  // Track roadmap scroll position to show quick "Jump to Active Step" button
   const handleRoadmapScroll = () => {
     if (!roadmapScrollRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = roadmapScrollRef.current;
+    const { scrollTop } = roadmapScrollRef.current;
     const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
-    const targetScrollTop = Math.max(0, activeTile.cy - 300);
-    const isFarFromActive = Math.abs(scrollTop - targetScrollTop) > 150;
+    const targetScrollTop = Math.max(0, activeTile.cy - 340);
+    const isFarFromActive = Math.abs(scrollTop - targetScrollTop) > 160;
     setIsScrolledUp(isFarFromActive);
   };
 
@@ -125,7 +277,7 @@ export const LearningMap: React.FC = () => {
     playSound('click');
     const activeTile = tiles.find((t) => t.status === 'active') || tiles[0];
     if (roadmapScrollRef.current) {
-      const targetScrollTop = Math.max(0, activeTile.cy - 300);
+      const targetScrollTop = Math.max(0, activeTile.cy - 340);
       roadmapScrollRef.current.scrollTo({
         top: targetScrollTop,
         behavior: 'smooth'
@@ -168,301 +320,209 @@ export const LearningMap: React.FC = () => {
       className="flex-1 w-full lg:max-w-[640px] xl:max-w-[680px] mx-auto relative h-[calc(100vh-2rem)] select-none overflow-hidden"
       aria-label="Peta Belajar Python"
     >
-      {/* LEARN TO CODE: SELALU DITENGAH SECARA RELATIF TERHADAP SECTION ROADMAP TENGAH */}
+      {/* Floating Bottom Action Card (Always Centered) */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 w-[92%] max-w-[440px] bg-[#171717] border-2 border-[#2e2e2e] rounded-2xl p-4 shadow-2xl flex flex-col gap-3 pointer-events-auto">
         <div className="flex items-center justify-between px-1">
           <span className="font-brand font-extrabold text-sm uppercase tracking-wider text-white">
             LEARN TO CODE
           </span>
+          <span className="text-xs font-mono font-bold text-[#3ecf8e]">
+            {stats.completedLessons.length} / 25 Selesai
+          </span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setShowSyllabus(true)}
-            className="w-12 h-12 shrink-0 rounded-xl bg-[#242424] hover:bg-[#2e2e2e] border border-[#393939] flex items-center justify-center text-[#3ecf8e] hover:text-white transition-all cursor-pointer"
-            title="Daftar Pelajaran / Silabus"
-          >
-            <BookOpen className="w-5 h-5 stroke-[2.2]" />
-          </button>
-          <button
-            type="button"
-            onClick={startNextLesson}
-            className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#3ecf8e] to-[#2fb778] hover:from-[#3ecf8e] hover:to-[#38c985] active:translate-y-1 font-brand font-black text-sm tracking-wide text-[#0e0e0e] shadow-[0_4px_0_#1b6343] flex items-center justify-center gap-2 transition-all uppercase cursor-pointer group"
-          >
-            <span>NEXT LESSON ({stats.completedLessons.length}/{LESSON_UNITS.length})</span>
-            <ArrowRight className="w-4 h-4 stroke-[2.8] transition-transform group-hover:translate-x-0.5" />
-          </button>
-        </div>
+        <button
+          onClick={startNextLesson}
+          className="tactile-btn-primary w-full py-3.5 px-6 rounded-xl font-brand font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+        >
+          <span>NEXT LESSON</span>
+          <ArrowRight className="w-4 h-4 stroke-[2.8]" />
+        </button>
       </div>
 
-      {/* Floating Button "Ke Langkah Aktif" when user scrolls roadmap up */}
+      {/* Floating "Lompat ke Langkah Aktif" button if scrolled away */}
       {isScrolledUp && (
         <button
           onClick={scrollToActiveStep}
-          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-full bg-[#1c1b1b]/95 hover:bg-[#242424] border border-[#3ecf8e] text-xs font-brand font-bold text-[#3ecf8e] shadow-2xl flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 whitespace-nowrap"
+          className="absolute bottom-28 right-6 z-20 px-3.5 py-2 rounded-full bg-[#1c1b1b] border border-[#3ecf8e]/50 text-[#3ecf8e] text-xs font-bold shadow-xl flex items-center gap-1.5 hover:bg-[#252525] transition-all cursor-pointer animate-bounce"
         >
           <ChevronDown className="w-4 h-4" />
-          <span>Ke Langkah Aktif</span>
+          <span>Langkah Aktif</span>
         </button>
       )}
 
-      {/* SCROLLABLE ROADMAP CONTAINER (HANYA INI YANG BERGERAK SAAT SCROLL) */}
+      {/* Scrollable Map Container - Clean dark background without checkerboard/chess pieces */}
       <div
         ref={roadmapScrollRef}
         onScroll={handleRoadmapScroll}
-        className="w-full h-full overflow-y-auto overflow-x-hidden pt-6 pb-36 scroll-smooth select-none flex flex-col items-center"
-        style={{ scrollbarWidth: 'thin', scrollbarColor: '#2e2e2e transparent' }}
+        className="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col items-center pt-8 pb-36 relative custom-scrollbar scroll-smooth"
       >
-        {/* ISOMETRIC ROADMAP SVG (SCROLLS SMOOTHLY IN CENTER) */}
-        <div className="relative w-full flex items-center justify-center py-2 select-none">
-          <div className="relative w-[360px] sm:w-[380px] h-[3150px] flex items-center justify-center overflow-visible">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-[420px] flex justify-center relative">
             <svg
-              className="w-full h-full overflow-visible"
-              viewBox="0 0 380 3150"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 420 2360"
+              className="w-full h-auto overflow-visible select-none"
+              style={{ filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.7))' }}
             >
               <defs>
-                {/* Active glowing emerald slab top */}
-                <linearGradient id="slabTopActive" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#3ecf8e" />
-                  <stop offset="100%" stopColor="#1ea672" />
+                {/* 1. Inactive / Normal Tile Shading (Deep Dark Teal Slab) */}
+                <linearGradient id="tileTopDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#1e4d49" />
+                  <stop offset="100%" stopColor="#133634" />
+                </linearGradient>
+                <linearGradient id="tileSideLeftDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#0f2927" />
+                  <stop offset="100%" stopColor="#081816" />
+                </linearGradient>
+                <linearGradient id="tileSideRightDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#0c2321" />
+                  <stop offset="100%" stopColor="#051210" />
                 </linearGradient>
 
-                {/* Completed emerald slab top */}
-                <linearGradient id="slabTopCompleted" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#228258" />
-                  <stop offset="100%" stopColor="#15583b" />
+                {/* 2. Active Glowing Tile Shading (Radiant Seafoam Mint) */}
+                <linearGradient id="tileTopActive" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#3ff3a9" />
+                  <stop offset="100%" stopColor="#1ecb85" />
+                </linearGradient>
+                <linearGradient id="tileSideLeftActive" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#128362" />
+                  <stop offset="100%" stopColor="#0b543e" />
+                </linearGradient>
+                <linearGradient id="tileSideRightActive" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#0d6b4f" />
+                  <stop offset="100%" stopColor="#073a2b" />
                 </linearGradient>
 
-                {/* Dark teal-slate default/locked slab top matching reference screenshot */}
-                <linearGradient id="slabTopDark" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#1e3d36" />
-                  <stop offset="100%" stopColor="#0e1f1c" />
+                {/* 3. Completed Tile Shading */}
+                <linearGradient id="tileTopCompleted" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#22c55e" />
+                  <stop offset="100%" stopColor="#15803d" />
                 </linearGradient>
 
-                {/* 3D Side extrusion facets for normal tiles */}
-                <linearGradient id="sideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#102621" />
-                  <stop offset="100%" stopColor="#081412" />
-                </linearGradient>
-                <linearGradient id="sideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#0d201c" />
-                  <stop offset="100%" stopColor="#050e0c" />
-                </linearGradient>
-
-                {/* 3D Side extrusion facets for active/completed tiles */}
-                <linearGradient id="activeSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#165e3d" />
-                  <stop offset="100%" stopColor="#0b3320" />
-                </linearGradient>
-                <linearGradient id="activeSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#124f33" />
-                  <stop offset="100%" stopColor="#072416" />
-                </linearGradient>
-
+                {/* Drop shadow filters */}
                 <filter id="tileShadow" x="-30%" y="-20%" width="160%" height="160%">
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.65" />
+                  <feDropShadow dx="0" dy="10" stdDeviation="6" floodColor="#000000" floodOpacity="0.75" />
                 </filter>
-                <filter id="activeNeonGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="14" floodColor="#3ecf8e" floodOpacity="0.6" />
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.75" />
-                </filter>
-                <filter id="completedGlow" x="-40%" y="-40%" width="180%" height="180%">
-                  <feDropShadow dx="0" dy="0" stdDeviation="10" floodColor="#3ecf8e" floodOpacity="0.4" />
-                  <feDropShadow dx="0" dy="8" stdDeviation="6" floodColor="#000000" floodOpacity="0.65" />
+                <filter id="activeNeonGlow" x="-60%" y="-50%" width="220%" height="220%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="18" floodColor="#3ff3a9" floodOpacity="0.75" />
+                  <feDropShadow dx="0" dy="10" stdDeviation="7" floodColor="#000000" floodOpacity="0.85" />
                 </filter>
               </defs>
 
-              {/* 1. RENDER BACKGROUND TILES IN ISOMETRIC ORDER (TOP TO BOTTOM) */}
+              {/* Top Section Header & Gate (Next Section: Beginner / Lanjutan) */}
+              <g transform="translate(210, 160)" textAnchor="middle">
+                <text
+                  y="-18"
+                  fill="#718096"
+                  fontFamily="Montserrat, sans-serif"
+                  fontWeight="800"
+                  fontSize="11"
+                  letterSpacing="1.8"
+                >
+                  NEXT SECTION
+                </text>
+                <text
+                  y="6"
+                  fill="#cbd5e1"
+                  fontFamily="Montserrat, sans-serif"
+                  fontWeight="900"
+                  fontSize="22"
+                  letterSpacing="0.5"
+                >
+                  Beginner
+                </text>
+
+                {/* Next Section Gateway Tile */}
+                <g transform="translate(0, 56)" filter="url(#tileShadow)">
+                  <path d={getSlabLeftSidePath(0, 0)} fill="url(#tileSideLeftDark)" />
+                  <path d={getSlabRightSidePath(0, 0)} fill="url(#tileSideRightDark)" />
+                  <path d={getSlabTopPath(0, 0)} fill="url(#tileTopDark)" stroke="#2a635d" strokeWidth="1.5" />
+                  {renderEmbossedIcon('graduation', false)}
+                </g>
+              </g>
+
+              {/* Render Inactive and Completed Tiles (Top to Bottom order) */}
               {tiles
                 .filter((tile) => tile.status !== 'active')
                 .sort((a, b) => a.cy - b.cy)
                 .map((tile) => {
-                  const { id, cx, cy, status } = tile;
+                  const { id, cx, cy, status, iconType } = tile;
                   const isCompleted = status === 'completed';
-                  const isUnit1 = tile.unit === 1;
+                  const isRoundMilestone = tile.id === 12; // Special round dais for Unit 2 milestone
 
-                  if (isCompleted) {
-                    // TANGGA SELESAI: BERSINAR & MEMILIKI ICON CENTANG HIJAU
+                  if (isRoundMilestone) {
                     return (
-                      <g
-                        key={id}
-                        className="roadmap-tile-group cursor-pointer"
-                        onClick={() => handleTileClick(tile)}
-                      >
-                        {/* Static Hit Target */}
-                        <rect
-                          x={cx - 48}
-                          y={cy - 26}
-                          width={96}
-                          height={74}
-                          fill="transparent"
-                          style={{ pointerEvents: 'all' }}
-                        />
-                        {/* Glowing Completed Slab */}
-                        <g className="roadmap-tile-slab" filter="url(#completedGlow)">
-                          <path d={getLeftSidePath(cx, cy)} fill="url(#activeSideLeft)" />
-                          <path d={getRightSidePath(cx, cy)} fill="url(#activeSideRight)" />
-                          <path
-                            d={getTopSlabPath(cx, cy)}
-                            fill="url(#slabTopCompleted)"
-                            stroke="#3ecf8e"
-                            strokeOpacity="0.9"
-                            strokeWidth="1.5"
-                          />
-                          <ellipse cx={cx} cy={cy} rx="16" ry="8" fill="white" fillOpacity="0.3" filter="blur(2px)" />
-
-                          {/* Completed Checkmark Emblem */}
-                          <g transform={`translate(${cx - 8}, ${cy - 8})`}>
-                            <circle cx="8" cy="8" r="8" fill="#14532d" fillOpacity="0.9" stroke="#ffffff" strokeWidth="1.2" />
-                            <path
-                              d="M4.5 8 L7 10.5 L11.5 5.5"
-                              fill="none"
-                              stroke="#ffffff"
-                              strokeWidth="1.8"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
+                      <g key={id} className="roadmap-tile-group cursor-pointer" onClick={() => handleTileClick(tile)}>
+                        <rect x={cx - 56} y={cy - 30} width={112} height={80} fill="transparent" style={{ pointerEvents: 'all' }} />
+                        <g className="roadmap-tile-slab" filter="url(#tileShadow)">
+                          <path d={getRoundSidePath(cx, cy)} fill="url(#tileSideLeftDark)" />
+                          <path d={getRoundTopPath(cx, cy)} fill="url(#tileTopDark)" stroke="#2a635d" strokeWidth="1.5" />
+                          <g transform={`translate(${cx}, ${cy})`}>
+                            {renderEmbossedIcon(iconType, isCompleted)}
                           </g>
                         </g>
                       </g>
                     );
                   }
 
-                  // TANGGA TERKUNCI / NORMAL (SESUAI DENGAN GAMBAR REFERENSI PENGGUNA)
+                  if (isCompleted) {
+                    return (
+                      <g key={id} className="roadmap-tile-group cursor-pointer" onClick={() => handleTileClick(tile)}>
+                        <rect x={cx - 56} y={cy - 30} width={112} height={80} fill="transparent" style={{ pointerEvents: 'all' }} />
+                        <g className="roadmap-tile-slab" filter="url(#tileShadow)">
+                          <path d={getSlabLeftSidePath(cx, cy)} fill="url(#tileSideLeftActive)" />
+                          <path d={getSlabRightSidePath(cx, cy)} fill="url(#tileSideRightActive)" />
+                          <path d={getSlabTopPath(cx, cy)} fill="url(#tileTopCompleted)" stroke="#a7f3d0" strokeWidth="1.8" />
+                          <g transform={`translate(${cx}, ${cy})`}>
+                            {renderEmbossedIcon(iconType, true)}
+                          </g>
+                          <g transform={`translate(${cx + 24}, ${cy - 14})`}>
+                            <circle cx="0" cy="0" r="8" fill="#14532d" stroke="#ffffff" strokeWidth="1.4" />
+                            <path d="M-3.5 0 L-1 2.5 L3.5 -2" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                          </g>
+                        </g>
+                      </g>
+                    );
+                  }
+
+                  // Normal Inactive / Locked Tile (Enlarged Deep Teal Slab with Embossed Icon)
                   return (
-                    <g
-                      key={id}
-                      className="roadmap-tile-group cursor-pointer"
-                      onClick={() => handleTileClick(tile)}
-                    >
-                      {/* Static Hit Target */}
-                      <rect
-                        x={cx - 48}
-                        y={cy - 26}
-                        width={96}
-                        height={74}
-                        fill="transparent"
-                        style={{ pointerEvents: 'all' }}
-                      />
-                      {/* Visual Slab: Moves down smoothly on hover without dribble */}
-                      <g className="roadmap-tile-slab" filter="url(#tileShadow)" opacity={isUnit1 ? 0.95 : 0.65}>
-                        <path d={getLeftSidePath(cx, cy)} fill="url(#sideLeft)" />
-                        <path d={getRightSidePath(cx, cy)} fill="url(#sideRight)" />
-                        <path
-                          d={getTopSlabPath(cx, cy)}
-                          fill="url(#slabTopDark)"
-                          stroke="#2e584f"
-                          strokeWidth="1.4"
-                        />
+                    <g key={id} className="roadmap-tile-group cursor-pointer" onClick={() => handleTileClick(tile)}>
+                      <rect x={cx - 56} y={cy - 30} width={112} height={80} fill="transparent" style={{ pointerEvents: 'all' }} />
+                      <g className="roadmap-tile-slab" filter="url(#tileShadow)">
+                        <path d={getSlabLeftSidePath(cx, cy)} fill="url(#tileSideLeftDark)" />
+                        <path d={getSlabRightSidePath(cx, cy)} fill="url(#tileSideRightDark)" />
+                        <path d={getSlabTopPath(cx, cy)} fill="url(#tileTopDark)" stroke="#2a635d" strokeWidth="1.5" />
+                        <g transform={`translate(${cx}, ${cy})`}>
+                          {renderEmbossedIcon(iconType, false)}
+                        </g>
                       </g>
                     </g>
                   );
                 })}
 
-              {/* 2. RENDER ACTIVE TILE + NEXT INDICATOR ON TOP LAYER */}
+              {/* Render Active Tile with Glowing Mint Slab (Label "Next" REMOVED as requested) */}
               {(() => {
                 const activeTile = tiles.find((t) => t.status === 'active');
                 if (!activeTile) return null;
-                const { id, cx, cy } = activeTile;
-                return (
-                  <g
-                    key={id}
-                    className="roadmap-tile-group cursor-pointer"
-                    onClick={() => handleTileClick(activeTile)}
-                  >
-                    {/* Static Hit Target: Covers badge & slab */}
-                    <rect
-                      x={cx - 48}
-                      y={cy - 56}
-                      width={96}
-                      height={104}
-                      fill="transparent"
-                      style={{ pointerEvents: 'all' }}
-                    />
-                    {/* Visual Slab: Moves down smoothly on hover without dribble */}
-                    <g className="roadmap-tile-slab" filter="url(#activeNeonGlow)">
-                      {/* Active glowing slab geometry */}
-                      <path d={getLeftSidePath(cx, cy)} fill="url(#activeSideLeft)" />
-                      <path d={getRightSidePath(cx, cy)} fill="url(#activeSideRight)" />
-                      <path
-                        d={getTopSlabPath(cx, cy)}
-                        fill="url(#slabTopActive)"
-                        stroke="#ffffff"
-                        strokeOpacity="0.95"
-                        strokeWidth="1.8"
-                      />
-                      <ellipse cx={cx} cy={cy} rx="16" ry="8" fill="white" fillOpacity="0.45" filter="blur(2px)" />
+                const { id, cx, cy, iconType } = activeTile;
 
-                      {/* NEXT Indicator Speech Bubble Badge (Persis seperti gambar referensi) */}
-                      <g transform={`translate(${cx}, ${cy - 46})`}>
-                        {/* Glow halo */}
-                        <rect x="-31" y="-14" width="62" height="28" rx="14" fill="#3ecf8e" fillOpacity="0.4" filter="blur(4px)" />
-                        {/* White speech bubble */}
-                        <rect x="-29" y="-12" width="58" height="24" rx="12" fill="#ffffff" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.45))" />
-                        {/* Downward triangle pointer */}
-                        <polygon points="-6,12 6,12 0,18" fill="#ffffff" />
-                        {/* Bold NEXT label */}
-                        <text
-                          x="0"
-                          y="4"
-                          textAnchor="middle"
-                          fill="#0c1a16"
-                          fontFamily="Montserrat, sans-serif"
-                          fontWeight="900"
-                          fontSize="11"
-                          letterSpacing="1.2"
-                        >
-                          NEXT
-                        </text>
+                return (
+                  <g key={id} className="roadmap-tile-group cursor-pointer" onClick={() => handleTileClick(activeTile)}>
+                    {/* Hit Target */}
+                    <rect x={cx - 60} y={cy - 34} width={120} height={90} fill="transparent" style={{ pointerEvents: 'all' }} />
+
+                    {/* Glowing Mint 3D Slab without any speech bubble / "Next" label on top */}
+                    <g className="roadmap-tile-slab" filter="url(#activeNeonGlow)">
+                      <path d={getSlabLeftSidePath(cx, cy)} fill="url(#tileSideLeftActive)" />
+                      <path d={getSlabRightSidePath(cx, cy)} fill="url(#tileSideRightActive)" />
+                      <path d={getSlabTopPath(cx, cy)} fill="url(#tileTopActive)" stroke="#ffffff" strokeWidth="2" />
+
+                      {/* White Embossed Icon inside Active Tile */}
+                      <g transform={`translate(${cx}, ${cy})`}>
+                        {renderEmbossedIcon(iconType, true)}
                       </g>
                     </g>
-                  </g>
-                );
-              })()}
-
-              {/* MILESTONE TROPHIES ON THE PATH */}
-              {/* Unit 1 Trophy Milestone (Above step 11) */}
-              {(() => {
-                const u1End = tiles.find((t) => t.id === 11) || tiles[10];
-                return (
-                  <g transform={`translate(${u1End.cx - 20}, ${u1End.cy - 68})`} className="cursor-pointer">
-                    <circle cx="20" cy="20" r="18" fill="#171717" stroke="#facc15" strokeWidth="2" />
-                    <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#facc15" />
-                    <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#facc15" strokeWidth="1.5" />
-                    <path d="M28 14 h2 c1.1 0 2 .9 2 2 v1 c0 1.7 -1.3 3 -3 3 h-1" fill="none" stroke="#facc15" strokeWidth="1.5" />
-                    <line x1="20" y1="24" x2="20" y2="28" stroke="#facc15" strokeWidth="2" />
-                    <line x1="16" y1="28" x2="24" y2="28" stroke="#facc15" strokeWidth="2" />
-                  </g>
-                );
-              })()}
-
-              {/* Unit 2 Trophy Milestone (Above step 18) */}
-              {(() => {
-                const u2End = tiles.find((t) => t.id === 18) || tiles[17];
-                return (
-                  <g transform={`translate(${u2End.cx - 20}, ${u2End.cy - 68})`} className="cursor-pointer opacity-70">
-                    <circle cx="20" cy="20" r="18" fill="#171717" stroke="#38bdf8" strokeWidth="2" />
-                    <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#38bdf8" />
-                    <line x1="20" y1="24" x2="20" y2="28" stroke="#38bdf8" strokeWidth="2" />
-                    <line x1="16" y1="28" x2="24" y2="28" stroke="#38bdf8" strokeWidth="2" />
-                  </g>
-                );
-              })()}
-
-              {/* Unit 3 Trophy Milestone (Above step 25 - Course Summit) */}
-              {(() => {
-                const u3End = tiles.find((t) => t.id === 25) || tiles[24];
-                return (
-                  <g transform={`translate(${u3End.cx - 20}, ${u3End.cy - 68})`} className="cursor-pointer">
-                    <circle cx="20" cy="20" r="18" fill="#171717" stroke="#a855f7" strokeWidth="2" />
-                    <path d="M14 12 h12 v6 c0 3.3 -2.7 6 -6 6 s-6 -2.7 -6 -6 v-6 z" fill="#a855f7" />
-                    <path d="M12 14 h-2 c-1.1 0 -2 .9 -2 2 v1 c0 1.7 1.3 3 3 3 h1" fill="none" stroke="#a855f7" strokeWidth="1.5" />
-                    <path d="M28 14 h2 c1.1 0 2 .9 2 2 v1 c0 1.7 -1.3 3 -3 3 h-1" fill="none" stroke="#a855f7" strokeWidth="1.5" />
-                    <line x1="20" y1="24" x2="20" y2="28" stroke="#a855f7" strokeWidth="2" />
-                    <line x1="16" y1="28" x2="24" y2="28" stroke="#a855f7" strokeWidth="2" />
                   </g>
                 );
               })()}

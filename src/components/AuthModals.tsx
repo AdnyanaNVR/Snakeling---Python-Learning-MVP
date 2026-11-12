@@ -8,8 +8,67 @@ export const SupabaseSetupModal: React.FC<{ isOpen: boolean; onClose: () => void
   return null;
 };
 
+// Secret Easter Egg: Alternating toggle clicks between Masuk and Daftar 20 times unlocks Demo Account
+let demoToggleCount = 0;
+let lastToggleAction: 'to_register' | 'to_login' | null = null;
+let lastToggleTime = 0;
+
+export const resetDemoToggleCount = () => {
+  demoToggleCount = 0;
+  lastToggleAction = null;
+};
+
+const handleAlternateAuthToggle = (
+  target: 'to_register' | 'to_login',
+  setShowLoginModal: (show: boolean) => void,
+  setShowRegisterModal: (show: boolean) => void,
+  continueWithDemo: (username?: string, email?: string) => void,
+  playSound: (type: any) => void,
+  showToast: (msg: string, type?: any) => void
+) => {
+  playSound('click');
+  const now = Date.now();
+
+  // Reset counter if user paused for more than 25 seconds
+  if (now - lastToggleTime > 25000) {
+    demoToggleCount = 0;
+    lastToggleAction = null;
+  }
+  lastToggleTime = now;
+
+  // Track alternate clicks
+  if (lastToggleAction !== target) {
+    demoToggleCount += 1;
+    lastToggleAction = target;
+  } else {
+    demoToggleCount = 1;
+    lastToggleAction = target;
+  }
+
+  // Trigger secret demo login when count reaches 20 alternating clicks!
+  if (demoToggleCount >= 20) {
+    demoToggleCount = 0;
+    lastToggleAction = null;
+    setShowLoginModal(false);
+    setShowRegisterModal(false);
+    playSound('celebrate');
+    showToast('✨ Mode Rahasia Terbuka: Masuk sebagai Akun Demo (Infinite Gems)!', 'success');
+    continueWithDemo('demo', 'demo@snakeling.app');
+    return;
+  }
+
+  // Regular modal toggle
+  if (target === 'to_register') {
+    setShowLoginModal(false);
+    setShowRegisterModal(true);
+  } else {
+    setShowRegisterModal(false);
+    setShowLoginModal(true);
+  }
+};
+
 export const LoginModal: React.FC = () => {
-  const { showLoginModal, setShowLoginModal, setShowRegisterModal, loginUser, continueWithDemo, showToast } = useApp();
+  const { showLoginModal, setShowLoginModal, setShowRegisterModal, loginUser, continueWithDemo, showToast, playSound } = useApp();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -50,7 +109,10 @@ export const LoginModal: React.FC = () => {
         {/* Top Bar */}
         <header className="w-full px-6 py-6 sm:px-10 flex items-center justify-between">
           <button
-            onClick={() => setShowLoginModal(false)}
+            onClick={() => {
+              resetDemoToggleCount();
+              setShowLoginModal(false);
+            }}
             className="text-[#b4b4b4] hover:text-white p-2 rounded-lg transition-colors cursor-pointer"
             aria-label="Tutup"
           >
@@ -59,8 +121,14 @@ export const LoginModal: React.FC = () => {
 
           <button
             onClick={() => {
-              setShowLoginModal(false);
-              setShowRegisterModal(true);
+              handleAlternateAuthToggle(
+                'to_register',
+                setShowLoginModal,
+                setShowRegisterModal,
+                continueWithDemo,
+                playSound,
+                showToast
+              );
             }}
             className="px-6 py-2 rounded-full border border-[#393939] text-xs font-brand font-bold tracking-wider text-white hover:bg-white/[0.06] transition-all uppercase cursor-pointer"
           >
@@ -164,7 +232,7 @@ export const LoginModal: React.FC = () => {
 };
 
 export const RegisterModal: React.FC = () => {
-  const { showRegisterModal, setShowRegisterModal, setShowLoginModal, registerUser, loginUser, continueWithDemo, showToast } = useApp();
+  const { showRegisterModal, setShowRegisterModal, setShowLoginModal, registerUser, loginUser, continueWithDemo, showToast, playSound } = useApp();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -207,7 +275,10 @@ export const RegisterModal: React.FC = () => {
         {/* Top Bar */}
         <header className="w-full px-6 py-6 sm:px-10 flex items-center justify-between">
           <button
-            onClick={() => setShowRegisterModal(false)}
+            onClick={() => {
+              resetDemoToggleCount();
+              setShowRegisterModal(false);
+            }}
             className="text-[#b4b4b4] hover:text-white p-2 rounded-lg transition-colors cursor-pointer"
             aria-label="Tutup"
           >
@@ -216,8 +287,14 @@ export const RegisterModal: React.FC = () => {
 
           <button
             onClick={() => {
-              setShowRegisterModal(false);
-              setShowLoginModal(true);
+              handleAlternateAuthToggle(
+                'to_login',
+                setShowLoginModal,
+                setShowRegisterModal,
+                continueWithDemo,
+                playSound,
+                showToast
+              );
             }}
             className="px-5 py-2 rounded-2xl bg-[#201f1f] hover:bg-[#2a2a2a] border border-[#2e2e2e] text-white font-brand text-xs font-bold tracking-wider uppercase transition-all shadow-sm cursor-pointer"
           >
