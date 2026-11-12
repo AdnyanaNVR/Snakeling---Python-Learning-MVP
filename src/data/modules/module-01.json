@@ -9,8 +9,46 @@
   "gemReward": 15,
   "tip": {
     "title": "Fungsi print() di Python",
-    "body": "Fungsi print() digunakan untuk menampilkan pesan teks atau hasil program ke layar terminal. Teks di dalam tanda kurung harus diapit oleh tanda kutip tunggal ('...') atau tanda kutip ganda (\"...\").",
-    "codeExample": "print(\"Halo, Dunia!\")\nprint('Belajar Python di Snakeling')"
+    "body": "Fungsi print() adalah instruksi bawaan (built-in function) paling mendasar di Python yang digunakan untuk menampilkan data ke layar terminal konsol. Anda dapat mencetak teks (string), angka, ekspresi perhitungan matematika, maupun nilai variabel.",
+    "codeExample": "print(\"Halo, Dunia!\")\nprint('Belajar Python di Snakeling')\nprint(10 + 5)\nprint(\"Level:\", 1, \"XP:\", 100)",
+    "outputExample": "Halo, Dunia!\nBelajar Python di Snakeling\n15\nLevel: 1 XP: 100",
+    "sections": [
+      {
+        "heading": "Sintaks & Tanda Kurung Buka-Tutup",
+        "explanation": "Di Python 3, fungsi print harus selalu disertai tanda kurung buka dan tutup (). Nilai atau pesan yang ingin dicetak diletakkan di dalam tanda kurung tersebut sebagai argumen masukan.",
+        "codeSnippet": "print(\"Selamat datang calon programmer!\")",
+        "outputSnippet": "Selamat datang calon programmer!"
+      },
+      {
+        "heading": "Aturan Teks (String) & Tanda Kutip",
+        "explanation": "Semua data berbentuk teks harus diapit sepasang tanda kutip: boleh menggunakan tanda kutip tunggal ('...') maupun tanda kutip ganda (\"...\"). Pastikan tanda kutip pembuka dan penutup berjenis sama dan tidak tertinggal.",
+        "codeSnippet": "print(\"Menggunakan kutip ganda\")\nprint('Menggunakan kutip tunggal')",
+        "outputSnippet": "Menggunakan kutip ganda\nMenggunakan kutip tunggal"
+      },
+      {
+        "heading": "Mencetak Angka & Hasil Perhitungan",
+        "explanation": "Angka (integer atau desimal) tidak perlu tanda kutip. Jika Anda memasukkan ekspresi matematika seperti tambah (+) atau kali (*), Python akan otomatis menghitung hasilnya terlebih dahulu sebelum mencetaknya.",
+        "codeSnippet": "print(42)\nprint(20 * 5)",
+        "outputSnippet": "42\n100"
+      },
+      {
+        "heading": "Mencetak Banyak Nilai Sekaligus",
+        "explanation": "Anda dapat mencetak beberapa teks atau angka sekaligus dalam satu perintah print() dengan memisahkannya menggunakan tanda koma (,). Python akan otomatis menambahkan spasi di antara setiap nilai.",
+        "codeSnippet": "print(\"Skor:\", 95, \"Peringkat:\", 1)",
+        "outputSnippet": "Skor: 95 Peringkat: 1"
+      },
+      {
+        "heading": "Baris Baru dengan Karakter Khusus (\\n)",
+        "explanation": "Karakter khusus \\n (newline) dapat disisipkan di dalam teks string untuk membuat baris baru tanpa harus memanggil fungsi print() terpisah.",
+        "codeSnippet": "print(\"Baris Pertama\\nBaris Kedua\")",
+        "outputSnippet": "Baris Pertama\nBaris Kedua"
+      }
+    ],
+    "notes": [
+      "Python bersifat Case-Sensitive: Selalu ketik print dengan huruf kecil. Mengetik Print() atau PRINT() akan memicu NameError: name 'Print' is not defined.",
+      "Tanda Kutip Tidak Berpasangan: Menulis print(\"Halo') akan menghasilkan SyntaxError: unterminated string literal.",
+      "Teks Tanpa Kutip Dianggap Variabel: Menulis print(Halo) tanpa tanda kutip membuat Python mencari variabel bernama 'Halo'. Jika variabel belum dibuat, muncul NameError."
+    ]
   },
   "quizzes": [
     {

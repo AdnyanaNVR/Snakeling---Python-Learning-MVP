@@ -37,10 +37,20 @@ export interface SpotTheBugQuiz extends BaseQuiz {
 
 export type ModuleQuiz = MultipleChoiceQuiz | FillBlankQuiz | ReorderQuiz | SpotTheBugQuiz;
 
+export interface ModuleTipSection {
+  heading: string;
+  explanation: string;
+  codeSnippet?: string;
+  outputSnippet?: string;
+}
+
 export interface ModuleTip {
   title: string;
   body: string;
   codeExample: string;
+  outputExample?: string;
+  sections?: ModuleTipSection[];
+  notes?: string[];
 }
 
 export interface PythonModule {

@@ -56,10 +56,20 @@ export type QuestionType =
   | 'ro'
   | 'sb';
 
+export interface LessonTipSection {
+  heading: string;
+  explanation: string;
+  codeSnippet?: string;
+  outputSnippet?: string;
+}
+
 export interface LessonTip {
   title: string;
   body: string;
   codeExample: string;
+  outputExample?: string;
+  sections?: LessonTipSection[];
+  notes?: string[];
 }
 
 export interface QuizQuestion {

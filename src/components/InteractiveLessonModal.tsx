@@ -16,7 +16,9 @@ import {
   Flame,
   Bug,
   Award,
-  BookOpen
+  BookOpen,
+  Terminal,
+  AlertTriangle
 } from 'lucide-react';
 
 export const InteractiveLessonModal: React.FC = () => {
@@ -262,59 +264,121 @@ export const InteractiveLessonModal: React.FC = () => {
   if (showTipCard && lesson.tip) {
     return (
       <div className="fixed inset-0 z-50 bg-[#121212] flex flex-col justify-between select-none animate-in fade-in duration-200">
-        <header className="w-full max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+        <header className="w-full max-w-2xl mx-auto px-6 py-4 flex items-center justify-between shrink-0">
           <button
             onClick={() => setIsLessonActive(false)}
-            className="text-[#898989] hover:text-white transition-colors p-1"
+            className="text-[#898989] hover:text-white transition-colors p-1.5 rounded-xl hover:bg-[#1f1f1f] cursor-pointer"
             aria-label="Tutup Pelajaran"
           >
             <X className="w-6 h-6" />
           </button>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-brand font-bold uppercase tracking-wider text-[#3ecf8e]">
-              {lesson.unitTitle || `Unit ${lesson.unitNumber}`}
-            </span>
-            <span className="text-xs text-[#898989]">• Modul {lesson.lessonOrder}</span>
-          </div>
           <div className="w-6" />
         </header>
 
-        <main className="flex-1 flex flex-col items-center justify-center max-w-xl w-full mx-auto px-6 py-4 overflow-y-auto">
-          <div className="w-full bg-[#171717] border-2 border-[#2e2e2e] rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-[#3ecf8e]/20 text-[#3ecf8e] flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(62,207,142,0.25)]">
-                <Sparkles className="w-6 h-6" />
-              </div>
+        <main className="flex-1 flex flex-col items-center justify-center max-w-2xl w-full mx-auto px-4 sm:px-6 py-2 overflow-hidden min-h-0">
+          <div className="w-full max-h-[calc(100vh-155px)] bg-[#171717] border-2 border-[#2e2e2e] rounded-3xl p-5 sm:p-7 shadow-2xl flex flex-col overflow-hidden">
+            {/* Scrollable Content Container */}
+            <div className="overflow-y-auto pr-1.5 sm:pr-2 space-y-6 flex-1 scroll-smooth">
+              {/* Title Section */}
               <div>
-                <span className="text-[11px] font-brand font-bold uppercase tracking-wider text-[#3ecf8e]">
-                  TIPS BELAJAR SEBELUM KUIS
-                </span>
-                <h2 className="text-xl sm:text-2xl font-brand font-extrabold text-white tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-brand font-black text-white tracking-tight">
                   {lesson.tip.title}
                 </h2>
+                <div className="h-1 w-12 bg-[#3ecf8e] rounded-full mt-2.5" />
               </div>
-            </div>
 
-            <p className="text-sm text-[#d4d4d4] leading-relaxed">
-              {lesson.tip.body}
-            </p>
+              {/* Main Body */}
+              <p className="text-sm sm:text-base text-[#d4d4d4] leading-relaxed">
+                {lesson.tip.body}
+              </p>
 
-            {lesson.tip.codeExample && (
-              <div className="bg-[#0e0e0e] border border-[#2e2e2e] rounded-2xl p-4 font-mono text-sm shadow-inner">
-                <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-[#242424] text-[11px] text-[#898989]">
-                  <span className="w-2 h-2 rounded-full bg-[#3ecf8e]" />
-                  <span>contoh_kode.py</span>
+              {/* Primary Code Example Box with Simulated Terminal Output */}
+              {lesson.tip.codeExample && (
+                <div className="bg-[#0e0e0e] border border-[#2e2e2e] rounded-2xl overflow-hidden shadow-inner">
+                  <div className="flex items-center justify-between px-4 py-2.5 bg-[#141414] border-b border-[#242424] text-[11px] font-mono text-[#898989]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444]/80 inline-block" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#eab308]/80 inline-block" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#3ecf8e]/80 inline-block" />
+                      <span className="text-[#a3a3a3] ml-1">contoh_kode.py</span>
+                    </div>
+                    <span className="text-[10px] text-[#3ecf8e] uppercase font-bold tracking-wider">Python 3</span>
+                  </div>
+                  <div className="p-4 font-mono text-sm">
+                    <pre className="whitespace-pre-wrap leading-relaxed text-[#3ecf8e]">
+                      <code>{lesson.tip.codeExample}</code>
+                    </pre>
+                  </div>
+                  {lesson.tip.outputExample && (
+                    <div className="border-t border-[#222222] bg-[#090909] px-4 py-3 font-mono text-xs">
+                      <div className="text-[10px] uppercase font-bold text-[#898989] mb-1.5 flex items-center gap-1.5">
+                        <Terminal className="w-3.5 h-3.5 text-[#3ecf8e]" />
+                        <span>Hasil Output Terminal:</span>
+                      </div>
+                      <pre className="text-[#e2e8f0] whitespace-pre-wrap leading-relaxed">
+                        <code>{lesson.tip.outputExample}</code>
+                      </pre>
+                    </div>
+                  )}
                 </div>
-                <pre className="whitespace-pre-wrap leading-relaxed text-[#3ecf8e]">
-                  <code>{lesson.tip.codeExample}</code>
-                </pre>
-              </div>
-            )}
+              )}
+
+              {/* Detailed Explanation Breakdown Sections */}
+              {lesson.tip.sections && lesson.tip.sections.length > 0 && (
+                <div className="space-y-4 pt-1">
+                  {lesson.tip.sections.map((sec, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-[#1c1b1b] border border-[#2a2a2a] rounded-2xl p-4 sm:p-5 space-y-3"
+                    >
+                      <h3 className="text-sm sm:text-base font-brand font-bold text-[#fafafa] flex items-center gap-2.5">
+                        <span className="w-6 h-6 rounded-lg bg-[#3ecf8e]/15 text-[#3ecf8e] text-xs font-mono font-bold flex items-center justify-center shrink-0">
+                          {idx + 1}
+                        </span>
+                        <span>{sec.heading}</span>
+                      </h3>
+                      <p className="text-xs sm:text-sm text-[#b4b4b4] leading-relaxed">
+                        {sec.explanation}
+                      </p>
+
+                      {sec.codeSnippet && (
+                        <div className="bg-[#0e0e0e] border border-[#282828] rounded-xl p-3 font-mono text-xs shadow-inner">
+                          <pre className="whitespace-pre-wrap text-[#3ecf8e] leading-relaxed">
+                            <code>{sec.codeSnippet}</code>
+                          </pre>
+                          {sec.outputSnippet && (
+                            <div className="mt-2 pt-2 border-t border-[#222] text-[#898989] flex items-start gap-1.5 text-[11px]">
+                              <span className="text-[#3ecf8e] font-bold">»</span>
+                              <span className="text-[#d4d4d4]">{sec.outputSnippet}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Catatan Penting & Kesalahan Umum (Important Pitfalls) */}
+              {lesson.tip.notes && lesson.tip.notes.length > 0 && (
+                <div className="bg-[#ef4444]/10 border border-[#ef4444]/25 rounded-2xl p-4 sm:p-5 space-y-2.5">
+                  <div className="flex items-center gap-2 text-sm font-brand font-bold text-[#f87171]">
+                    <AlertTriangle className="w-4 h-4 shrink-0 text-[#ef4444]" />
+                    <span>Catatan Penting & Kesalahan Umum:</span>
+                  </div>
+                  <ul className="space-y-2 text-xs sm:text-sm text-[#d4d4d4] list-disc list-inside leading-relaxed pl-1">
+                    {lesson.tip.notes.map((note, nIdx) => (
+                      <li key={nIdx}>{note}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </main>
 
-        <footer className="w-full border-t border-[#2e2e2e] bg-[#121212] py-5 px-6">
-          <div className="max-w-xl mx-auto flex justify-end">
+        <footer className="w-full border-t border-[#2e2e2e] bg-[#121212] py-4 sm:py-5 px-6 shrink-0">
+          <div className="max-w-2xl mx-auto flex justify-end">
             <button
               onClick={() => {
                 playSound('click');
