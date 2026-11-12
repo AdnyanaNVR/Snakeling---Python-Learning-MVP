@@ -181,7 +181,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const saved = localStorage.getItem(STORAGE_KEY_USER);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (!parsed.avatarUrl || parsed.avatarUrl.includes('googleusercontent')) {
+        if (!parsed.avatarUrl) {
           parsed.avatarUrl = '/logo_snakepreview.png';
         }
         return parsed;
@@ -308,7 +308,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  const loadUserProgressFromSupabase = React.useCallback(async (userId: string, userEmail: string): Promise<{ profile: UserProfile; stats: UserStats }> => {
+  const loadUserProgressFromSupabase = React.useCallback(async (
+    userId: string,
+    userEmail: string,
+    userMetadata?: Record<string, any>
+  ): Promise<{ profile: UserProfile; stats: UserStats }> => {
     let profileData: any = null;
     let statsData: any = null;
     let progressData: any[] = [];
@@ -350,22 +354,55 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       lastActiveDate: statsData?.last_active_date || scoped?.lastActiveDate || getTodayStr()
     };
 
-    const username = profileData?.username || (userEmail.includes('@') ? userEmail.split('@')[0] : userEmail) || 'Siswa';
+    const googleAvatar = userMetadata?.avatar_url || userMetadata?.picture;
+    const googleName = userMetadata?.full_name || userMetadata?.name;
+    const rawUsername = profileData?.username || userMetadata?.user_name || (userEmail.includes('@') ? userEmail.split('@')[0] : userEmail) || 'Siswa';
+    const cleanUsername = rawUsername.replace(/\s+/g, '_').toLowerCase();
+
     const loadedProfile: UserProfile = {
       id: userId,
-      username,
-      displayName: profileData?.display_name || username,
+      username: profileData?.username || cleanUsername,
+      displayName: profileData?.display_name || googleName || profileData?.username || cleanUsername,
       email: userEmail,
-      avatarUrl: profileData?.avatar_url || '/logo_snakepreview.png',
+      avatarUrl: profileData?.avatar_url || googleAvatar || '/logo_snakepreview.png',
       isPro: Boolean(profileData?.is_pro),
       joinedDate: profileData?.created_at
         ? `Bergabung ${new Date(profileData.created_at).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}`
         : 'Bergabung 2025',
-      userCode: `SNK-${username.slice(0, 3).toUpperCase()}`
+      userCode: `SNK-${(profileData?.username || cleanUsername).slice(0, 3).toUpperCase()}`
     };
 
+    // Client-side fallback sync for Google users if profile row not present yet
+    if (isSupabaseConfigured && supabase) {
+      if (!profileData || (!profileData.avatar_url && googleAvatar)) {
+        supabase.from('profiles').upsert({
+          id: userId,
+          username: loadedProfile.username,
+          display_name: loadedProfile.displayName,
+          avatar_url: loadedProfile.avatarUrl,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' }).then(({ error }) => {
+          if (error) console.warn('Supabase sync profile info:', error.message);
+        });
+      }
+      if (!statsData) {
+        supabase.from('user_stats').upsert({
+          user_id: userId,
+          xp: loadedStats.xp,
+          gems: loadedStats.gems,
+          hearts: loadedStats.hearts,
+          max_hearts: loadedStats.maxHearts,
+          streak: loadedStats.streak,
+          streak_freeze_count: loadedStats.streakFreezeCount,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' }).then(({ error }) => {
+          if (error) console.warn('Supabase sync stats info:', error.message);
+        });
+      }
+    }
+
     return { profile: loadedProfile, stats: loadedStats };
-  }, []);
+  }, [isSupabaseConfigured]);
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) return;
@@ -374,10 +411,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        loadUserProgressFromSupabase(session.user.id, session.user.email || '').then(({ profile, stats: loadedStats }) => {
+        loadUserProgressFromSupabase(
+          session.user.id,
+          session.user.email || '',
+          session.user.user_metadata
+        ).then(({ profile, stats: loadedStats }) => {
           setUser(profile);
           setStats(loadedStats);
           saveScopedUserStats(session.user.id, loadedStats);
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(profile));
+          localStorage.setItem('snakeling_is_logged_in', 'true');
           setIsLoggedIn(true);
         });
       }
@@ -385,11 +428,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session?.user) {
-        loadUserProgressFromSupabase(session.user.id, session.user.email || '').then(({ profile, stats: loadedStats }) => {
+        loadUserProgressFromSupabase(
+          session.user.id,
+          session.user.email || '',
+          session.user.user_metadata
+        ).then(({ profile, stats: loadedStats }) => {
           setUser(profile);
           setStats(loadedStats);
           saveScopedUserStats(session.user.id, loadedStats);
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(profile));
+          localStorage.setItem('snakeling_is_logged_in', 'true');
           setIsLoggedIn(true);
+          setShowLoginModal(false);
+          setShowRegisterModal(false);
+          playSound('correct');
+          showToast(`Berhasil masuk! Selamat datang, ${profile.displayName}`);
         });
       } else if (event === 'SIGNED_OUT') {
         setIsLoggedIn(false);

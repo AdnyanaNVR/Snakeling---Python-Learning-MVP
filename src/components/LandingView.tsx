@@ -155,23 +155,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onEnterApp }) => {
           </div>
         </div>
       </main>
-
-      {/* Minimal Footer with Air Space */}
-      <footer className="relative w-full border-t border-[#2e2e2e]/60 bg-[#0e0e0e] shrink-0 z-10 py-3 sm:py-4">
-        <div className="max-w-[1240px] mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#3ecf8e]" />
-            <p className="text-[#898989] font-medium text-[11px] sm:text-xs tracking-wider font-mono">
-              © 2025 snakeling • belajar coding python gratis &amp; seru
-            </p>
-          </div>
-          <div className="flex items-center gap-6 font-mono text-[11px] sm:text-xs text-[#898989]">
-            <button onClick={handleStart} className="hover:text-[#3ecf8e] transition cursor-pointer">modul</button>
-            <button onClick={handleStart} className="hover:text-[#3ecf8e] transition cursor-pointer">komunitas</button>
-            <button onClick={handleStart} className="hover:text-[#3ecf8e] transition cursor-pointer">dokumentasi</button>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

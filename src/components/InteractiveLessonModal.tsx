@@ -452,7 +452,7 @@ export const InteractiveLessonModal: React.FC = () => {
           </div>
         </main>
 
-        <footer className="w-full border-t border-[#2e2e2e] bg-[#121212] py-4 sm:py-5 px-6 shrink-0">
+        <div className="w-full border-t border-[#2e2e2e] bg-[#121212] py-4 sm:py-5 px-6 shrink-0">
           <div className="max-w-2xl mx-auto flex justify-end">
             <button
               onClick={() => {
@@ -465,7 +465,7 @@ export const InteractiveLessonModal: React.FC = () => {
               <ArrowRight className="w-4 h-4 stroke-[2.8]" />
             </button>
           </div>
-        </footer>
+        </div>
       </div>
     );
   }
@@ -844,7 +844,7 @@ export const InteractiveLessonModal: React.FC = () => {
       </main>
 
       {/* Bottom Verification Drawer */}
-      <footer
+      <div
         className={`w-full border-t transition-colors duration-200 py-5 px-6 ${
           !isAnswerChecked
             ? 'bg-[#121212] border-[#2e2e2e]'
@@ -901,7 +901,7 @@ export const InteractiveLessonModal: React.FC = () => {
             {isAnswerChecked ? 'LANJUTKAN' : 'PERIKSA'}
           </button>
         </div>
-      </footer>
+      </div>
 
       {/* Exit Confirmation Modal */}
       {showExitConfirm && (
