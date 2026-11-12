@@ -1,0 +1,201 @@
+{
+  "id": "module-07",
+  "unit": 3,
+  "unitTitle": "Unit 3: Operator Python",
+  "moduleNumber": 7,
+  "title": "Operator Aritmatika & Penugasan",
+  "subtitle": "Operasi matematika dasar (+, -, *, /, //, %, **) dan penugasan ringkas",
+  "xpReward": 40,
+  "gemReward": 20,
+  "tip": {
+    "title": "Operator Aritmatika & Penugasan di Python",
+    "body": "Python menyediakan operator aritmatika lengkap: penjumlahan (+), pengurangan (-), perkalian (*), pembagian (/), pembagian bulat (//), modulus sisa bagi (%), dan perpangkatan (**). Operator penugasan ringkas seperti += dan -= mempermudah pembaruan nilai variabel.",
+    "codeExample": "a = 10\nb = 3\nprint('Bagi Bulat:', a // b)\nprint('Sisa Bagi:', a % b)\nprint('Pangkat:', a ** 2)",
+    "outputExample": "Bagi Bulat: 3\nSisa Bagi: 1\nPangkat: 100",
+    "sections": [
+      {
+        "heading": "Pembagian Bulat (//) vs Pembagian Standar (/)",
+        "explanation": "Operator / menghasilkan float riil. Sedangkan operator // (floor division) memotong hasil ke bilangan bulat terdekat ke bawah.",
+        "codeSnippet": "print(7 / 2)\nprint(7 // 2)",
+        "outputSnippet": "3.5\n3"
+      },
+      {
+        "heading": "Modulus (%): Sisa Bagi",
+        "explanation": "Operator % menghasilkan sisa pembagian. Sangat sering digunakan untuk mengecek bilangan ganjil atau genap (jika n % 2 == 0 maka genap).",
+        "codeSnippet": "print(10 % 3)\nprint(8 % 2)",
+        "outputSnippet": "1\n0"
+      },
+      {
+        "heading": "Pangkat (**)",
+        "explanation": "Di Python, perpangkatan menggunakan dua tanda bintang (**), bukan tanda caret (^).",
+        "codeSnippet": "print(2 ** 3)  # 2 pangkat 3",
+        "outputSnippet": "8"
+      },
+      {
+        "heading": "Operator Penugasan Gabungan (+=, -=, *=)",
+        "explanation": "Sintaks `x += 5` adalah singkatan dari `x = x + 5`. Ini menghemat penulisan dan membuat kode lebih ringkas.",
+        "codeSnippet": "skor = 10\nskor += 5\nprint(skor)",
+        "outputSnippet": "15"
+      },
+      {
+        "heading": "Ringkasan",
+        "explanation": "Gunakan // untuk bagi bulat, % untuk sisa bagi, ** untuk pangkat, dan += untuk menambah nilai secara langsung.",
+        "codeSnippet": "x = 5\nx *= 2\nprint(x)",
+        "outputSnippet": "10"
+      }
+    ],
+    "notes": [
+      "Tanda ^ di Python adalah operator bitwise XOR, BUKAN operator pangkat matematika.",
+      "Pembagian dengan angka 0 (seperti 10 / 0) memicu ZeroDivisionError.",
+      "Urutan operasi mengikuti aturan matematika standar (PEMDAS: Kurung, Pangkat, Kali/Bagi, Tambah/Kurang)."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m07_q01",
+      "type": "mc",
+      "prompt": "Simbol operator apakah yang digunakan untuk menghitung sisa hasil bagi (modulus) di Python?",
+      "code": "",
+      "options": [
+        "% (persen)",
+        "// (garis miring ganda)",
+        "** (bintang ganda)",
+        "mod"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '%' digunakan untuk menghitung nilai sisa bagi dari dua bilangan."
+    },
+    {
+      "id": "m07_q02",
+      "type": "fb",
+      "prompt": "Lengkapi operator untuk menghitung perpangkatan 3 pangkat 2 (hasil: 9):",
+      "codeWithBlank": "hasil = 3 ___ 2",
+      "options": [
+        "**",
+        "^",
+        "*",
+        "pangkat"
+      ],
+      "acceptedAnswers": [
+        "**"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '**' adalah operator eksponensial (pangkat) di Python."
+    },
+    {
+      "id": "m07_q03",
+      "type": "mc",
+      "prompt": "Berapa hasil dari pembagian bulat `15 // 4` di Python?",
+      "code": "print(15 // 4)",
+      "options": [
+        "3",
+        "3.75",
+        "4",
+        "3.0"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '//' membulatkan hasil ke bawah, 15 dibagi 4 adalah 3.75 sehingga menjadi 3."
+    },
+    {
+      "id": "m07_q04",
+      "type": "fb",
+      "prompt": "Lengkapi operator penugasan ringkas agar nilai skor bertambah 10:",
+      "codeWithBlank": "skor ___ 10",
+      "options": [
+        "+=",
+        "=+",
+        "++",
+        "= 10"
+      ],
+      "acceptedAnswers": [
+        "+="
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '+=' menambahkan nilai operan kanan ke variabel di operan kiri."
+    },
+    {
+      "id": "m07_q05",
+      "type": "ro",
+      "prompt": "Susun baris perhitungan total harga kasir setelah diskon:",
+      "lines": [
+        "harga = 50000",
+        "diskon = 10000",
+        "harga -= diskon",
+        "print(harga)"
+      ],
+      "distractors": [],
+      "explanation": "Tentukan harga, tentukan diskon, kurangi harga dengan operator -=, lalu cetak hasil."
+    },
+    {
+      "id": "m07_q06",
+      "type": "sb",
+      "prompt": "Temukan baris kode yang memicu error pembagian dengan nol:",
+      "lines": [
+        "pembilang = 20",
+        "penyebut = 0",
+        "hasil = pembilang / penyebut"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "hasil = pembilang / (penyebut if penyebut != 0 else 1)",
+      "explanation": "Baris ke-3 memicu ZeroDivisionError karena bilangan tidak boleh dibagi 0."
+    },
+    {
+      "id": "m07_q07",
+      "type": "mc",
+      "prompt": "Berapa hasil dari ekspresi `2 + 3 * 4` di Python?",
+      "code": "print(2 + 3 * 4)",
+      "options": [
+        "14",
+        "20",
+        "24",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Perkalian memiliki prioritas lebih tinggi daripada penjumlahan: (3 * 4) = 12, lalu + 2 = 14."
+    },
+    {
+      "id": "m07_q08",
+      "type": "fb",
+      "prompt": "Lengkapi operator pembagian bulat:",
+      "codeWithBlank": "hasil = 20 ___ 6",
+      "options": [
+        "//",
+        "/",
+        "%",
+        "div"
+      ],
+      "acceptedAnswers": [
+        "//"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '//' menghasilkan bagian bulat dari pembagian."
+    },
+    {
+      "id": "m07_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam menulis operator pangkat:",
+      "lines": [
+        "basis = 5",
+        "pangkat = basis ^ 2",
+        "print(pangkat)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "pangkat = basis ** 2",
+      "explanation": "Tanda '^' di Python adalah operator bitwise XOR. Gunakan '**' untuk menghitung pangkat."
+    },
+    {
+      "id": "m07_q10",
+      "type": "mc",
+      "prompt": "Apa hasil dari `17 % 5`?",
+      "code": "print(17 % 5)",
+      "options": [
+        "2",
+        "3",
+        "3.4",
+        "1"
+      ],
+      "answerIndex": 0,
+      "explanation": "17 dibagi 5 adalah 3 dengan sisa 2 (3 * 5 + 2 = 17)."
+    }
+  ]
+}

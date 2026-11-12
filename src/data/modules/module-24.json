@@ -1,0 +1,198 @@
+{
+  "id": "module-24",
+  "unit": 12,
+  "unitTitle": "Unit 12: OOP & Python Lanjutan",
+  "moduleNumber": 24,
+  "title": "OOP Dasar & List Comprehension",
+  "subtitle": "Membuat Class, Object, method __init__, dan sintaks ringkas comprehension",
+  "xpReward": 60,
+  "gemReward": 35,
+  "tip": {
+    "title": "Pemrograman Berorientasi Objek & List Comprehension",
+    "body": "OOP (Object-Oriented Programming) memodelkan dunia nyata ke dalam kode menggunakan 'Class' (cetak biru / blueprint) dan 'Object' (wujud nyata dari class). Di modul ini Anda juga mempelajari List Comprehension, yaitu cara ringkas dan elegan membuat list baru hanya dalam satu baris kode.",
+    "codeExample": "class Pemain:\n    def __init__(self, nama, skor=0):\n        self.nama = nama\n        self.skor = skor\n\np1 = Pemain('Adnyana', 100)\nprint(f'{p1.nama} memiliki skor {p1.skor}')\n\n# List Comprehension\nkuadrat = [x**2 for x in range(1, 4)]\nprint('Kuadrat:', kuadrat)",
+    "outputExample": "Adnyana memiliki skor 100\nKuadrat: [1, 4, 9]",
+    "sections": [
+      {
+        "heading": "Mendefinisikan Class & Konstruktor __init__",
+        "explanation": "Class dibuat dengan kata kunci 'class'. Metode spesial __init__ otomatis berjalan saat objek pertama kali diciptakan (konstruktor) untuk menginisialisasi atribut objek.",
+        "codeSnippet": "class Kopi:\n    def __init__(self, nama, harga):\n        self.nama = nama\n        self.harga = harga\n\nk = Kopi('Latte', 20000)\nprint(k.nama, k.harga)",
+        "outputSnippet": "Latte 20000"
+      },
+      {
+        "heading": "Parameter 'self'",
+        "explanation": "Parameter pertama dari setiap method di dalam class wajib bernama 'self', yang mewakili instance objek itu sendiri.",
+        "codeSnippet": "class Hewan:\n    def bersuara(self):\n        print('Meow!')\nh = Hewan()\nh.bersuara()",
+        "outputSnippet": "Meow!"
+      },
+      {
+        "heading": "List Comprehension: Satu Baris Elegan",
+        "explanation": "Formatnya: `[ekspresi for item in koleksi if kondisi]`. Menggantikan for loop 4 baris menjadi 1 baris ekspresif.",
+        "codeSnippet": "angka = [1, 2, 3, 4, 5]\ngenap = [x for x in angka if x % 2 == 0]\nprint(genap)",
+        "outputSnippet": "[2, 4]"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Dalam game RPG, kita membuat blueprint `class Karakter` dengan atribut darah (hp) dan method serang(). Setiap monster yang muncul di layar adalah object turunan dari class tersebut.",
+        "codeSnippet": "class Karakter:\n    def __init__(self, nama):\n        self.nama = nama\n        self.hp = 100\nhero = Karakter('Satria')\nprint(f'{hero.nama} siap bertarung! HP: {hero.hp}')",
+        "outputSnippet": "Satria siap bertarung! HP: 100"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Class membuat tipe data kustom ber-atribut dan method. List comprehension membuat list baru secara ringkas.",
+        "codeSnippet": "print('OOP & Lanjutan siap!')",
+        "outputSnippet": "OOP & Lanjutan siap!"
+      }
+    ],
+    "notes": [
+      "Nama class dianjurkan menggunakan PascalCase (huruf pertama setiap kata kapital, misal: 'AkunBank').",
+      "Konstruktor __init__ memiliki dua garis bawah sebelum dan sesudah kata init (dunder method).",
+      "Jangan menyalahgunakan list comprehension jika logikanya terlalu rumit; gunakan for loop biasa demi keterbacaan kode."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m24_q01",
+      "type": "mc",
+      "prompt": "Kata kunci apakah yang digunakan untuk membuat blueprint Class baru di Python?",
+      "code": "",
+      "options": [
+        "class",
+        "struct",
+        "object",
+        "blueprint"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, kelas dibuat dengan kata kunci 'class'."
+    },
+    {
+      "id": "m24_q02",
+      "type": "fb",
+      "prompt": "Lengkapi nama metode konstruktor spesial yang otomatis dipanggil saat objek dibuat:",
+      "codeWithBlank": "def ___init___(self, nama):\n    self.nama = nama",
+      "options": [
+        "__",
+        "_",
+        "$",
+        "dunder"
+      ],
+      "acceptedAnswers": [
+        "__"
+      ],
+      "answerIndex": 0,
+      "explanation": "Konstruktor diawali dan diakhiri dengan dua garis bawah ganda: '__init__'."
+    },
+    {
+      "id": "m24_q03",
+      "type": "sb",
+      "prompt": "Temukan baris yang lupa menyertakan parameter 'self' pada method class:",
+      "lines": [
+        "class Mobil:",
+        "    def klakson():",
+        "        print('Tin tin!')"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "    def klakson(self):",
+      "explanation": "Method instance pada class Python wajib menerima parameter pertama 'self'."
+    },
+    {
+      "id": "m24_q04",
+      "type": "mc",
+      "prompt": "Apa hasil dari list comprehension berikut?",
+      "code": "hasil = [x * 2 for x in [1, 2, 3]]\nprint(hasil)",
+      "options": [
+        "[2, 4, 6]",
+        "[1, 2, 3, 1, 2, 3]",
+        "[2, 2, 2]",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Setiap elemen dikalikan 2: 1*2=2, 2*2=4, 3*2=6, menghasilkan [2, 4, 6]."
+    },
+    {
+      "id": "m24_q05",
+      "type": "ro",
+      "prompt": "Susun pembuatan class Mahasiswa dan instansiasi objeknya:",
+      "lines": [
+        "class Mahasiswa:",
+        "    def __init__(self, nama):",
+        "        self.nama = nama",
+        "mhs = Mahasiswa('Rizky')",
+        "print(mhs.nama)"
+      ],
+      "distractors": [],
+      "explanation": "Buat class dengan konstruktor __init__, inisialisasi objek 'mhs', lalu cetak atribut namanya."
+    },
+    {
+      "id": "m24_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam menuliskan konstruktor __init__:",
+      "lines": [
+        "class Siswa:",
+        "    def _init_(self, nama):",
+        "        self.nama = nama"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "    def __init__(self, nama):",
+      "explanation": "Konstruktor resmi Python menggunakan dua garis bawah ganda '__init__', bukan satu garis bawah."
+    },
+    {
+      "id": "m24_q07",
+      "type": "mc",
+      "prompt": "Apa yang diwakili oleh kata kunci `self` di dalam method Class Python?",
+      "code": "",
+      "options": [
+        "Merujuk ke instance objek saat ini yang sedang dipanggil",
+        "Merujuk ke modul Python global",
+        "Merujuk ke class induk (parent class)",
+        "Kata kunci untuk membuat variabel statis"
+      ],
+      "answerIndex": 0,
+      "explanation": "'self' merujuk ke instance spesifik dari objek yang sedang menjalankan method tersebut."
+    },
+    {
+      "id": "m24_q08",
+      "type": "fb",
+      "prompt": "Lengkapi sintaks list comprehension untuk mengambil angka kuadrat:",
+      "codeWithBlank": "kuadrat = [x ** 2 ___ x in range(3)]",
+      "options": [
+        "for",
+        "in",
+        "loop",
+        "each"
+      ],
+      "acceptedAnswers": [
+        "for"
+      ],
+      "answerIndex": 0,
+      "explanation": "List comprehension menggunakan sintaks [ekspresi for item in koleksi]."
+    },
+    {
+      "id": "m24_q09",
+      "type": "ro",
+      "prompt": "Susun list comprehension pemfilter angka genap:",
+      "lines": [
+        "angka = [1, 2, 3, 4, 5, 6]",
+        "genap = [n for n in angka if n % 2 == 0]",
+        "print(genap)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan list sumber, gunakan list comprehension dengan filter if, lalu cetak hasilnya."
+    },
+    {
+      "id": "m24_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam mengakses atribut objek:",
+      "lines": [
+        "class Akun:",
+        "    def __init__(self, saldo):",
+        "        self.saldo = saldo",
+        "user = Akun(50000)",
+        "print(user['saldo'])"
+      ],
+      "buggyLineIndex": 4,
+      "fixedLine": "print(user.saldo)",
+      "explanation": "Atribut objek diakses menggunakan tanda titik 'user.saldo', bukan kurung siku seperti dictionary."
+    }
+  ]
+}

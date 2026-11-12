@@ -193,36 +193,60 @@ export const LearningMap: React.FC = () => {
   const dyStep = 74; // Generous vertical step matching enlarged tile proportion
 
   const tileMetaData = [
-    // UNIT 1 (Steps 1 to 11)
+    // UNIT 1: DASAR PYTHON
     { id: 1, unit: 1, stepNumber: 1, lessonId: 'module-01', title: 'Hello World & print', iconType: 'king' },
-    { id: 2, unit: 1, stepNumber: 2, lessonId: 'unit1_lesson2', title: 'Variabel & Tipe String', iconType: 'queen' },
-    { id: 3, unit: 1, stepNumber: 3, lessonId: 'unit1_lesson3', title: 'Penggabungan String', iconType: 'rook' },
-    { id: 4, unit: 1, stepNumber: 4, lessonId: 'unit1_lesson4', title: 'Aritmatika Dasar Minuman', iconType: 'bishop' },
-    { id: 5, unit: 1, stepNumber: 5, lessonId: 'unit1_lesson5', title: 'Input Pengguna', iconType: 'knight' },
-    { id: 6, unit: 1, stepNumber: 6, lessonId: 'unit1_lesson6', title: 'Latihan Praktik Terminal', iconType: 'pawn' },
-    { id: 7, unit: 1, stepNumber: 7, lessonId: 'unit1_lesson7', title: 'Format Teks f-string', iconType: 'pawn' },
-    { id: 8, unit: 1, stepNumber: 8, lessonId: 'unit1_lesson8', title: 'Logika Boolean', iconType: 'plus' },
-    { id: 9, unit: 1, stepNumber: 9, lessonId: 'unit1_lesson9', title: 'Review Cepat Sintaks', iconType: 'lightning' },
-    { id: 10, unit: 1, stepNumber: 10, lessonId: 'unit1_lesson10', title: 'Tantangan Mini Game', iconType: 'hash' },
-    { id: 11, unit: 1, stepNumber: 11, lessonId: 'unit1_lesson11', title: 'Ujian Sertifikasi Unit 1', iconType: 'castling' },
+    { id: 2, unit: 1, stepNumber: 2, lessonId: 'module-02', title: 'Sintaks & Komentar (#)', iconType: 'queen' },
+    { id: 3, unit: 1, stepNumber: 3, lessonId: 'module-03', title: 'Variabel & Penamaan', iconType: 'rook' },
 
-    // UNIT 2 (Steps 12 to 18)
-    { id: 12, unit: 2, stepNumber: 12, lessonId: 'unit2_lesson1', title: 'Kondisi if & Logika Dasar', iconType: 'graduation' },
-    { id: 13, unit: 2, stepNumber: 13, lessonId: 'unit2_lesson2', title: 'Percabangan else & Alternatif', iconType: 'king' },
-    { id: 14, unit: 2, stepNumber: 14, lessonId: 'unit2_lesson3', title: 'Kondisi Majemuk elif', iconType: 'queen' },
-    { id: 15, unit: 2, stepNumber: 15, lessonId: 'unit2_lesson4', title: 'Operator Logika and & or', iconType: 'bishop' },
-    { id: 16, unit: 2, stepNumber: 16, lessonId: 'unit2_lesson5', title: 'Nested if (Kondisi Bersarang)', iconType: 'knight' },
-    { id: 17, unit: 2, stepNumber: 17, lessonId: 'unit2_lesson6', title: 'Studi Kasus Menu Restoran', iconType: 'pawn' },
-    { id: 18, unit: 2, stepNumber: 18, lessonId: 'unit2_lesson7', title: 'Evaluasi Akhir Unit 2', iconType: 'rook' },
+    // UNIT 2: TIPE DATA
+    { id: 4, unit: 2, stepNumber: 4, lessonId: 'module-04', title: 'Integer & Float', iconType: 'bishop' },
+    { id: 5, unit: 2, stepNumber: 5, lessonId: 'module-05', title: 'String & Boolean', iconType: 'knight' },
+    { id: 6, unit: 2, stepNumber: 6, lessonId: 'module-06', title: 'type() & Konversi Data', iconType: 'pawn' },
 
-    // UNIT 3 (Steps 19 to 25)
-    { id: 19, unit: 3, stepNumber: 19, lessonId: 'unit3_lesson1', title: 'Mengenal List Python []', iconType: 'brackets' },
-    { id: 20, unit: 3, stepNumber: 20, lessonId: 'unit3_lesson2', title: 'Indeks & Mengakses Elemen', iconType: 'hash' },
-    { id: 21, unit: 3, stepNumber: 21, lessonId: 'unit3_lesson3', title: 'Menambah Data: append()', iconType: 'plus' },
-    { id: 22, unit: 3, stepNumber: 22, lessonId: 'unit3_lesson4', title: 'Menghapus Data: remove()', iconType: 'knight' },
-    { id: 23, unit: 3, stepNumber: 23, lessonId: 'unit3_lesson5', title: 'Panjang List dengan len()', iconType: 'bishop' },
-    { id: 24, unit: 3, stepNumber: 24, lessonId: 'unit3_lesson6', title: 'Slicing & Potong List', iconType: 'queen' },
-    { id: 25, unit: 3, stepNumber: 25, lessonId: 'unit3_lesson7', title: 'Master Sertifikasi List', iconType: 'king' }
+    // UNIT 3: OPERATOR PYTHON
+    { id: 7, unit: 3, stepNumber: 7, lessonId: 'module-07', title: 'Operator Aritmatika', iconType: 'plus' },
+    { id: 8, unit: 3, stepNumber: 8, lessonId: 'module-08', title: 'Perbandingan & Logika', iconType: 'lightning' },
+
+    // UNIT 4: INPUT & OUTPUT
+    { id: 9, unit: 4, stepNumber: 9, lessonId: 'module-09', title: 'Input Pengguna input()', iconType: 'hash' },
+    { id: 10, unit: 4, stepNumber: 10, lessonId: 'module-10', title: 'Format Teks f-string', iconType: 'castling' },
+
+    // MILESTONE 1: EVALUASI SERTIFIKASI TINGKAT DASAR
+    { id: 11, unit: 4, stepNumber: 11, lessonId: 'module-11', title: 'Ujian Sertifikasi Dasar', iconType: 'graduation' },
+
+    // UNIT 5: PERCABANGAN
+    { id: 12, unit: 5, stepNumber: 12, lessonId: 'module-12', title: 'Kondisi if & else', iconType: 'king' },
+    { id: 13, unit: 5, stepNumber: 13, lessonId: 'module-13', title: 'Kondisi elif & Nested', iconType: 'queen' },
+
+    // UNIT 6: PERULANGAN
+    { id: 14, unit: 6, stepNumber: 14, lessonId: 'module-14', title: 'For Loop & range()', iconType: 'bishop' },
+    { id: 15, unit: 6, stepNumber: 15, lessonId: 'module-15', title: 'While, break, continue', iconType: 'knight' },
+
+    // UNIT 7: STRUKTUR DATA
+    { id: 16, unit: 7, stepNumber: 16, lessonId: 'module-16', title: 'List & Indeks Elemen', iconType: 'brackets' },
+    { id: 17, unit: 7, stepNumber: 17, lessonId: 'module-17', title: 'Manipulasi List Methods', iconType: 'plus' },
+    { id: 18, unit: 7, stepNumber: 18, lessonId: 'module-18', title: 'Dictionary, Tuple, Set', iconType: 'hash' },
+
+    // UNIT 8: MANIPULASI STRING
+    { id: 19, unit: 8, stepNumber: 19, lessonId: 'module-19', title: 'String Slicing & Methods', iconType: 'pawn' },
+
+    // MILESTONE 2: TANTANGAN STRUKTUR DATA & ALGORITMA
+    { id: 20, unit: 8, stepNumber: 20, lessonId: 'module-20', title: 'Tantangan Algoritma', iconType: 'graduation' },
+
+    // UNIT 9: FUNCTION
+    { id: 21, unit: 9, stepNumber: 21, lessonId: 'module-21', title: 'Function: def & return', iconType: 'rook' },
+
+    // UNIT 10: ERROR HANDLING
+    { id: 22, unit: 10, stepNumber: 22, lessonId: 'module-22', title: 'try, except, finally', iconType: 'lightning' },
+
+    // UNIT 11: FILE HANDLING
+    { id: 23, unit: 11, stepNumber: 23, lessonId: 'module-23', title: 'File Handling: with open', iconType: 'castling' },
+
+    // UNIT 12 & 13: OOP & PYTHON LANJUTAN
+    { id: 24, unit: 12, stepNumber: 24, lessonId: 'module-24', title: 'OOP & Comprehension', iconType: 'queen' },
+
+    // UNIT 14: PRAKTIK PROYEK & KELULUSAN
+    { id: 25, unit: 14, stepNumber: 25, lessonId: 'module-25', title: 'Kelulusan Python Master', iconType: 'king' }
   ];
 
   const isLessonCompleted = (lId: string) => {
@@ -448,7 +472,7 @@ export const LearningMap: React.FC = () => {
                 .map((tile) => {
                   const { id, cx, cy, status, iconType } = tile;
                   const isCompleted = status === 'completed';
-                  const isRoundMilestone = tile.id === 12; // Special round dais for Unit 2 milestone
+                  const isRoundMilestone = tile.id === 11 || tile.id === 20 || tile.id === 25;
 
                   if (isRoundMilestone) {
                     return (

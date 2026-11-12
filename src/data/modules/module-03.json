@@ -1,0 +1,170 @@
+{
+  "id": "module-03",
+  "unit": 1,
+  "unitTitle": "Unit 1: Dasar Python",
+  "moduleNumber": 3,
+  "title": "Variabel & Aturan Penamaan",
+  "subtitle": "Menyimpan nilai ke dalam memori komputer dengan variabel",
+  "xpReward": 35,
+  "gemReward": 15,
+  "tip": {
+    "title": "Variabel & Penamaan di Python",
+    "body": "Variabel adalah wadah penyimpanan di memori komputer yang diberi nama untuk menyimpan data. Di Python, Anda tidak perlu mendeklarasikan tipe data secara eksplisit; variabel langsung tercipta saat pertama kali Anda memberinya nilai menggunakan operator sama dengan (=).",
+    "codeExample": "nama_siswa = 'Adnyana'\numur = 20\ntinggi_cm = 175.5\nprint(nama_siswa, umur, tinggi_cm)",
+    "outputExample": "Adnyana 20 175.5",
+    "sections": [
+      {
+        "heading": "Aturan Wajib Penamaan Variabel",
+        "explanation": "1. Harus diawali huruf (a-z, A-Z) atau garis bawah (_). 2. Tidak boleh diawali angka (contoh: 1nama salah, nama1 benar). 3. Hanya boleh memuat karakter alfanumerik dan garis bawah. 4. Tidak boleh mengandung spasi atau tanda hubung (-).",
+        "codeSnippet": "skor_pemain = 100   # Benar\n_level = 2          # Benar\n# 2pemain = 10      # Salah! SyntaxError",
+        "outputSnippet": "skor_pemain = 100"
+      },
+      {
+        "heading": "Konvensi snake_case",
+        "explanation": "Komunitas Python menggunakan konvensi snake_case, yaitu huruf kecil semua dengan pemisah garis bawah (_) untuk nama variabel yang terdiri dari lebih dari satu kata.",
+        "codeSnippet": "total_harga_belanja = 50000\nprint(total_harga_belanja)",
+        "outputSnippet": "50000"
+      },
+      {
+        "heading": "Sifat Case-Sensitive & Kata Kunci Terlarang",
+        "explanation": "Variabel 'total', 'Total', dan 'TOTAL' adalah tiga variabel yang berbeda. Anda juga dilarang memakai kata kunci bawaan Python (seperti if, for, while, print, class) sebagai nama variabel.",
+        "codeSnippet": "poin = 10\nPoin = 20\nprint(poin, Poin)",
+        "outputSnippet": "10 20"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Bayangkan sebuah kotak label di gudang. Nama variabel adalah label di bagian luar kotak (misal: 'sepatu_olahraga'), sedangkan nilai di dalamnya adalah isi kotak tersebut. Anda dapat mengganti isi kotak kapan saja.",
+        "codeSnippet": "pesanan = 'Kopi Hitam'\npesanan = 'Kopi Susu'  # Nilai diperbarui\nprint(pesanan)",
+        "outputSnippet": "Kopi Susu"
+      },
+      {
+        "heading": "Ringkasan",
+        "explanation": "Variabel dibuat dengan format `nama_variabel = nilai`. Nama variabel tidak boleh diawali angka dan tidak boleh menggunakan spasi.",
+        "codeSnippet": "status_aktif = True\nprint('Aktif:', status_aktif)",
+        "outputSnippet": "Aktif: True"
+      }
+    ],
+    "notes": [
+      "Jangan gunakan kata kunci seperti 'def', 'class', atau 'return' sebagai nama variabel.",
+      "Gunakan nama variabel yang deskriptif dan bermakna agar kode mudah dipahami orang lain.",
+      "Nilai variabel bersifat dinamis dan dapat diubah kapan saja di tengah alur program."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m03_q01",
+      "type": "mc",
+      "prompt": "Manakah nama variabel yang TIDAK valid di Python?",
+      "code": "",
+      "options": [
+        "3_buku",
+        "nama_siswa",
+        "_total",
+        "hargaBarang"
+      ],
+      "answerIndex": 0,
+      "explanation": "Nama variabel di Python tidak boleh diawali dengan angka. '3_buku' memicu SyntaxError."
+    },
+    {
+      "id": "m03_q02",
+      "type": "fb",
+      "prompt": "Lengkapi operator penugasan untuk menyimpan angka 50 ke variabel nilai:",
+      "codeWithBlank": "nilai ___ 50",
+      "options": [
+        "=",
+        "==",
+        "->",
+        ":="
+      ],
+      "acceptedAnswers": [
+        "="
+      ],
+      "answerIndex": 0,
+      "explanation": "Gunakan operator tunggal '=' untuk menetapkan (assign) nilai ke variabel."
+    },
+    {
+      "id": "m03_q03",
+      "type": "ro",
+      "prompt": "Susun baris kode berikut untuk membuat variabel skor lalu memperbarui nilainya:",
+      "lines": [
+        "skor = 10",
+        "skor = 25",
+        "print(skor)"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi variabel pertama kali, ubah nilainya, lalu cetak nilai terbarunya."
+    },
+    {
+      "id": "m03_q04",
+      "type": "sb",
+      "prompt": "Temukan satu baris kode di bawah ini yang memuat kesalahan penamaan variabel:",
+      "lines": [
+        "nama_depan = 'Budi'",
+        "1total_skor = 100",
+        "print(nama_depan)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "total_skor_1 = 100",
+      "explanation": "Baris ke-2 diawali angka '1', padahal nama variabel Python tidak boleh dimulai dengan angka."
+    },
+    {
+      "id": "m03_q05",
+      "type": "mc",
+      "prompt": "Apa gaya penulisan penamaan variabel multi-kata yang paling disarankan oleh PEP 8 di Python?",
+      "code": "",
+      "options": [
+        "snake_case (huruf kecil dengan garis bawah)",
+        "camelCase (huruf kedua kapital)",
+        "kebab-case (dipisah tanda hubung)",
+        "PASCAL_CASE (huruf besar semua)"
+      ],
+      "answerIndex": 0,
+      "explanation": "Standar resmi PEP 8 Python menganjurkan konvensi snake_case (contoh: 'nama_pengguna')."
+    },
+    {
+      "id": "m03_q06",
+      "type": "fb",
+      "prompt": "Lengkapi pembuatan variabel string berikut dengan teks 'Aktif':",
+      "codeWithBlank": "status_akun = ___",
+      "options": [
+        "'Aktif'",
+        "Aktif",
+        "(Aktif)",
+        "[Aktif]"
+      ],
+      "acceptedAnswers": [
+        "'Aktif'",
+        "\"Aktif\""
+      ],
+      "answerIndex": 0,
+      "explanation": "Data teks (string) harus selalu diapit dengan tanda kutip."
+    },
+    {
+      "id": "m03_q07",
+      "type": "ro",
+      "prompt": "Susun baris kode berikut agar variabel didefinisikan sebelum dipakai dalam operasi cetak:",
+      "lines": [
+        "harga = 15000",
+        "jumlah = 3",
+        "total = harga * jumlah",
+        "print(total)"
+      ],
+      "distractors": [],
+      "explanation": "Variabel harga dan jumlah harus dibuat sebelum total dihitung dan dicetak."
+    },
+    {
+      "id": "m03_q08",
+      "type": "mc",
+      "prompt": "Jika `x = 5` lalu di baris berikutnya `x = 'Halo'`, apakah program Python akan error?",
+      "code": "x = 5\nx = 'Halo'\nprint(x)",
+      "options": [
+        "Tidak error, Python bersifat dinamis dan nilai x menjadi 'Halo'",
+        "Error, tipe variabel tidak boleh diubah setelah dibuat",
+        "Error, harus dideklarasikan ulang dengan kata kunci let",
+        "Hanya menghasilkan angka 5"
+      ],
+      "answerIndex": 0,
+      "explanation": "Python memiliki dynamic typing sehingga tipe dan nilai variabel dapat berubah secara bebas."
+    }
+  ]
+}

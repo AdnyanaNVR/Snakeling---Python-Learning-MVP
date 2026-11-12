@@ -1,0 +1,204 @@
+{
+  "id": "module-22",
+  "unit": 10,
+  "unitTitle": "Unit 10: Error Handling",
+  "moduleNumber": 22,
+  "title": "Penanganan Error: try, except, finally",
+  "subtitle": "Mencegah program crash dengan menangani pengecualian (Exception)",
+  "xpReward": 55,
+  "gemReward": 30,
+  "tip": {
+    "title": "Penanganan Error dengan try dan except",
+    "body": "Dalam dunia nyata, kesalahan tak terduga bisa terjadi kapan saja (misal pengguna mengetik huruf pada input angka, atau file yang dicari tidak ditemukan). Tanpa penanganan error, program akan langsung crash dan terhenti secara tiba-tiba. Blok 'try' dan 'except' memungkinkan program menangani error dengan anggun (gracefully).",
+    "codeExample": "try:\n    angka = int('bukan_angka')\nexcept ValueError:\n    print('Terjadi kesalahan: input harus angka bulat!')\nfinally:\n    print('Proses selesai.')",
+    "outputExample": "Terjadi kesalahan: input harus angka bulat!\nProses selesai.",
+    "sections": [
+      {
+        "heading": "Blok try dan except Dasar",
+        "explanation": "Letakkan kode yang berisiko memicu error di dalam blok try. Jika error terjadi, Python melompati sisa blok try dan mengeksekusi blok except.",
+        "codeSnippet": "try:\n    hasil = 10 / 0\nexcept ZeroDivisionError:\n    print('Tidak bisa membagi dengan angka nol!')",
+        "outputSnippet": "Tidak bisa membagi dengan angka nol!"
+      },
+      {
+        "heading": "Menangkap Jenis Error Spesifik",
+        "explanation": "Praktik terbaik industri adalah menangkap tipe Exception spesifik (seperti ValueError atau KeyError) daripada menangkap semua error secara membabi-buta.",
+        "codeSnippet": "try:\n    d = {'nama': 'Ani'}\n    print(d['umur'])\nexcept KeyError:\n    print('Data umur tidak ditemukan')",
+        "outputSnippet": "Data umur tidak ditemukan"
+      },
+      {
+        "heading": "Blok finally",
+        "explanation": "Blok finally SELALU dijalankan dalam kondisi apa pun, baik saat blok try berhasil tanpa masalah maupun saat terjadi error. Sangat berguna untuk menutup koneksi atau membersihkan sumber daya.",
+        "codeSnippet": "try:\n    print('Operasi berjalan')\nfinally:\n    print('Pembersihan selalu jalan')",
+        "outputSnippet": "Operasi berjalan\nPembersihan selalu jalan"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Aplikasi kasir meminta input uang pembayaran: jika kasir tidak sengaja mengetik 'dua puluh ribu' (huruf), try-except menangkap ValueError dan meminta kasir mengetik ulang tanpa mematikan komputer kasir.",
+        "codeSnippet": "try:\n    bayar = int('50000')\n    print(f'Diterima: Rp{bayar}')\nexcept ValueError:\n    print('Nominal tidak valid!')",
+        "outputSnippet": "Diterima: Rp50000"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Gunakan try untuk uji coba, except untuk antisipasi error, dan finally untuk instruksi penutup.",
+        "codeSnippet": "print('Error handling aman!')",
+        "outputSnippet": "Error handling aman!"
+      }
+    ],
+    "notes": [
+      "Hindari 'bare except:' (except tanpa nama error) karena dapat menyembunyikan bug tak terduga dan interupsi Ctrl+C.",
+      "Gunakan kata kunci 'raise' jika Anda sengaja ingin memicu Exception khusus.",
+      "Blok 'else' opsional dapat ditambahkan setelah except, yang hanya berjalan jika try tidak mengalami error sama sekali."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m22_q01",
+      "type": "mc",
+      "prompt": "Pasangan kata kunci apakah yang digunakan di Python untuk menangani Exception dan mencegah program crash?",
+      "code": "",
+      "options": [
+        "try dan except",
+        "try dan catch",
+        "begin dan rescue",
+        "check dan error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, penanganan error menggunakan kata kunci 'try' dan 'except' (bukan catch seperti Java/JS)."
+    },
+    {
+      "id": "m22_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci penangkap error saat operasi konversi string gagal:",
+      "codeWithBlank": "try:\n    n = int(\"teks\")\n___ ValueError:\n    print(\"Bukan angka\")",
+      "options": [
+        "except",
+        "catch",
+        "rescue",
+        "error"
+      ],
+      "acceptedAnswers": [
+        "except"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'except' menangkap exception yang terjadi di dalam blok try."
+    },
+    {
+      "id": "m22_q03",
+      "type": "mc",
+      "prompt": "Tipe Exception apakah yang dipicu saat mencoba membagi bilangan dengan angka 0 di Python?",
+      "code": "x = 10 / 0",
+      "options": [
+        "ZeroDivisionError",
+        "MathError",
+        "DivideByZeroException",
+        "ValueError"
+      ],
+      "answerIndex": 0,
+      "explanation": "Python memicu Exception bawaan bernama 'ZeroDivisionError'."
+    },
+    {
+      "id": "m22_q04",
+      "type": "fb",
+      "prompt": "Lengkapi blok yang SELALU dieksekusi baik ada error maupun tidak:",
+      "codeWithBlank": "try:\n    print(\"Buka\")\n___:\n    print(\"Tutup koneksi\")",
+      "options": [
+        "finally",
+        "always",
+        "end",
+        "after"
+      ],
+      "acceptedAnswers": [
+        "finally"
+      ],
+      "answerIndex": 0,
+      "explanation": "Blok 'finally:' selalu dieksekusi di akhir penanganan exception."
+    },
+    {
+      "id": "m22_q05",
+      "type": "ro",
+      "prompt": "Susun struktur lengkap penanganan error pembagian angka:",
+      "lines": [
+        "try:",
+        "    hasil = 100 / 0",
+        "except ZeroDivisionError:",
+        "    print('Pembagian nol ditolak!')"
+      ],
+      "distractors": [],
+      "explanation": "Mulai dari blok try, tulis baris risiko error, tulis except ZeroDivisionError, lalu tampilkan pesan aman."
+    },
+    {
+      "id": "m22_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang keliru menggunakan kata kunci catch (gaya JS) alih-alih except:",
+      "lines": [
+        "try:",
+        "    x = int('abc')",
+        "catch ValueError:",
+        "    print('Error')"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "except ValueError:",
+      "explanation": "Python menggunakan kata kunci 'except', bukan 'catch'."
+    },
+    {
+      "id": "m22_q07",
+      "type": "mc",
+      "prompt": "Kata kunci apa yang digunakan untuk sengaja memicu atau melempar Exception baru di kode Anda?",
+      "code": "",
+      "options": [
+        "raise",
+        "throw",
+        "error",
+        "fire"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'raise' digunakan untuk melempar exception secara manual (contoh: raise ValueError('Pesan'))."
+    },
+    {
+      "id": "m22_q08",
+      "type": "fb",
+      "prompt": "Lengkapi penangkapan error konversi tipe data angka:",
+      "codeWithBlank": "except ___:\n    print(\"Format salah\")",
+      "options": [
+        "ValueError",
+        "TypeError",
+        "IndexError",
+        "KeyError"
+      ],
+      "acceptedAnswers": [
+        "ValueError"
+      ],
+      "answerIndex": 0,
+      "explanation": "'ValueError' muncul ketika tipe data cocok tetapi nilainya tidak tepat (seperti int('abc'))."
+    },
+    {
+      "id": "m22_q09",
+      "type": "ro",
+      "prompt": "Susun alur penanganan input kasir yang aman:",
+      "lines": [
+        "raw = 'lima_puluh'",
+        "try:",
+        "    uang = int(raw)",
+        "except ValueError:",
+        "    uang = 0",
+        "print(uang)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan input mentah, coba konversi di try, jika error tangani di except dengan nilai default 0, lalu cetak."
+    },
+    {
+      "id": "m22_q10",
+      "type": "sb",
+      "prompt": "Temukan baris dengan titik dua yang tertinggal pada blok try:",
+      "lines": [
+        "try",
+        "    x = 1 / 1",
+        "except Exception:",
+        "    pass"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "try:",
+      "explanation": "Pernyataan 'try' wajib diakhiri dengan tanda titik dua ':'."
+    }
+  ]
+}

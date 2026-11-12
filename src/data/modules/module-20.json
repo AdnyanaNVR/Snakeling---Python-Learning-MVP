@@ -1,0 +1,168 @@
+{
+  "id": "module-20",
+  "unit": 8,
+  "unitTitle": "Unit 8: Milestone Ujian 2",
+  "moduleNumber": 20,
+  "title": "Tantangan Algoritma & Struktur Data",
+  "subtitle": "Penyelesaian masalah komputasi menggabungkan loop dan struktur data",
+  "xpReward": 85,
+  "gemReward": 45,
+  "tip": {
+    "title": "Tantangan Algoritma & Struktur Data",
+    "body": "Ujian tantangan tingkat menengah! Di modul ini Anda menguji kemampuan memadukan perulangan (for/while), percabangan (if/else), list, dictionary, dan manipulasi string untuk memecahkan persoalan pemrograman nyata.",
+    "codeExample": "# Filter data genap\nangka = [1, 2, 3, 4, 5, 6]\ngenap = [x for x in angka if x % 2 == 0]\nprint(genap)",
+    "outputExample": "[2, 4, 6]"
+  },
+  "skipTipCard": true,
+  "quizzes": [
+    {
+      "id": "m20_q01",
+      "type": "mc",
+      "prompt": "Struktur data manakah yang paling ideal untuk menyimpan data inventaris barang berupa nama barang dan jumlah stoknya?",
+      "code": "",
+      "options": [
+        "Dictionary (contoh: {'kopi': 10, 'teh': 5})",
+        "Set",
+        "Tuple",
+        "String tunggal"
+      ],
+      "answerIndex": 0,
+      "explanation": "Dictionary sangat cocok untuk relasi nama barang (key) dan jumlah stoknya (value)."
+    },
+    {
+      "id": "m20_q02",
+      "type": "fb",
+      "prompt": "Lengkapi operator keanggotaan untuk memeriksa apakah 'kopi' ada di dalam list menu:",
+      "codeWithBlank": "if \"kopi\" ___ menu:\n    print(\"Tersedia\")",
+      "options": [
+        "in",
+        "has",
+        "exists",
+        "at"
+      ],
+      "acceptedAnswers": [
+        "in"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator 'in' digunakan untuk memeriksa keberadaan elemen di dalam koleksi Python."
+    },
+    {
+      "id": "m20_q03",
+      "type": "ro",
+      "prompt": "Susun algoritma pencarian angka terbesar (maksimum) dari sebuah list:",
+      "lines": [
+        "angka = [12, 45, 7, 89, 23]",
+        "terbesar = angka[0]",
+        "for n in angka:",
+        "    if n > terbesar:",
+        "        terbesar = n",
+        "print(terbesar)"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi terbesar dengan item pertama, iterasi seluruh angka, perbarui jika lebih besar, lalu cetak."
+    },
+    {
+      "id": "m20_q04",
+      "type": "mc",
+      "prompt": "Apa hasil keluaran dari algoritma filter angka positif berikut?",
+      "code": "data = [-2, 5, 0, -1, 8]\npositif = []\nfor x in data:\n    if x > 0:\n        positif.append(x)\nprint(positif)",
+      "options": [
+        "[5, 8]",
+        "[-2, -1]",
+        "[5, 0, 8]",
+        "[8, 5]"
+      ],
+      "answerIndex": 0,
+      "explanation": "Hanya angka yang lebih besar dari 0 (yaitu 5 dan 8) yang ditambahkan ke list positif."
+    },
+    {
+      "id": "m20_q05",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk memeriksa apakah string berakhiran kata '.py':",
+      "codeWithBlank": "is_python = nama_file.___(\".py\")",
+      "options": [
+        "endswith",
+        "finishwith",
+        "contains",
+        "tail"
+      ],
+      "acceptedAnswers": [
+        "endswith"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.endswith(akhiran)' mengembalikan True jika string berakhiran nilai tersebut."
+    },
+    {
+      "id": "m20_q06",
+      "type": "ro",
+      "prompt": "Susun program penghitungan total kasir dari list dictionary belanjaan:",
+      "lines": [
+        "keranjang = [{'item': 'Buku', 'harga': 20000}, {'item': 'Pena', 'harga': 5000}]",
+        "total = 0",
+        "for belanja in keranjang:",
+        "    total += belanja['harga']",
+        "print(f'Total Tagihan: Rp{total}')"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan list dict produk, inisialisasi total, iterasi dan jumlahkan belanja['harga'], lalu cetak nota."
+    },
+    {
+      "id": "m20_q07",
+      "type": "mc",
+      "prompt": "Berapa panjang list `hasil` setelah pemanggilan `.split()` pada string `'apel,mangga,jeruk'`?",
+      "code": "hasil = 'apel,mangga,jeruk'.split(',')\nprint(len(hasil))",
+      "options": [
+        "3",
+        "1",
+        "17",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "String dipecah berdasarkan koma menjadi list 3 elemen: ['apel', 'mangga', 'jeruk']."
+    },
+    {
+      "id": "m20_q08",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi bawaan untuk menjumlahkan seluruh elemen angka di dalam list:",
+      "codeWithBlank": "total = ___(daftar_angka)",
+      "options": [
+        "sum",
+        "total",
+        "add",
+        "count"
+      ],
+      "acceptedAnswers": [
+        "sum"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi bawaan 'sum(list)' menjumlahkan seluruh nilai numerik di dalam list."
+    },
+    {
+      "id": "m20_q09",
+      "type": "ro",
+      "prompt": "Susun algoritma menghitung kemunculan kata (word frequency) menggunakan dictionary:",
+      "lines": [
+        "kata_list = ['kopi', 'teh', 'kopi', 'susu']",
+        "frekuensi = {}",
+        "for k in kata_list:",
+        "    frekuensi[k] = frekuensi.get(k, 0) + 1",
+        "print(frekuensi)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan list kata, buat dict kosong, iterasi kata dan naikkan frekuensi dengan get, lalu cetak."
+    },
+    {
+      "id": "m20_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam mengecek keberadaan key di dictionary:",
+      "lines": [
+        "menu = {'Kopi': 15000}",
+        "if 'Teh' in menu:",
+        "    print(menu['Teh'])"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "    print(menu['Teh'])\nelse:\n    print('Menu Teh tidak ada')",
+      "explanation": "Jika 'Teh' tidak ada di menu, program sebaiknya memiliki penanganan alternatif agar tidak sepi respons."
+    }
+  ]
+}

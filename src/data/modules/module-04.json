@@ -1,0 +1,201 @@
+{
+  "id": "module-04",
+  "unit": 2,
+  "unitTitle": "Unit 2: Tipe Data",
+  "moduleNumber": 4,
+  "title": "Integer & Float (Bilangan)",
+  "subtitle": "Mengenal angka bulat dan angka pecahan desimal di Python",
+  "xpReward": 35,
+  "gemReward": 15,
+  "tip": {
+    "title": "Tipe Data Integer & Float",
+    "body": "Python memiliki dua tipe data utama untuk angka: Integer (int) untuk bilangan bulat tanpa koma (positif, negatif, nol) dan Float (float) untuk bilangan riil yang memiliki titik desimal. Di Python, koma desimal ditulis menggunakan tanda titik (.), bukan tanda koma.",
+    "codeExample": "jumlah_buku = 5        # Integer\nharga_kopi = 18500.75  # Float\nsuhu_ruang = -3.5      # Float negatif\nprint(jumlah_buku, harga_kopi)",
+    "outputExample": "5 18500.75",
+    "sections": [
+      {
+        "heading": "Ciri-Ciri Bilangan Integer (int)",
+        "explanation": "Integer mencakup semua bilangan bulat seperti -10, 0, 42, 1000. Python 3 mampu menampung bilangan bulat dengan ukuran sangat besar tanpa batas memori tetap.",
+        "codeSnippet": "jarak = 1200\nprint(jarak)",
+        "outputSnippet": "1200"
+      },
+      {
+        "heading": "Ciri-Ciri Bilangan Float (float)",
+        "explanation": "Float digunakan untuk presisi desimal, seperti berat badan, nilai tukar mata uang, atau perhitungan ilmiah. Penulisan wajib menggunakan titik desimal.",
+        "codeSnippet": "pi = 3.14159\nrating = 4.8\nprint(pi, rating)",
+        "outputSnippet": "3.14159 4.8"
+      },
+      {
+        "heading": "Pembagian Selalu Menghasilkan Float",
+        "explanation": "Di Python 3, operator pembagian standar (/) selalu menghasilkan tipe float, bahkan jika hasilnya bulat (contoh: 10 / 2 menghasilkan 5.0).",
+        "codeSnippet": "hasil = 10 / 2\nprint(hasil)",
+        "outputSnippet": "5.0"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Ketika Anda berbelanja di kasir, jumlah cangkir kopi adalah Integer (2 cangkir, tidak mungkin 2.3 cangkir), tetapi persentase diskon atau berat gram biji kopi adalah Float (250.5 gram).",
+        "codeSnippet": "cangkir = 2\nberat_kopi_gr = 18.5\nprint(f'{cangkir} cangkir butuh {cangkir * berat_kopi_gr} gram')",
+        "outputSnippet": "2 cangkir butuh 37.0 gram"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Integer adalah bilangan bulat; Float adalah bilangan dengan tanda titik desimal. Operasi pembagian garis miring tunggal (/) selalu menghasilkan Float.",
+        "codeSnippet": "print(type(10), type(10.0))",
+        "outputSnippet": "<class 'int'> <class 'float'>"
+      }
+    ],
+    "notes": [
+      "Jangan gunakan tanda koma untuk desimal, misalnya 3,14 akan dianggap dua angka tuple di Python.",
+      "Gunakan integer jika data pasti bulat (seperti nomor ID atau jumlah antrean).",
+      "Float memiliki batas presisi komputer IEEE 754, misalnya 0.1 + 0.2 dapat bernilai 0.30000000000000004."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m04_q01",
+      "type": "mc",
+      "prompt": "Manakah di bawah ini yang merupakan contoh nilai bertipe Float di Python?",
+      "code": "",
+      "options": [
+        "19.5",
+        "19",
+        "'19.5'",
+        "19_000"
+      ],
+      "answerIndex": 0,
+      "explanation": "Nilai '19.5' memiliki tanda titik desimal, sehingga merupakan tipe data float."
+    },
+    {
+      "id": "m04_q02",
+      "type": "fb",
+      "prompt": "Lengkapi titik desimal agar angka 7 berubah menjadi tipe data float:",
+      "codeWithBlank": "nilai_desimal = 7___0",
+      "options": [
+        ".",
+        ",",
+        "_",
+        ":"
+      ],
+      "acceptedAnswers": [
+        "."
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, pemisah desimal menggunakan tanda titik '.'."
+    },
+    {
+      "id": "m04_q03",
+      "type": "mc",
+      "prompt": "Apa hasil keluaran dari baris kode pembagian berikut di Python?",
+      "code": "print(8 / 2)",
+      "options": [
+        "4.0",
+        "4",
+        "4.00",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator pembagian tunggal '/' di Python 3 selalu menghasilkan nilai float (4.0)."
+    },
+    {
+      "id": "m04_q04",
+      "type": "fb",
+      "prompt": "Lengkapi kode berikut dengan nilai integer 100:",
+      "codeWithBlank": "skor_maksimal = ___",
+      "options": [
+        "100",
+        "'100'",
+        "100.0",
+        "seratus"
+      ],
+      "acceptedAnswers": [
+        "100"
+      ],
+      "answerIndex": 0,
+      "explanation": "Angka 100 tanpa tanda kutip dan tanpa titik adalah tipe integer."
+    },
+    {
+      "id": "m04_q05",
+      "type": "ro",
+      "prompt": "Susun baris perhitungan matematika integer dan float berikut:",
+      "lines": [
+        "harga = 25000",
+        "pajak = 0.1",
+        "total = harga + (harga * pajak)",
+        "print(total)"
+      ],
+      "distractors": [],
+      "explanation": "Definisikan harga awal, tarif pajak float, hitung total harga, lalu tampilkan."
+    },
+    {
+      "id": "m04_q06",
+      "type": "sb",
+      "prompt": "Temukan baris kode di bawah ini yang salah dalam penulisan bilangan desimal:",
+      "lines": [
+        "panjang = 10",
+        "lebar = 4,5",
+        "print(panjang)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "lebar = 4.5",
+      "explanation": "Baris ke-2 menggunakan koma '4,5', seharusnya menggunakan tanda titik '4.5'."
+    },
+    {
+      "id": "m04_q07",
+      "type": "mc",
+      "prompt": "Tipe data apakah hasil dari ekspresi `5 + 2.0` di Python?",
+      "code": "x = 5 + 2.0\nprint(type(x))",
+      "options": [
+        "<class 'float'>",
+        "<class 'int'>",
+        "<class 'str'>",
+        "<class 'number'>"
+      ],
+      "answerIndex": 0,
+      "explanation": "Penjumlahan antara integer dan float otomatis menghasilkan float (7.0) melalui type coercion."
+    },
+    {
+      "id": "m04_q08",
+      "type": "fb",
+      "prompt": "Lengkapi baris kode untuk membuat integer negatif minus lima:",
+      "codeWithBlank": "suhu_beku = ___5",
+      "options": [
+        "-",
+        "--",
+        "+-",
+        "neg"
+      ],
+      "acceptedAnswers": [
+        "-"
+      ],
+      "answerIndex": 0,
+      "explanation": "Tanda minus '-' digunakan untuk mendefinisikan bilangan bulat negatif."
+    },
+    {
+      "id": "m04_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah saat mencoba menetapkan bilangan bulat integer:",
+      "lines": [
+        "skor = 100",
+        "total = 'seratus'",
+        "print(skor + total)"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "print(skor)",
+      "explanation": "Python tidak mengizinkan operasi penjumlahan langsung antara int dan string (TypeError)."
+    },
+    {
+      "id": "m04_q10",
+      "type": "mc",
+      "prompt": "Apakah angka 0 termasuk tipe data Integer di Python?",
+      "code": "angka = 0",
+      "options": [
+        "Ya, 0 adalah bilangan bulat (integer)",
+        "Bukan, 0 adalah tipe data null/None",
+        "Bukan, 0 selalu otomatis float",
+        "Bukan, 0 adalah boolean False saja"
+      ],
+      "answerIndex": 0,
+      "explanation": "Angka 0 adalah bilangan bulat sah bertipe int."
+    }
+  ]
+}

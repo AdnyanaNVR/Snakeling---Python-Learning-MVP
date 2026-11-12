@@ -1,0 +1,204 @@
+{
+  "id": "module-17",
+  "unit": 7,
+  "unitTitle": "Unit 7: Struktur Data",
+  "moduleNumber": 17,
+  "title": "Manipulasi List (append, pop, remove)",
+  "subtitle": "Menambah, menghapus, dan mengurutkan elemen pada List",
+  "xpReward": 50,
+  "gemReward": 25,
+  "tip": {
+    "title": "Metode Manipulasi List di Python",
+    "body": "List bersifat mutable (bisa dimodifikasi setelah dibuat). Python menyediakan metode bawaan yang lengkap seperti .append() untuk menambah item di ujung, .insert() untuk menyisipkan item di posisi tertentu, .remove() untuk menghapus item berdasarkan nilai, dan .pop() untuk mengambil serta membuang item.",
+    "codeExample": "menu = ['Kopi']\nmenu.append('Teh')    # Menambah 'Teh'\nmenu.append('Susu')   # Menambah 'Susu'\nmenu.remove('Teh')    # Menghapus 'Teh'\nprint(menu)",
+    "outputExample": "['Kopi', 'Susu']",
+    "sections": [
+      {
+        "heading": "Menambah Item: .append() dan .insert()",
+        "explanation": ".append(nilai) menambahkan satu elemen baru di urutan paling akhir. .insert(indeks, nilai) menyisipkan elemen di posisi indeks spesifik.",
+        "codeSnippet": "daftar = ['A', 'C']\ndaftar.insert(1, 'B')  # Sisipkan 'B' di indeks 1\nprint(daftar)",
+        "outputSnippet": "['A', 'B', 'C']"
+      },
+      {
+        "heading": "Menghapus Item: .remove() vs .pop()",
+        "explanation": ".remove('nilai') mencari dan menghapus item pertama yang cocok nilainya. Sedangkan .pop(indeks) menghapus item berdasarkan nomor indeks dan mengembalikan nilainya (bawaannya indeks terakhir).",
+        "codeSnippet": "angka = [10, 20, 30]\nterakhir = angka.pop()\nprint('Dibuang:', terakhir)\nprint('Sisa:', angka)",
+        "outputSnippet": "Dibuang: 30\nSisa: [10, 20]"
+      },
+      {
+        "heading": "Mengurutkan List: .sort()",
+        "explanation": "Metode .sort() mengurutkan elemen list secara ascending (A-Z atau angka terkecil ke terbesar) langsung di tempat (in-place).",
+        "codeSnippet": "skor = [50, 10, 80]\nskor.sort()\nprint(skor)",
+        "outputSnippet": "[10, 50, 80]"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Daftar antrean kasir: pelanggan baru bergabung di belakang dengan antrean.append('Pelanggan Baru'). Pelanggan yang selesai dilayani keluar dari antrean dengan antrean.pop(0).",
+        "codeSnippet": "antrean = ['Ani', 'Budi']\nantrean.append('Candra')\ndilayani = antrean.pop(0)\nprint(f'{dilayani} selesai dilayani. Sisa antrean: {antrean}')",
+        "outputSnippet": "Ani selesai dilayani. Sisa antrean: ['Budi', 'Candra']"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Gunakan .append() untuk menambah di akhir, .pop() untuk mencabut item, .remove() untuk hapus nama item, dan .sort() untuk menyortir.",
+        "codeSnippet": "x = [3, 1, 2]\nx.sort()\nprint(x)",
+        "outputSnippet": "[1, 2, 3]"
+      }
+    ],
+    "notes": [
+      "Metode .append() mengubah list asli dan tidak mengembalikan list baru (mengembalikan None).",
+      "Memanggil .remove(x) pada item yang tidak ada di list akan memicu ValueError.",
+      "Jika memanggil .pop() tanpa argumen indeks, item paling akhir yang akan dihapus."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m17_q01",
+      "type": "mc",
+      "prompt": "Metode list manakah yang digunakan untuk menambahkan elemen baru ke bagian paling akhir dari list?",
+      "code": "",
+      "options": [
+        ".append()",
+        ".push()",
+        ".add()",
+        ".insert_last()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, metode bawaan list untuk menambah elemen di akhir adalah .append()."
+    },
+    {
+      "id": "m17_q02",
+      "type": "fb",
+      "prompt": "Lengkapi nama metode untuk menambahkan item 'Latte' ke dalam list menu:",
+      "codeWithBlank": "menu.___( \"Latte\" )",
+      "options": [
+        "append",
+        "add",
+        "push",
+        "insert"
+      ],
+      "acceptedAnswers": [
+        "append"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode 'append()' menambahkan item ke bagian akhir list."
+    },
+    {
+      "id": "m17_q03",
+      "type": "mc",
+      "prompt": "Apa yang terjadi pada list setelah perintah `angka.pop()` dieksekusi?",
+      "code": "angka = [1, 2, 3]\nangka.pop()\nprint(angka)",
+      "options": [
+        "[1, 2]",
+        "[2, 3]",
+        "[1, 3]",
+        "[]"
+      ],
+      "answerIndex": 0,
+      "explanation": ".pop() tanpa parameter indeks akan menghapus elemen paling akhir dari list (angka 3 dihapus)."
+    },
+    {
+      "id": "m17_q04",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk menghapus item dengan teks 'Apel':",
+      "codeWithBlank": "buah.___( \"Apel\" )",
+      "options": [
+        "remove",
+        "delete",
+        "pop",
+        "discard"
+      ],
+      "acceptedAnswers": [
+        "remove"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.remove(nilai)' menghapus kemunculan pertama elemen dengan nilai yang dicari."
+    },
+    {
+      "id": "m17_q05",
+      "type": "ro",
+      "prompt": "Susun alur penambahan dan pengurutan data nilai:",
+      "lines": [
+        "nilai = [80, 60]",
+        "nilai.append(90)",
+        "nilai.sort()",
+        "print(nilai)"
+      ],
+      "distractors": [],
+      "explanation": "Buat list 2 nilai, tambahkan angka 90 dengan append, urutkan dengan sort(), lalu cetak."
+    },
+    {
+      "id": "m17_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah menggunakan metode push (gaya JavaScript) pada Python list:",
+      "lines": [
+        "peserta = ['Ali']",
+        "peserta.push('Budi')",
+        "print(peserta)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "peserta.append('Budi')",
+      "explanation": "Python list tidak memiliki metode '.push()'. Gunakan metode '.append()'."
+    },
+    {
+      "id": "m17_q07",
+      "type": "mc",
+      "prompt": "Metode apa yang digunakan untuk menyisipkan item pada posisi indeks tertentu di dalam List?",
+      "code": "",
+      "options": [
+        ".insert()",
+        ".append()",
+        ".inject()",
+        ".splice()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.insert(indeks, item)' menyisipkan elemen tepat di posisi indeks yang ditentukan."
+    },
+    {
+      "id": "m17_q08",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk mengurutkan angka di dalam list secara ascending:",
+      "codeWithBlank": "daftar_skor.___()",
+      "options": [
+        "sort",
+        "order",
+        "arrange",
+        "sorted"
+      ],
+      "acceptedAnswers": [
+        "sort"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.sort()' mengurutkan isi list di tempat (in-place)."
+    },
+    {
+      "id": "m17_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang keliru saat mencoba menghapus item yang tidak ada:",
+      "lines": [
+        "hewan = ['Kucing', 'Ikan']",
+        "hewan.remove('Gajah')",
+        "print(hewan)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "hewan.remove('Kucing')",
+      "explanation": "Menghapus item 'Gajah' yang tidak ada di list memicu ValueError: list.remove(x): x not in list."
+    },
+    {
+      "id": "m17_q10",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk mengosongkan seluruh isi list sekaligus:",
+      "codeWithBlank": "data.___()",
+      "options": [
+        "clear",
+        "empty",
+        "reset",
+        "clean"
+      ],
+      "acceptedAnswers": [
+        "clear"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.clear()' menghapus seluruh elemen dari dalam list sehingga menjadi kosong []."
+    }
+  ]
+}

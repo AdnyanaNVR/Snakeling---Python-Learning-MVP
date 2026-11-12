@@ -1,0 +1,199 @@
+{
+  "id": "module-15",
+  "unit": 6,
+  "unitTitle": "Unit 6: Perulangan",
+  "moduleNumber": 15,
+  "title": "While Loop, break, & continue",
+  "subtitle": "Perulangan berbasis kondisi, menghentikan loop, dan melompati iterasi",
+  "xpReward": 45,
+  "gemReward": 20,
+  "tip": {
+    "title": "While Loop, break, & continue",
+    "body": "While loop terus berulang selama suatu kondisi bernilai True. Anda wajib memperbarui variabel kondisi agar tidak terjebak dalam perulangan abadi (infinite loop). Perintah 'break' digunakan untuk menghentikan paksa loop seketika, sedangkan 'continue' melompati sisa kode putaran saat ini dan langsung menuju putaran berikutnya.",
+    "codeExample": "hitung = 1\nwhile hitung <= 3:\n    print('Hitungan:', hitung)\n    hitung += 1",
+    "outputExample": "Hitungan: 1\nHitungan: 2\nHitungan: 3",
+    "sections": [
+      {
+        "heading": "Sintaks Dasar while loop",
+        "explanation": "Pernyataan while menguji kondisi sebelum setiap putaran. Jika kondisi bernilai False sejak awal, blok while sama sekali tidak akan dijalankan.",
+        "codeSnippet": "nyawa = 3\nwhile nyawa > 0:\n    print(f'Sisa nyawa: {nyawa}')\n    nyawa -= 1",
+        "outputSnippet": "Sisa nyawa: 3\nSisa nyawa: 2\nSisa nyawa: 1"
+      },
+      {
+        "heading": "Perintah break: Keluar Seketika",
+        "explanation": "Ketika program menemui perintah 'break', eksekusi loop langsung berhenti total saat itu juga, mengabaikan kondisi while.",
+        "codeSnippet": "angka = 1\nwhile True:\n    if angka == 3:\n        break\n    print(angka)\n    angka += 1",
+        "outputSnippet": "1\n2"
+      },
+      {
+        "heading": "Perintah continue: Lompati Putaran Ini",
+        "explanation": "Perintah 'continue' menghentikan iterasi yang sedang berjalan dan langsung melompat ke pengecekan kondisi berikutnya.",
+        "codeSnippet": "for i in range(1, 5):\n    if i == 3:\n        continue\n    print(i, end=' ')",
+        "outputSnippet": "1 2 4 "
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Mesin kasir terus menanyakan 'Scan barang berikutnya? (y/n)'. Selama kasir memilih 'y', while loop terus berputar. Ketika kasir memilih 'n', perintah 'break' dipanggil untuk mencetak total tagihan akhir.",
+        "codeSnippet": "total = 0\nwhile True:\n    harga = 15000\n    total += harga\n    break  # Selesai scan 1 item\nprint('Total:', total)",
+        "outputSnippet": "Total: 15000"
+      },
+      {
+        "heading": "Ringkasan",
+        "explanation": "while loop berulang selama kondisi True. Gunakan break untuk keluar, dan continue untuk melewati putaran saat ini.",
+        "codeSnippet": "x = 0\nwhile x < 2:\n    x += 1\nprint('Selesai, x =', x)",
+        "outputSnippet": "Selesai, x = 2"
+      }
+    ],
+    "notes": [
+      "Waspadai Infinite Loop: pastikan ada baris pengubah nilai (seperti x += 1) di dalam while agar kondisi bisa menjadi False.",
+      "Jika terjebak infinite loop di terminal asli, tekan kombinasi Ctrl + C untuk menghentikannya.",
+      "Perintah break dan continue dapat digunakan pada for loop maupun while loop."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m15_q01",
+      "type": "mc",
+      "prompt": "Perintah kata kunci apa yang digunakan untuk menghentikan dan keluar dari perulangan secara paksa?",
+      "code": "",
+      "options": [
+        "break",
+        "stop",
+        "exit",
+        "return"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'break' menghentikan eksekusi perulangan seketika dan melompat keluar dari loop."
+    },
+    {
+      "id": "m15_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci perulangan berbasis kondisi berikut:",
+      "codeWithBlank": "___ count < 5:\n    count += 1",
+      "options": [
+        "while",
+        "for",
+        "loop",
+        "until"
+      ],
+      "acceptedAnswers": [
+        "while"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'while' digunakan untuk membuat perulangan berbasis kondisi kebenaran."
+    },
+    {
+      "id": "m15_q03",
+      "type": "ro",
+      "prompt": "Susun while loop hitungan maju dari 1 sampai 2:",
+      "lines": [
+        "angka = 1",
+        "while angka <= 2:",
+        "    print(angka)",
+        "    angka += 1"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi variabel penghitung, kepala while kondisi, cetak angka, lalu tambah nilai variabel."
+    },
+    {
+      "id": "m15_q04",
+      "type": "mc",
+      "prompt": "Apa yang dilakukan oleh perintah `continue` di dalam perulangan Python?",
+      "code": "",
+      "options": [
+        "Melompati sisa kode pada putaran saat ini dan lanjut ke putaran berikutnya",
+        "Menghentikan perulangan secara permanen",
+        "Mengulang kembali baris kode yang sama dua kali",
+        "Keluar dari seluruh program aplikasi"
+      ],
+      "answerIndex": 0,
+      "explanation": "'continue' menghentikan iterasi yang sedang berjalan dan langsung meloncat ke iterasi berikutnya."
+    },
+    {
+      "id": "m15_q05",
+      "type": "ro",
+      "prompt": "Susun loop tak hingga (infinite loop) yang dihentikan dengan perintah break:",
+      "lines": [
+        "counter = 0",
+        "while True:",
+        "    counter += 1",
+        "    if counter == 3:",
+        "        break",
+        "print('Berhenti')"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi counter, jalankan while True, naikkan counter, uji kondisi stop, break, lalu cetak."
+    },
+    {
+      "id": "m15_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang menyebabkan infinite loop karena lupa menambah nilai variabel x:",
+      "lines": [
+        "x = 1",
+        "while x <= 5:",
+        "    print(x)"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "    print(x)\n    x += 1",
+      "explanation": "Variabel x tidak pernah bertambah nilainya (tetap 1), sehingga x <= 5 selalu True tanpa henti."
+    },
+    {
+      "id": "m15_q07",
+      "type": "mc",
+      "prompt": "Perhatikan kode berikut. Berapa nilai yang tercetak di layar?",
+      "code": "for i in range(1, 6):\n    if i == 3:\n        break\n    print(i, end='')",
+      "options": [
+        "12",
+        "123",
+        "1245",
+        "3"
+      ],
+      "answerIndex": 0,
+      "explanation": "Saat i = 1 dicetak '1', saat i = 2 dicetak '2'. Saat i = 3, loop langsung di-break sehingga berhenti."
+    },
+    {
+      "id": "m15_q08",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci untuk melompati iterasi putaran ganjil:",
+      "codeWithBlank": "if n % 2 != 0:\n    ___",
+      "options": [
+        "continue",
+        "break",
+        "pass",
+        "skip"
+      ],
+      "acceptedAnswers": [
+        "continue"
+      ],
+      "answerIndex": 0,
+      "explanation": "Gunakan kata kunci 'continue' untuk melompati proses pada angka ganjil ke iterasi berikutnya."
+    },
+    {
+      "id": "m15_q09",
+      "type": "ro",
+      "prompt": "Susun while loop pemrosesan antrean kasir hingga habis:",
+      "lines": [
+        "sisa_antrean = 2",
+        "while sisa_antrean > 0:",
+        "    print(f'Melayani antrean sisa: {sisa_antrean}')",
+        "    sisa_antrean -= 1",
+        "print('Semua antrean selesai!')"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi antrean, buat while loop pengurangan, cetak proses, lalu pesan selesai."
+    },
+    {
+      "id": "m15_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam menuliskan kata kunci break:",
+      "lines": [
+        "while True:",
+        "    stop",
+        "print('Selesai')"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "    break",
+      "explanation": "Python menggunakan kata kunci 'break', bukan 'stop'."
+    }
+  ]
+}

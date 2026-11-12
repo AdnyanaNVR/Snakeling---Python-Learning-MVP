@@ -1,0 +1,206 @@
+{
+  "id": "module-10",
+  "unit": 4,
+  "unitTitle": "Unit 4: Input & Output",
+  "moduleNumber": 10,
+  "title": "Format Output Modern f-string",
+  "subtitle": "Menyisipkan variabel ke teks dengan sintaks f\"... {variabel}\"",
+  "xpReward": 45,
+  "gemReward": 20,
+  "tip": {
+    "title": "Format String Modern dengan f-string",
+    "body": "Sejak Python 3.6, format string berformat f-string (formatted string literals) menjadi standar emas industri karena sangat cepat, bersih, dan mudah dibaca. Anda cukup menambahkan huruf 'f' kecil sebelum tanda kutip string dan meletakkan variabel atau ekspresi di dalam kurung kurawal {}.",
+    "codeExample": "nama = 'Adnyana'\nskor = 95\nprint(f'Siswa {nama} memperoleh skor {skor}!')",
+    "outputExample": "Siswa Adnyana memperoleh skor 95!",
+    "sections": [
+      {
+        "heading": "Sintaks Dasar f-string",
+        "explanation": "Awali teks dengan huruf f (atau F), lalu gunakan tanda kurung kurawal {} untuk menyisipkan nama variabel secara langsung di tengah kalimat.",
+        "codeSnippet": "menu = 'Es Kopi'\nharga = 18000\nprint(f'{menu} seharga Rp{harga}')",
+        "outputSnippet": "Es Kopi seharga Rp18000"
+      },
+      {
+        "heading": "Ekspresi Matematika di Dalam Kurung Kurawal",
+        "explanation": "Anda dapat langsung menghitung matematika di dalam kurung kurawal tanpa perlu membuat variabel perantara tambahan.",
+        "codeSnippet": "print(f'Total belanja: Rp{15000 * 3}')",
+        "outputSnippet": "Total belanja: Rp45000"
+      },
+      {
+        "heading": "Format Angka Desimal ({nilai:.2f})",
+        "explanation": "Tambahkan spesifikasi format seperti :.2f untuk menampilkan angka pecahan desimal dengan 2 angka tetap di belakang koma.",
+        "codeSnippet": "pi = 3.14159265\nprint(f'Nilai pi dibulatkan: {pi:.2f}')",
+        "outputSnippet": "Nilai pi dibulatkan: 3.14"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Struk belanja dan invoice kasir kafe menggunakan format f-string untuk mencetak nama kasir, tanggal transaksi, daftar pesanan, dan subtotal secara rapi dan otomatis.",
+        "codeSnippet": "kasir = 'Rina'\nitem = 'Croissant'\nqty = 2\ntotal = qty * 22000\nprint(f'Kasir: {kasir} | {qty}x {item} = Rp{total}')",
+        "outputSnippet": "Kasir: Rina | 2x Croissant = Rp44000"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "f-string menggantikan metode lama seperti penggabungan (+) dan format(). Lebih cepat, elegan, dan mendukung format angka desimal :.2f.",
+        "codeSnippet": "x = 10\nprint(f'Dua kali x adalah {x * 2}')",
+        "outputSnippet": "Dua kali x adalah 20"
+      }
+    ],
+    "notes": [
+      "Jangan lupa menuliskan huruf f di depan tanda kutip pembuka string.",
+      "Kurung kurawal {} di dalam f-string hanya boleh memuat ekspresi yang valid, bukan pernyataan seperti penugasan variabel.",
+      "Untuk mencetak karakter kurung kurawal literal di f-string, gunakan kurung ganda: {{ atau }}."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m10_q01",
+      "type": "mc",
+      "prompt": "Huruf apakah yang harus diletakkan tepat di depan tanda kutip untuk mengaktifkan f-string di Python?",
+      "code": "",
+      "options": [
+        "f (atau F)",
+        "s",
+        "str",
+        "$"
+      ],
+      "answerIndex": 0,
+      "explanation": "Huruf 'f' di depan tanda kutip menandai bahwa teks tersebut adalah formatted string literal (f-string)."
+    },
+    {
+      "id": "m10_q02",
+      "type": "fb",
+      "prompt": "Lengkapi awalan f-string berikut agar variabel nama tersubstitusi:",
+      "codeWithBlank": "pesan = ___\"Halo, {nama}!\"",
+      "options": [
+        "f",
+        "s",
+        "p",
+        "format"
+      ],
+      "acceptedAnswers": [
+        "f",
+        "F"
+      ],
+      "answerIndex": 0,
+      "explanation": "Awali teks dengan huruf 'f' untuk mengaktifkan interpolasi kurung kurawal {nama}."
+    },
+    {
+      "id": "m10_q03",
+      "type": "mc",
+      "prompt": "Apa hasil cetak dari baris kode f-string dengan ekspresi berikut?",
+      "code": "harga = 12000\nprint(f'Total: Rp{harga * 2}')",
+      "options": [
+        "Total: Rp24000",
+        "Total: Rp12000 * 2",
+        "Total: Rp{harga * 2}",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Ekspresi matematika di dalam {harga * 2} otomatis dihitung menjadi 24000."
+    },
+    {
+      "id": "m10_q04",
+      "type": "fb",
+      "prompt": "Lengkapi simbol kurung yang digunakan untuk membungkus variabel di dalam f-string:",
+      "codeWithBlank": "print(f\"Skor Anda: ___skor___\")",
+      "options": [
+        "{ / }",
+        "[ / ]",
+        "( / )",
+        "< / >"
+      ],
+      "acceptedAnswers": [
+        "{ / }",
+        "{}"
+      ],
+      "answerIndex": 0,
+      "explanation": "f-string menggunakan kurung kurawal '{' dan '}' untuk menyisipkan variabel."
+    },
+    {
+      "id": "m10_q05",
+      "type": "ro",
+      "prompt": "Susun kode mencetak nota pesanan menggunakan f-string:",
+      "lines": [
+        "menu = 'Kopi Susu'",
+        "harga = 18000",
+        "nota = f'Pesanan: {menu} (Rp{harga})'",
+        "print(nota)"
+      ],
+      "distractors": [],
+      "explanation": "Definisikan variabel, format teks dengan f-string, lalu cetak variabel nota."
+    },
+    {
+      "id": "m10_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang lupa menyertakan awalan f sehingga kurung kurawal tercetak mentah:",
+      "lines": [
+        "nama = 'Budi'",
+        "pesan = 'Halo, {nama}!'",
+        "print(pesan)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "pesan = f'Halo, {nama}!'",
+      "explanation": "Baris ke-2 tidak memiliki huruf 'f' di depan kutip sehingga {nama} tidak dievaluasi."
+    },
+    {
+      "id": "m10_q07",
+      "type": "mc",
+      "prompt": "Bagaimana cara memformat angka float `nilai = 3.1415` agar hanya menampilkan 2 desimal di f-string?",
+      "code": "",
+      "options": [
+        "f'{nilai:.2f}'",
+        "f'{nilai, 2}'",
+        "f'{round(nilai, 2f)}'",
+        "f'{nilai % 2}'"
+      ],
+      "answerIndex": 0,
+      "explanation": "Format spesifikasi ':.2f' membulatkan tampilan bilangan pecahan float ke 2 digit desimal."
+    },
+    {
+      "id": "m10_q08",
+      "type": "fb",
+      "prompt": "Lengkapi spesifikasi format agar variabel rasio tampil dengan 2 angka di belakang koma:",
+      "codeWithBlank": "print(f\"Rasio: {rasio___}\")",
+      "options": [
+        ":.2f",
+        ":2",
+        ".2",
+        "::float"
+      ],
+      "acceptedAnswers": [
+        ":.2f"
+      ],
+      "answerIndex": 0,
+      "explanation": "Gunakan ':.2f' di dalam kurung kurawal untuk format dua angka desimal."
+    },
+    {
+      "id": "m10_q09",
+      "type": "sb",
+      "prompt": "Temukan baris dengan kurung kurawal yang salah ketik:",
+      "lines": [
+        "poin = 50",
+        "teks = f'Poin kamu: (poin)'",
+        "print(teks)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "teks = f'Poin kamu: {poin}'",
+      "explanation": "f-string membutuhkan kurung kurawal '{}', bukan kurung biasa '()'."
+    },
+    {
+      "id": "m10_q10",
+      "type": "fb",
+      "prompt": "Lengkapi kode untuk menampilkan salam f-string dengan nama pengguna:",
+      "codeWithBlank": "print(f\"Selamat datang, ___{nama}___!\")",
+      "options": [
+        "",
+        " ",
+        "_",
+        "$"
+      ],
+      "acceptedAnswers": [
+        ""
+      ],
+      "answerIndex": 0,
+      "explanation": "Variabel {nama} langsung disisipkan di dalam kalimat teks f-string."
+    }
+  ]
+}

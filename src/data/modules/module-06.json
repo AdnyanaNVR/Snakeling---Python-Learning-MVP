@@ -1,0 +1,201 @@
+{
+  "id": "module-06",
+  "unit": 2,
+  "unitTitle": "Unit 2: Tipe Data",
+  "moduleNumber": 6,
+  "title": "Fungsi type() & Konversi Tipe Data",
+  "subtitle": "Mengecek tipe data dan mengubah data dengan int(), float(), str()",
+  "xpReward": 40,
+  "gemReward": 20,
+  "tip": {
+    "title": "Mengecek & Mengonversi Tipe Data",
+    "body": "Python menyediakan fungsi bawaan type() untuk mengetahui tipe data suatu objek atau variabel. Anda juga dapat melakukan type casting (konversi tipe data) menggunakan fungsi int(), float(), str(), dan bool(). Ini sangat penting ketika data yang didapat berupa teks namun perlu dihitung secara matematis.",
+    "codeExample": "teks_angka = '25'\nangka = int(teks_angka)  # Konversi teks ke integer\nprint(type(angka))\nprint(angka + 5)",
+    "outputExample": "<class 'int'>\n30",
+    "sections": [
+      {
+        "heading": "Mengecek Tipe Data dengan type()",
+        "explanation": "Fungsi type() menerima satu argumen dan mengembalikan informasi kelas tipe data objek tersebut, seperti <class 'int'>, <class 'str'>, atau <class 'float'>.",
+        "codeSnippet": "x = 3.14\nprint(type(x))",
+        "outputSnippet": "<class 'float'>"
+      },
+      {
+        "heading": "Konversi ke Integer: int()",
+        "explanation": "Fungsi int() mengubah string angka atau float menjadi integer. Angka di belakang koma pada float akan dipotong (bukan dibulatkan ke atas).",
+        "codeSnippet": "print(int('100'))\nprint(int(9.85))",
+        "outputSnippet": "100\n9"
+      },
+      {
+        "heading": "Konversi ke Float dan String: float() dan str()",
+        "explanation": "float() mengubah integer atau teks angka menjadi desimal. str() mengubah tipe apa pun menjadi representasi teks.",
+        "codeSnippet": "print(float(10))\nprint(str(500) + ' Rupiah')",
+        "outputSnippet": "10.0\n500 Rupiah"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Setiap data yang diketik pengguna di keyboard terminal melalui input() selalu berwujud teks (string). Jika kasir mengetik '3' cangkir, sistem harus mengubahnya ke int('3') agar bisa dikalikan harga.",
+        "codeSnippet": "input_cangkir = '3'\njumlah = int(input_cangkir)\ntotal = jumlah * 15000\nprint('Total:', total)",
+        "outputSnippet": "Total: 45000"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "type() memeriksa jenis data. int(), float(), str(), dan bool() digunakan untuk konversi antar-tipe data.",
+        "codeSnippet": "print(int(True), int(False))",
+        "outputSnippet": "1 0"
+      }
+    ],
+    "notes": [
+      "Mengonversi teks non-angka seperti int('halo') akan memicu ValueError: invalid literal for int().",
+      "int(7.9) menghasilkan 7, bukan 8, karena int() memotong bagian desimal (truncation).",
+      "bool(0) bernilai False, sedangkan bool angka selain 0 bernilai True."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m06_q01",
+      "type": "mc",
+      "prompt": "Fungsi bawaan Python apa yang digunakan untuk memeriksa tipe data suatu variabel?",
+      "code": "",
+      "options": [
+        "type()",
+        "typeof()",
+        "kind()",
+        "datatype()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, fungsi bawaan untuk mengecek jenis tipe data adalah type()."
+    },
+    {
+      "id": "m06_q02",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi untuk mengonversi string '50' menjadi integer:",
+      "codeWithBlank": "angka = ___( \"50\" )",
+      "options": [
+        "int",
+        "float",
+        "str",
+        "number"
+      ],
+      "acceptedAnswers": [
+        "int"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi 'int()' mengubah representasi teks numerik menjadi tipe data bilangan bulat."
+    },
+    {
+      "id": "m06_q03",
+      "type": "mc",
+      "prompt": "Apa hasil keluaran dari `int(7.8)` di Python?",
+      "code": "print(int(7.8))",
+      "options": [
+        "7",
+        "8",
+        "7.8",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "int() membuang angka desimal di belakang koma (truncation), sehingga 7.8 menjadi 7."
+    },
+    {
+      "id": "m06_q04",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi untuk mengonversi angka 25 menjadi string agar dapat digabung:",
+      "codeWithBlank": "pesan = \"Umur saya \" + ___(25)",
+      "options": [
+        "str",
+        "int",
+        "text",
+        "format"
+      ],
+      "acceptedAnswers": [
+        "str"
+      ],
+      "answerIndex": 0,
+      "explanation": "Gunakan 'str(25)' untuk mengubah angka integer menjadi teks bertipe string."
+    },
+    {
+      "id": "m06_q05",
+      "type": "ro",
+      "prompt": "Susun alur konversi teks harga menjadi angka kalkulasi:",
+      "lines": [
+        "teks_harga = '15000'",
+        "harga = int(teks_harga)",
+        "bayar = harga * 2",
+        "print(bayar)"
+      ],
+      "distractors": [],
+      "explanation": "Mulai dari string angka, konversi ke integer, lakukan perhitungan, lalu cetak hasil."
+    },
+    {
+      "id": "m06_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu error saat konversi tipe data yang salah:",
+      "lines": [
+        "teks = 'abc'",
+        "angka = int(teks)",
+        "print(angka)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "teks = '123'; angka = int(teks)",
+      "explanation": "Baris ke-2 memicu ValueError karena teks 'abc' bukan karakter angka yang valid."
+    },
+    {
+      "id": "m06_q07",
+      "type": "mc",
+      "prompt": "Apa nilai dari `float(5)` di Python?",
+      "code": "print(float(5))",
+      "options": [
+        "5.0",
+        "5",
+        "5.00",
+        "0.5"
+      ],
+      "answerIndex": 0,
+      "explanation": "Mengonversi integer 5 ke float menghasilkan nilai 5.0."
+    },
+    {
+      "id": "m06_q08",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi konversi untuk mengubah angka bulat 10 ke float:",
+      "codeWithBlank": "desimal = ___(10)",
+      "options": [
+        "float",
+        "int",
+        "str",
+        "double"
+      ],
+      "acceptedAnswers": [
+        "float"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi 'float()' mengonversi angka menjadi pecahan desimal."
+    },
+    {
+      "id": "m06_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam menggabungkan teks dengan angka tanpa konversi:",
+      "lines": [
+        "skor = 90",
+        "teks = 'Skor kamu: ' + skor",
+        "print(teks)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "teks = 'Skor kamu: ' + str(skor)",
+      "explanation": "Operator '+' tidak bisa menggabungkan string dan int secara langsung tanpa str()."
+    },
+    {
+      "id": "m06_q10",
+      "type": "mc",
+      "prompt": "Berapa hasil evaluasi dari `bool(0)` di Python?",
+      "code": "print(bool(0))",
+      "options": [
+        "False",
+        "True",
+        "None",
+        "0"
+      ],
+      "answerIndex": 0,
+      "explanation": "Angka 0 dievaluasi sebagai False dalam konversi boolean di Python."
+    }
+  ]
+}

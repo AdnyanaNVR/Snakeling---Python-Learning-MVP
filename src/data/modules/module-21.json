@@ -1,0 +1,195 @@
+{
+  "id": "module-21",
+  "unit": 9,
+  "unitTitle": "Unit 9: Function / Fungsi",
+  "moduleNumber": 21,
+  "title": "Membuat Fungsi: def, Parameter, return",
+  "subtitle": "Membungkus logika kode yang dapat digunakan kembali (reusable)",
+  "xpReward": 50,
+  "gemReward": 25,
+  "tip": {
+    "title": "Mendefinisikan Fungsi di Python",
+    "body": "Fungsi (function) adalah blok kode terorganisir yang diberi nama dan hanya dieksekusi saat dipanggil. Fungsi mencegah duplikasi kode (prinsip DRY: Don't Repeat Yourself). Fungsi dibuat dengan kata kunci 'def', dapat menerima masukan (parameter/argumen), dan dapat mengembalikan nilai keluaran dengan 'return'.",
+    "codeExample": "def hitung_diskon(harga, persen=10):\n    potongan = harga * (persen / 100)\n    return harga - potongan\n\nbayar = hitung_diskon(50000, 20)\nprint('Bayar:', bayar)",
+    "outputExample": "Bayar: 40000.0",
+    "sections": [
+      {
+        "heading": "Sintaks Mendefinisikan Fungsi (def)",
+        "explanation": "Awali dengan kata kunci def, diikuti nama fungsi, tanda kurung (parameter), titik dua (:), dan blok kode menjorok.",
+        "codeSnippet": "def sapa():\n    print('Halo dari dalam fungsi!')\nsapa()  # Memanggil fungsi",
+        "outputSnippet": "Halo dari dalam fungsi!"
+      },
+      {
+        "heading": "Parameter vs Argumen",
+        "explanation": "Parameter adalah variabel yang didaftarkan di dalam definisi fungsi. Argumen adalah nilai nyata yang dikirimkan saat fungsi dipanggil.",
+        "codeSnippet": "def salam(nama):\n    print(f'Halo, {nama}!')\nsalam('Budi')",
+        "outputSnippet": "Halo, Budi!"
+      },
+      {
+        "heading": "Mengembalikan Nilai dengan return",
+        "explanation": "Kata kunci 'return' mengirimkan nilai hasil kembali ke pemanggil fungsi. Perintah setelah return tidak akan dieksekusi.",
+        "codeSnippet": "def tambah(a, b):\n    return a + b\nhasil = tambah(10, 5)\nprint(hasil)",
+        "outputSnippet": "15"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Fungsi kalkulasi pajak kasir: daripada menghitung rumus pajak berulang kali di setiap transaksi, Anda cukup memanggil hitung_pajak(subtotal) di mana pun dibutuhkan.",
+        "codeSnippet": "def hitung_pajak(subtotal):\n    return subtotal * 0.11\nprint('PPN 11%:', hitung_pajak(100000))",
+        "outputSnippet": "PPN 11%: 11000.0"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Fungsi didefinisikan dengan def dan mengembalikan hasil dengan return. Mendukung parameter bawaan (default argument).",
+        "codeSnippet": "def kali(x, y=2):\n    return x * y\nprint(kali(5))",
+        "outputSnippet": "10"
+      }
+    ],
+    "notes": [
+      "Jika fungsi tidak memiliki pernyataan 'return', ia otomatis mengembalikan nilai khusus 'None'.",
+      "Variabel yang dibuat di dalam fungsi bersifat lokal (local scope) dan tidak bisa diakses dari luar fungsi.",
+      "Parameter dengan nilai default harus diletakkan setelah parameter tanpa default."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m21_q01",
+      "type": "mc",
+      "prompt": "Kata kunci apakah yang digunakan untuk mendefinisikan fungsi baru di Python?",
+      "code": "",
+      "options": [
+        "def",
+        "function",
+        "fn",
+        "fun"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, fungsi didefinisikan menggunakan kata kunci 'def' (kependekan dari define)."
+    },
+    {
+      "id": "m21_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci untuk mengembalikan nilai hasil dari dalam fungsi:",
+      "codeWithBlank": "def hitung(a, b):\n    ___ a + b",
+      "options": [
+        "return",
+        "yield",
+        "send",
+        "give"
+      ],
+      "acceptedAnswers": [
+        "return"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'return' mengirimkan nilai kembalian fungsi ke pemanggilnya."
+    },
+    {
+      "id": "m21_q03",
+      "type": "ro",
+      "prompt": "Susun pendefinisian fungsi kuadrat dan pemanggilannya:",
+      "lines": [
+        "def kuadrat(x):",
+        "    return x ** 2",
+        "hasil = kuadrat(4)",
+        "print(hasil)"
+      ],
+      "distractors": [],
+      "explanation": "Definisikan fungsi dengan def, isi rumus return, panggil fungsi kuadrat(4), lalu cetak hasil."
+    },
+    {
+      "id": "m21_q04",
+      "type": "mc",
+      "prompt": "Apa nilai kembalian dari fungsi yang tidak menyertakan perintah `return`?",
+      "code": "def salam():\n    print('Halo')\nx = salam()",
+      "options": [
+        "None",
+        "0",
+        "False",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi Python tanpa pernyataan return secara implisit mengembalikan objek 'None'."
+    },
+    {
+      "id": "m21_q05",
+      "type": "ro",
+      "prompt": "Susun fungsi yang menyapa dengan parameter default:",
+      "lines": [
+        "def sapa(nama='Teman'):",
+        "    return f'Halo, {nama}!'",
+        "print(sapa())"
+      ],
+      "distractors": [],
+      "explanation": "Buat fungsi dengan nilai default 'Teman', kembalikan f-string, lalu panggil tanpa argumen."
+    },
+    {
+      "id": "m21_q06",
+      "type": "sb",
+      "prompt": "Temukan baris di mana parameter default salah diletakkan mendahului parameter biasa:",
+      "lines": [
+        "def hitung(b=10, a):",
+        "    return a + b",
+        "print(hitung(5))"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "def hitung(a, b=10):",
+      "explanation": "Parameter tanpa default ('a') harus selalu diletakkan sebelum parameter dengan default ('b=10')."
+    },
+    {
+      "id": "m21_q07",
+      "type": "mc",
+      "prompt": "Perhatikan fungsi berikut. Berapa hasil dari pemanggilan `hitung(3, 2)`?",
+      "code": "def hitung(a, b):\n    return a * 2 + b\nprint(hitung(3, 2))",
+      "options": [
+        "8",
+        "10",
+        "12",
+        "7"
+      ],
+      "answerIndex": 0,
+      "explanation": "3 * 2 = 6, lalu 6 + 2 = 8."
+    },
+    {
+      "id": "m21_q08",
+      "type": "fb",
+      "prompt": "Lengkapi titik dua penutup pada kepala definisi fungsi:",
+      "codeWithBlank": "def hitung_total(harga, qty)___\n    return harga * qty",
+      "options": [
+        ":",
+        ";",
+        "{",
+        "->"
+      ],
+      "acceptedAnswers": [
+        ":"
+      ],
+      "answerIndex": 0,
+      "explanation": "Baris definisi fungsi wajib diakhiri dengan tanda titik dua ':'."
+    },
+    {
+      "id": "m21_q09",
+      "type": "ro",
+      "prompt": "Susun fungsi validator angka genap:",
+      "lines": [
+        "def is_genap(n):",
+        "    return n % 2 == 0",
+        "print(is_genap(8))"
+      ],
+      "distractors": [],
+      "explanation": "Definisikan fungsi is_genap, kembalikan ekspresi boolean n % 2 == 0, lalu cetak hasilnya."
+    },
+    {
+      "id": "m21_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang mencoba mengakses variabel lokal di luar fungsi:",
+      "lines": [
+        "def pesan():",
+        "    rahasia = 123",
+        "pesan()",
+        "print(rahasia)"
+      ],
+      "buggyLineIndex": 3,
+      "fixedLine": "print('Selesai')",
+      "explanation": "Variabel 'rahasia' berada di dalam scope lokal fungsi 'pesan' dan tidak bisa diakses dari luar (NameError)."
+    }
+  ]
+}

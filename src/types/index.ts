@@ -102,6 +102,7 @@ export interface LessonUnit {
   xpReward: number;
   gemReward: number;
   tip?: LessonTip;
+  skipTipCard?: boolean;
   questions: QuizQuestion[];
 }
 

@@ -1,0 +1,164 @@
+{
+  "id": "module-11",
+  "unit": 4,
+  "unitTitle": "Unit 4: Milestone Ujian 1",
+  "moduleNumber": 11,
+  "title": "Ujian Sertifikasi Dasar Python",
+  "subtitle": "Uji komprehensif sintaks, variabel, tipe data, operator, dan I/O",
+  "xpReward": 80,
+  "gemReward": 40,
+  "tip": {
+    "title": "Ujian Sertifikasi Dasar Python",
+    "body": "Selamat telah menyelesaikan Unit 1 hingga 4! Modul ini merupakan ujian tantangan evaluasi untuk menguji penguasaan Anda seputar sintaks Python, aturan variabel, tipe data (int, float, str, bool), operator aritmatika dan logika, serta input/output.",
+    "codeExample": "# Contoh integrasi seluruh konsep dasar\nnama = 'Siswa'\nxp = 150\nprint(f'{nama} memiliki {xp} XP')",
+    "outputExample": "Siswa memiliki 150 XP"
+  },
+  "skipTipCard": true,
+  "quizzes": [
+    {
+      "id": "m11_q01",
+      "type": "mc",
+      "prompt": "Manakah pernyataan di bawah ini yang paling tepat mengenai bahasa pemrograman Python?",
+      "code": "",
+      "options": [
+        "Python bersifat case-sensitive dan menggunakan indentasi untuk blok kode",
+        "Python mewajibkan titik koma (;) di akhir setiap baris",
+        "Variabel Python harus dideklarasikan dengan tipe data statis di awal",
+        "Python menggunakan tanda kurung kurawal {} untuk menandai badan fungsi"
+      ],
+      "answerIndex": 0,
+      "explanation": "Python peka huruf besar-kecil (case-sensitive) dan mengandalkan indentasi spasi untuk menentukan hierarki blok kode."
+    },
+    {
+      "id": "m11_q02",
+      "type": "fb",
+      "prompt": "Lengkapi nama fungsi bawaan untuk menampilkan data ke layar konsol terminal:",
+      "codeWithBlank": "___(\"Tes Kelulusan Unit 1\")",
+      "options": [
+        "print",
+        "echo",
+        "log",
+        "write"
+      ],
+      "acceptedAnswers": [
+        "print"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi print() adalah instruksi standar menampilkan keluaran ke konsol terminal."
+    },
+    {
+      "id": "m11_q03",
+      "type": "mc",
+      "prompt": "Berapa hasil evaluasi dari ekspresi `bool('False')` di Python?",
+      "code": "print(bool('False'))",
+      "options": [
+        "True",
+        "False",
+        "None",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "String 'False' bukan string kosong (memiliki 5 karakter), sehingga dievaluasi sebagai True oleh bool()!"
+    },
+    {
+      "id": "m11_q04",
+      "type": "fb",
+      "prompt": "Lengkapi operator kesetaraan untuk membandingkan dua nilai variabel:",
+      "codeWithBlank": "sama = (a ___ b)",
+      "options": [
+        "==",
+        "=",
+        "===",
+        "eq"
+      ],
+      "acceptedAnswers": [
+        "=="
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '==' digunakan untuk menguji apakah nilai variabel 'a' dan 'b' sama."
+    },
+    {
+      "id": "m11_q05",
+      "type": "ro",
+      "prompt": "Susun alur lengkap program kasir mini: input angka -> hitung total -> cetak f-string:",
+      "lines": [
+        "harga = 20000",
+        "qty = int(input('Jumlah: '))",
+        "total = harga * qty",
+        "print(f'Total Tagihan: Rp{total}')"
+      ],
+      "distractors": [],
+      "explanation": "Mulai dari menentukan harga dasar, ambil kuantitas input integer, kalikan, lalu cetak nota f-string."
+    },
+    {
+      "id": "m11_q06",
+      "type": "sb",
+      "prompt": "Temukan satu baris yang salah pada program penghitungan luas persegi panjang:",
+      "lines": [
+        "panjang = 10",
+        "lebar = '5'",
+        "luas = panjang * lebar",
+        "print(f'Luas: {luas}')"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "lebar = 5",
+      "explanation": "Variabel lebar adalah teks '5' (string). Harus berupa integer agar perkalian luas bekerja secara matematika."
+    },
+    {
+      "id": "m11_q07",
+      "type": "mc",
+      "prompt": "Apa tipe data dari variabel `hasil` pada operasi `hasil = 20 / 4`?",
+      "code": "hasil = 20 / 4\nprint(type(hasil))",
+      "options": [
+        "<class 'float'>",
+        "<class 'int'>",
+        "<class 'number'>",
+        "<class 'str'>"
+      ],
+      "answerIndex": 0,
+      "explanation": "Pembagian dengan garis miring tunggal (/) selalu menghasilkan bilangan bertipe float (5.0)."
+    },
+    {
+      "id": "m11_q08",
+      "type": "fb",
+      "prompt": "Lengkapi operator untuk mengecek sisa bagi genap (hasil sisa 0):",
+      "codeWithBlank": "is_genap = (angka ___ 2 == 0)",
+      "options": [
+        "%",
+        "/",
+        "//",
+        "**"
+      ],
+      "acceptedAnswers": [
+        "%"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator modulus '%' menghasilkan sisa bagi, jika angka % 2 == 0 maka angka tersebut genap."
+    },
+    {
+      "id": "m11_q09",
+      "type": "ro",
+      "prompt": "Susun kode yang meminta nama pengguna lalu mencetak panjang karakternya:",
+      "lines": [
+        "nama = input('Nama: ')",
+        "panjang = len(nama)",
+        "print(f'Panjang namamu: {panjang} karakter')"
+      ],
+      "distractors": [],
+      "explanation": "Ambil masukan nama, hitung jumlah karakter dengan fungsi len(), lalu cetak menggunakan f-string."
+    },
+    {
+      "id": "m11_q10",
+      "type": "sb",
+      "prompt": "Temukan baris kode yang memicu SyntaxError penamaan variabel:",
+      "lines": [
+        "nama_lengkap = 'Dewi'",
+        "99_poin = 99",
+        "print(nama_lengkap)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "poin_99 = 99",
+      "explanation": "Baris ke-2 diawali angka '99_', padahal nama variabel Python tidak boleh dimulai dengan angka."
+    }
+  ]
+}

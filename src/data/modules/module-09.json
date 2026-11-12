@@ -1,0 +1,200 @@
+{
+  "id": "module-09",
+  "unit": 4,
+  "unitTitle": "Unit 4: Input & Output",
+  "moduleNumber": 9,
+  "title": "Menerima Input dengan input()",
+  "subtitle": "Berinteraksi langsung dengan pengguna melalui terminal",
+  "xpReward": 40,
+  "gemReward": 20,
+  "tip": {
+    "title": "Mengambil Masukan Pengguna dengan input()",
+    "body": "Fungsi input() memungkinkan program Anda meminta masukan langsung dari keyboard pengguna saat program berjalan. Program akan berhenti sejenak menunggu pengguna mengetik teks dan menekan tombol Enter. Hasil dari input() SELALU bertipe String (teks).",
+    "codeExample": "nama = input('Masukkan nama Anda: ')\nprint('Halo, ' + nama + '!')",
+    "outputExample": "Masukkan nama Anda: Budi\nHalo, Budi!",
+    "sections": [
+      {
+        "heading": "Sintaks dan Argumen Prompt",
+        "explanation": "Anda dapat memberikan pesan pemantik (prompt string) di dalam tanda kurung input() agar pengguna tahu apa yang harus mereka ketik.",
+        "codeSnippet": "hobi = input('Apa hobimu? ')\nprint('Hobi yang keren:', hobi)",
+        "outputSnippet": "Apa hobimu? Membaca\nHobi yang keren: Membaca"
+      },
+      {
+        "heading": "Semua Hasil input() adalah String!",
+        "explanation": "Meskipun pengguna mengetik angka seperti 10, komputer menyimpannya sebagai teks '10'. Jika ingin dipakai dalam perhitungan matematika, Anda harus mengonversinya dengan int() atau float().",
+        "codeSnippet": "teks_angka = input('Umur: ')  # bertipe str\numur = int(teks_angka)       # dikonversi ke int",
+        "outputSnippet": "Umur: 20"
+      },
+      {
+        "heading": "Membungkus input() Langsung dengan int()",
+        "explanation": "Pola paling populer di Python adalah langsung membungkus pemanggilan input() dengan fungsi konversi int(input(...)).",
+        "codeSnippet": "jumlah = int(input('Jumlah tiket: '))\ntotal = jumlah * 50000\nprint('Total bayar:', total)",
+        "outputSnippet": "Jumlah tiket: 2\nTotal bayar: 100000"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Pada mesin ATM atau aplikasi kasir, sistem menanyakan PIN atau jumlah uang yang ingin ditarik. Program menunggu ketikan nasabah sebelum memproses saldo rekening.",
+        "codeSnippet": "pin = input('Masukkan PIN ATM: ')\nprint('Memverifikasi PIN...')",
+        "outputSnippet": "Masukkan PIN ATM: 1234\nMemverifikasi PIN..."
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "input() menghentikan eksekusi sementara untuk membaca ketikan pengguna. Nilai kembaliannya selalu berupa string.",
+        "codeSnippet": "data = input()\nprint(type(data))",
+        "outputSnippet": "<class 'str'>"
+      }
+    ],
+    "notes": [
+      "Jika pengguna menginput huruf padahal dibungkus int(input()), program akan memicu ValueError.",
+      "Selalu beri spasi di akhir teks prompt (contoh: 'Nama: ') agar ketikan pengguna tidak menempel pada titik dua.",
+      "Fungsi input() membaca satu baris penuh sampai tombol Enter ditekan."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m09_q01",
+      "type": "mc",
+      "prompt": "Fungsi bawaan Python apa yang digunakan untuk menerima input teks dari pengguna?",
+      "code": "",
+      "options": [
+        "input()",
+        "read()",
+        "scan()",
+        "prompt()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, fungsi standar untuk membaca masukan pengguna adalah input()."
+    },
+    {
+      "id": "m09_q02",
+      "type": "fb",
+      "prompt": "Lengkapi pemanggilan fungsi untuk meminta input nama:",
+      "codeWithBlank": "nama_user = ___(\"Ketik nama: \")",
+      "options": [
+        "input",
+        "print",
+        "scan",
+        "get"
+      ],
+      "acceptedAnswers": [
+        "input"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi 'input()' menerima teks pesan yang ditampilkan sebelum membaca masukan pengguna."
+    },
+    {
+      "id": "m09_q03",
+      "type": "mc",
+      "prompt": "Tipe data apakah yang SELALU dihasilkan oleh fungsi `input()` secara bawaan?",
+      "code": "x = input('Masukkan angka: ')\n# jika pengguna mengetik 100",
+      "options": [
+        "String (str)",
+        "Integer (int)",
+        "Float (float)",
+        "Tergantung yang diketik"
+      ],
+      "answerIndex": 0,
+      "explanation": "Hasil pemanggilan fungsi input() selalu bertipe string, meskipun yang diketik angka."
+    },
+    {
+      "id": "m09_q04",
+      "type": "fb",
+      "prompt": "Lengkapi pembungkus fungsi agar input teks angka langsung dikonversi menjadi integer:",
+      "codeWithBlank": "jumlah = ___(input(\"Jumlah cangkir: \"))",
+      "options": [
+        "int",
+        "str",
+        "float",
+        "num"
+      ],
+      "acceptedAnswers": [
+        "int"
+      ],
+      "answerIndex": 0,
+      "explanation": "Bungkus input() dengan 'int()' agar masukan teks angka berubah menjadi tipe integer."
+    },
+    {
+      "id": "m09_q05",
+      "type": "ro",
+      "prompt": "Susun alur program menyapa pengguna berdasarkan input namanya:",
+      "lines": [
+        "nama = input('Siapa nama Anda? ')",
+        "salam = f'Senang bertemu denganmu, {nama}!'",
+        "print(salam)"
+      ],
+      "distractors": [],
+      "explanation": "Minta input nama pengguna, rangkai pesan sapaan f-string, lalu tampilkan ke layar."
+    },
+    {
+      "id": "m09_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah saat mencoba menjumlahkan hasil input tanpa konversi:",
+      "lines": [
+        "a = input('Angka 1: ')",
+        "b = input('Angka 2: ')",
+        "print(a * b)"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "print(int(a) * int(b))",
+      "explanation": "Dua string tidak bisa dikalikan secara langsung (TypeError: can't multiply sequence by non-int of type 'str')."
+    },
+    {
+      "id": "m09_q07",
+      "type": "mc",
+      "prompt": "Jika pengguna mengetik angka '5' saat kode berikut berjalan, apa yang tercetak?",
+      "code": "angka = input('Angka: ')\nprint(angka * 3)",
+      "options": [
+        "555",
+        "15",
+        "5.0",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Karena 'angka' bertipe string '5', operasi '5' * 3 menduplikasi teks menjadi '555'."
+    },
+    {
+      "id": "m09_q08",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi konversi float untuk input berat badan desimal:",
+      "codeWithBlank": "berat = ___(input(\"Berat badan (kg): \"))",
+      "options": [
+        "float",
+        "int",
+        "str",
+        "round"
+      ],
+      "acceptedAnswers": [
+        "float"
+      ],
+      "answerIndex": 0,
+      "explanation": "Gunakan 'float()' untuk mengonversi teks angka desimal."
+    },
+    {
+      "id": "m09_q09",
+      "type": "sb",
+      "prompt": "Temukan baris penulisan pemanggilan input yang salah:",
+      "lines": [
+        "prompt = 'Masukkan sandi: '",
+        "sandi = read(prompt)",
+        "print('Tersimpan')"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "sandi = input(prompt)",
+      "explanation": "Python menggunakan fungsi 'input()', bukan 'read()'."
+    },
+    {
+      "id": "m09_q10",
+      "type": "mc",
+      "prompt": "Apa yang terjadi saat program Python mengeksekusi baris `input()`?",
+      "code": "input()",
+      "options": [
+        "Program berhenti sementara menunggu ketikan keyboard dan tombol Enter",
+        "Program otomatis error jika pengguna tidak mengetik apapun dalam 3 detik",
+        "Program langsung lanjut mencetak None",
+        "Terminal otomatis tertutup"
+      ],
+      "answerIndex": 0,
+      "explanation": "input() bersifat blocking; program menjeda proses sampai pengguna menekan Enter."
+    }
+  ]
+}

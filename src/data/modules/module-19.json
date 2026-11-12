@@ -1,0 +1,198 @@
+{
+  "id": "module-19",
+  "unit": 8,
+  "unitTitle": "Unit 8: Manipulasi String",
+  "moduleNumber": 19,
+  "title": "Manipulasi String & Slicing",
+  "subtitle": "Memotong teks [start:stop:step] dan metode bawaan string",
+  "xpReward": 50,
+  "gemReward": 25,
+  "tip": {
+    "title": "Manipulasi String & Slicing di Python",
+    "body": "String di Python dapat diiris (slicing) dengan sintaks [start:stop:step]. Selain itu, Python menyediakan metode pengolah teks lengkap seperti .upper(), .lower(), .strip(), .replace(), .split(), dan .join(). String di Python bersifat imutabel; setiap metode mengembalikan string baru.",
+    "codeExample": "teks = 'Belajar Python'\nprint(teks[0:7])       # Slicing: 'Belajar'\nprint(teks.upper())     # 'BELAJAR PYTHON'\nprint(teks.split(' ')) # ['Belajar', 'Python']",
+    "outputExample": "Belajar\nBELAJAR PYTHON\n['Belajar', 'Python']",
+    "sections": [
+      {
+        "heading": "Slicing Teks [start:stop]",
+        "explanation": "Ambil potongan teks dari indeks start sampai sebelum indeks stop.",
+        "codeSnippet": "bahasa = 'Python'\nprint(bahasa[:3])  # Pyt\nprint(bahasa[2:])  # thon",
+        "outputSnippet": "Pyt\nthon"
+      },
+      {
+        "heading": "Membalik String dengan [::-1]",
+        "explanation": "Dengan memberikan step negatif -1, Anda dapat membalikkan urutan teks secara instan.",
+        "codeSnippet": "kata = 'KASUR'\nprint(kata[::-1])",
+        "outputSnippet": "RUSAK"
+      },
+      {
+        "heading": "Metode .split() dan .join()",
+        "explanation": ".split(' ') memecah string menjadi list kata. .join(list) menggabungkan list kata kembali menjadi satu kalimat utuh.",
+        "codeSnippet": "kalimat = 'apel,jeruk,mangga'\nbuah = kalimat.split(',')\nprint(buah)\nprint('-'.join(buah))",
+        "outputSnippet": "['apel', 'jeruk', 'mangga']\napel-jeruk-mangga"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Membersihkan spasi ketikan pengguna pada formulir pendaftaran: nama.strip().title() otomatis menghapus spasi liar dan membuat huruf pertama setiap kata menjadi kapital.",
+        "codeSnippet": "nama_kotor = '   budi santoso   '\nbersih = nama_kotor.strip().title()\nprint(f'Nama resmi: {bersih}')",
+        "outputSnippet": "Nama resmi: Budi Santoso"
+      },
+      {
+        "heading": "Ringkasan",
+        "explanation": "Slicing menggunakan kurung siku [::]. Gunakan .upper(), .lower(), .strip(), .replace(), dan .split() untuk mengolah teks.",
+        "codeSnippet": "print('python'.capitalize())",
+        "outputSnippet": "Python"
+      }
+    ],
+    "notes": [
+      "String bersifat imutabel: teks[0] = 'B' akan memicu TypeError.",
+      ".strip() menghapus spasi kosong (whitespace) di awal dan akhir teks.",
+      "Parameter start dan stop pada slicing bersifat opsional: [:3] berarti dari awal sampai indeks 2."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m19_q01",
+      "type": "mc",
+      "prompt": "Apa hasil dari pemotongan string `teks = 'Python'` dengan `teks[0:2]`?",
+      "code": "teks = 'Python'\nprint(teks[0:2])",
+      "options": [
+        "Py",
+        "Pyt",
+        "P",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Slicing [0:2] mengambil karakter indeks 0 dan 1 ('P' dan 'y')."
+    },
+    {
+      "id": "m19_q02",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk mengubah seluruh huruf menjadi huruf besar (kapital):",
+      "codeWithBlank": "pesan_kapital = pesan.___()",
+      "options": [
+        "upper",
+        "toUpper",
+        "capitalize",
+        "casefold"
+      ],
+      "acceptedAnswers": [
+        "upper"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.upper()' mengubah semua karakter dalam string menjadi huruf besar."
+    },
+    {
+      "id": "m19_q03",
+      "type": "mc",
+      "prompt": "Metode apa yang digunakan untuk menghapus spasi kosong di awal dan akhir teks?",
+      "code": "teks = '  Halo  '\nprint(teks.strip())",
+      "options": [
+        ".strip()",
+        ".trim()",
+        ".clean()",
+        ".remove_space()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, metode penghapus spasi awal dan akhir adalah '.strip()' (bukan .trim())."
+    },
+    {
+      "id": "m19_q04",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk memecah teks kalimat menjadi list kata berdasarkan spasi:",
+      "codeWithBlank": "kata_kata = kalimat.___( \" \" )",
+      "options": [
+        "split",
+        "explode",
+        "break",
+        "divide"
+      ],
+      "acceptedAnswers": [
+        "split"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.split(pemisah)' memecah string menjadi list potongan kata."
+    },
+    {
+      "id": "m19_q05",
+      "type": "ro",
+      "prompt": "Susun pembersihan input nama pengguna:",
+      "lines": [
+        "input_user = '   adnyana   '",
+        "nama_bersih = input_user.strip()",
+        "print(nama_bersih.title())"
+      ],
+      "distractors": [],
+      "explanation": "Ambil string kotor, bersihkan spasi dengan strip(), lalu format huruf kapital awal dengan title()."
+    },
+    {
+      "id": "m19_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang mencoba mengubah karakter string secara langsung sehingga memicu TypeError:",
+      "lines": [
+        "kata = 'kucing'",
+        "kata[0] = 'K'",
+        "print(kata)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "kata = 'K' + kata[1:]",
+      "explanation": "String bersifat imutabel; Anda tidak bisa mengganti karakter individual secara langsung."
+    },
+    {
+      "id": "m19_q07",
+      "type": "mc",
+      "prompt": "Slicing manakah yang digunakan untuk membalikkan seluruh karakter string dari belakang ke depan?",
+      "code": "",
+      "options": [
+        "[ :: -1 ]",
+        "[ -1 : 0 ]",
+        "[ reverse ]",
+        "[ -1 ]"
+      ],
+      "answerIndex": 0,
+      "explanation": "Slicing '[::-1]' dengan step negatif -1 membalikkan urutan seluruh karakter string."
+    },
+    {
+      "id": "m19_q08",
+      "type": "fb",
+      "prompt": "Lengkapi metode penggantian teks 'Kopi' menjadi 'Teh':",
+      "codeWithBlank": "pesanan = pesanan.___( \"Kopi\", \"Teh\" )",
+      "options": [
+        "replace",
+        "change",
+        "swap",
+        "sub"
+      ],
+      "acceptedAnswers": [
+        "replace"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.replace(lama, baru)' mengganti kemunculan teks lama dengan teks baru."
+    },
+    {
+      "id": "m19_q09",
+      "type": "ro",
+      "prompt": "Susun penggabungan list kata menjadi kalimat dengan tanda hubung strip:",
+      "lines": [
+        "kata = ['Belajar', 'Python', 'Mudah']",
+        "hasil = '-'.join(kata)",
+        "print(hasil)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan list kata, panggil '-'.join(kata), lalu tampilkan hasilnya."
+    },
+    {
+      "id": "m19_q10",
+      "type": "sb",
+      "prompt": "Temukan baris metode string yang salah ketik (gaya JS trim alih-alih strip):",
+      "lines": [
+        "teks = '  data  '",
+        "bersih = teks.trim()",
+        "print(bersih)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "bersih = teks.strip()",
+      "explanation": "Python tidak memiliki metode '.trim()', gunakan '.strip()'."
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "id": "module-08",
+  "unit": 3,
+  "unitTitle": "Unit 3: Operator Python",
+  "moduleNumber": 8,
+  "title": "Operator Perbandingan & Logika",
+  "subtitle": "Membandingkan nilai (==, !=, >, <) dan menggabungkan syarat (and, or, not)",
+  "xpReward": 40,
+  "gemReward": 20,
+  "tip": {
+    "title": "Operator Perbandingan & Logika",
+    "body": "Operator perbandingan membandingkan dua nilai dan selalu menghasilkan Boolean (True atau False). Operatornya meliputi: sama dengan (==), tidak sama dengan (!=), lebih besar (>), lebih kecil (<), dsb. Operator logika (and, or, not) digunakan untuk merangkai beberapa kondisi sekaligus.",
+    "codeExample": "usia = 19\npunya_ktp = True\nbisa_memilih = usia >= 17 and punya_ktp\nprint('Bisa memilih:', bisa_memilih)",
+    "outputExample": "Bisa memilih: True",
+    "sections": [
+      {
+        "heading": "Perbedaan = (Penugasan) dan == (Kesetaraan)",
+        "explanation": "Tanda tunggal '=' digunakan untuk menyimpan nilai ke variabel. Tanda ganda '==' digunakan untuk menguji apakah dua nilai bernilai sama.",
+        "codeSnippet": "x = 10\nprint(x == 10)\nprint(x == 20)",
+        "outputSnippet": "True\nFalse"
+      },
+      {
+        "heading": "Operator Tidak Sama Dengan (!=)",
+        "explanation": "Operator != mengembalikan True jika kedua nilai berbeda.",
+        "codeSnippet": "print(5 != 3)\nprint(10 != 10)",
+        "outputSnippet": "True\nFalse"
+      },
+      {
+        "heading": "Operator Logika: and, or, not",
+        "explanation": "1. `and`: True hanya jika kedua kondisi True. 2. `or`: True jika minimal satu kondisi True. 3. `not`: membalikkan nilai Boolean (True jadi False, False jadi True).",
+        "codeSnippet": "print(True and False)\nprint(True or False)\nprint(not True)",
+        "outputSnippet": "False\nTrue\nFalse"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Syarat menerima beasiswa: IPK harus di atas 3.5 DAN kehadiran di atas 80%. Keduanya wajib dipenuhi secara bersamaan menggunakan operator 'and'.",
+        "codeSnippet": "ipk = 3.8\nkehadiran = 90\ndapat_beasiswa = ipk > 3.5 and kehadiran > 80\nprint('Dapat Beasiswa:', dapat_beasiswa)",
+        "outputSnippet": "Dapat Beasiswa: True"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Gunakan == dan != untuk membandingkan kesamaan. Gunakan and untuk syarat ganda, or untuk syarat alternatif, dan not untuk negasi.",
+        "codeSnippet": "print(not (5 > 10))",
+        "outputSnippet": "True"
+      }
+    ],
+    "notes": [
+      "Jangan gunakan tanda tunggal '=' di dalam kondisi perbandingan, hal itu akan memicu SyntaxError.",
+      "Python mendukung chained comparison, contohnya: `10 < x < 20`.",
+      "Operator logika ditulis dengan huruf kecil: and, or, not."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m08_q01",
+      "type": "mc",
+      "prompt": "Simbol manakah yang digunakan untuk memeriksa apakah dua nilai bernilai sama di Python?",
+      "code": "",
+      "options": [
+        "==",
+        "=",
+        "===",
+        "equals"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, operator kesetaraan adalah '==' (dua tanda sama dengan)."
+    },
+    {
+      "id": "m08_q02",
+      "type": "fb",
+      "prompt": "Lengkapi operator untuk mengecek apakah variabel nilai TIDAK sama dengan 0:",
+      "codeWithBlank": "if nilai ___ 0:",
+      "options": [
+        "!=",
+        "<>",
+        "not =",
+        "no"
+      ],
+      "acceptedAnswers": [
+        "!="
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '!=' berarti tidak sama dengan (not equal)."
+    },
+    {
+      "id": "m08_q03",
+      "type": "mc",
+      "prompt": "Berapa hasil evaluasi dari ekspresi `True and False`?",
+      "code": "print(True and False)",
+      "options": [
+        "False",
+        "True",
+        "None",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator 'and' mewajibkan kedua pihak bernilai True. Karena satu pihak False, hasilnya False."
+    },
+    {
+      "id": "m08_q04",
+      "type": "fb",
+      "prompt": "Lengkapi operator logika agar ekspresi bernilai True jika salah satu kondisi terpenuhi:",
+      "codeWithBlank": "lolos = punya_tiket ___ punya_undangan",
+      "options": [
+        "or",
+        "and",
+        "not",
+        "xor"
+      ],
+      "acceptedAnswers": [
+        "or"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator 'or' bernilai True jika minimal salah satu operand bernilai True."
+    },
+    {
+      "id": "m08_q05",
+      "type": "ro",
+      "prompt": "Susun baris kode evaluasi hak akses akun kasir:",
+      "lines": [
+        "login = True",
+        "level = 'admin'",
+        "bisa_buka = login and level == 'admin'",
+        "print(bisa_buka)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan variabel status, cek kedua kondisi dengan operator and, lalu cetak nilai kebenarannya."
+    },
+    {
+      "id": "m08_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang keliru menggunakan operator penugasan '=' saat memeriksa kondisi:",
+      "lines": [
+        "skor = 100",
+        "if skor = 100:",
+        "    print('Sempurna')"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "if skor == 100:",
+      "explanation": "Baris ke-2 menggunakan '=' tunggal (penugasan) di dalam kondisi if. Seharusnya '=='."
+    },
+    {
+      "id": "m08_q07",
+      "type": "mc",
+      "prompt": "Apa hasil dari ekspresi `not (10 > 5)` di Python?",
+      "code": "print(not (10 > 5))",
+      "options": [
+        "False",
+        "True",
+        "10",
+        "5"
+      ],
+      "answerIndex": 0,
+      "explanation": "10 > 5 bernilai True. Operator 'not True' membalikkan nilainya menjadi False."
+    },
+    {
+      "id": "m08_q08",
+      "type": "fb",
+      "prompt": "Lengkapi operator logika pembalik nilai kebenaran:",
+      "codeWithBlank": "status_kebalikan = ___ True",
+      "options": [
+        "not",
+        "neg",
+        "inv",
+        "!"
+      ],
+      "acceptedAnswers": [
+        "not"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator 'not' digunakan untuk menegasikan atau membalikkan nilai Boolean."
+    },
+    {
+      "id": "m08_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam penulisan operator logika:",
+      "lines": [
+        "a = True",
+        "b = a && False",
+        "print(b)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "b = a and False",
+      "explanation": "Python tidak menggunakan simbol '&&' seperti bahasa C/Java, melainkan kata kunci 'and'."
+    },
+    {
+      "id": "m08_q10",
+      "type": "mc",
+      "prompt": "Apa keluaran dari baris kode perbandingan berantai berikut?",
+      "code": "x = 15\nprint(10 < x < 20)",
+      "options": [
+        "True",
+        "False",
+        "15",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Python mendukung perbandingan berantai: 15 lebih besar dari 10 dan lebih kecil dari 20 (True)."
+    }
+  ]
+}

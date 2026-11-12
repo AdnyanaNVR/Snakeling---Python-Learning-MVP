@@ -1,0 +1,195 @@
+{
+  "id": "module-16",
+  "unit": 7,
+  "unitTitle": "Unit 7: Struktur Data",
+  "moduleNumber": 16,
+  "title": "List: Koleksi Berurutan & Indeks",
+  "subtitle": "Menyimpan banyak data dalam kurung siku [] dan mengakses via indeks",
+  "xpReward": 50,
+  "gemReward": 25,
+  "tip": {
+    "title": "Mengenal Struktur Data List di Python",
+    "body": "List adalah struktur data bawaan Python yang paling sering digunakan untuk menyimpan sekumpulan item dalam satu variabel. List bersifat terurut (ordered), dapat diubah isinya (mutable), dan mengizinkan item duplikat. List dibuat dengan tanda kurung siku [].",
+    "codeExample": "buah = ['Apel', 'Mangga', 'Jeruk']\nprint(buah[0])   # Item pertama\nprint(buah[-1])  # Item terakhir",
+    "outputExample": "Apel\nJeruk",
+    "sections": [
+      {
+        "heading": "Sintaks Pembuatan List",
+        "explanation": "Item-item di dalam list dipisahkan dengan tanda koma (,). List dapat menampung berbagai tipe data sekaligus (string, integer, boolean).",
+        "codeSnippet": "profil = ['Budi', 20, True, 175.5]\nprint(profil)",
+        "outputSnippet": "['Budi', 20, True, 175.5]"
+      },
+      {
+        "heading": "Sistem Indeks Berbasis Nol (Zero-Based Index)",
+        "explanation": "Elemen pertama selalu memiliki indeks 0, elemen kedua indeks 1, dan seterusnya. Mengakses indeks yang melebihi panjang list akan memicu IndexError.",
+        "codeSnippet": "menu = ['Kopi', 'Teh', 'Susu']\nprint('Menu pertama:', menu[0])",
+        "outputSnippet": "Menu pertama: Kopi"
+      },
+      {
+        "heading": "Indeks Negatif: Mengakses dari Belakang",
+        "explanation": "Python memiliki fitur unik indeks negatif: -1 adalah elemen paling belakang/terakhir, -2 adalah elemen kedua dari belakang.",
+        "codeSnippet": "angka = [10, 20, 30, 40]\nprint(angka[-1])",
+        "outputSnippet": "40"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Keranjang belanja e-commerce menyimpan daftar barang yang dipilih pembeli. Setiap kali barang baru diklik, barang tersebut masuk ke dalam list belanjaan.",
+        "codeSnippet": "keranjang = ['Kaos Hitam', 'Topi Beanie']\nprint(f'Total barang di keranjang: {len(keranjang)}')",
+        "outputSnippet": "Total barang di keranjang: 2"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "List dibuat dengan tanda kurung siku []. Gunakan [0] untuk item pertama dan [-1] untuk item terakhir.",
+        "codeSnippet": "data = ['A', 'B']\nprint(len(data))",
+        "outputSnippet": "2"
+      }
+    ],
+    "notes": [
+      "Indeks list selalu dimulai dari angka 0, bukan angka 1.",
+      "Mengakses indeks yang tidak ada (misal list ada 3 item, tapi minta [5]) menghasilkan IndexError: list index out of range.",
+      "Fungsi len(nama_list) mengembalikan jumlah total elemen di dalam list."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m16_q01",
+      "type": "mc",
+      "prompt": "Simbol kurung apakah yang digunakan untuk mendefinisikan List di Python?",
+      "code": "",
+      "options": [
+        "[ ] (kurung siku)",
+        "( ) (kurung bulat)",
+        "{ } (kurung kurawal)",
+        "< > (kurung sudut)"
+      ],
+      "answerIndex": 0,
+      "explanation": "List di Python dibuat dengan mengapit elemen-elemen menggunakan kurung siku '[ ]'."
+    },
+    {
+      "id": "m16_q02",
+      "type": "fb",
+      "prompt": "Lengkapi indeks untuk mengambil elemen pertama dari list menu:",
+      "codeWithBlank": "pertama = menu[___]",
+      "options": [
+        "0",
+        "1",
+        "-1",
+        "first"
+      ],
+      "acceptedAnswers": [
+        "0"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, indeks elemen pertama selalu bernilai 0."
+    },
+    {
+      "id": "m16_q03",
+      "type": "mc",
+      "prompt": "Item manakah yang akan dicetak dari kode list berikut?",
+      "code": "hewan = ['Kucing', 'Anjing', 'Kelinci']\nprint(hewan[-1])",
+      "options": [
+        "Kelinci",
+        "Kucing",
+        "Anjing",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Indeks negatif -1 selalu merujuk pada elemen paling akhir di dalam list ('Kelinci')."
+    },
+    {
+      "id": "m16_q04",
+      "type": "fb",
+      "prompt": "Lengkapi kurung siku penutup pada pembuatan list angka:",
+      "codeWithBlank": "skor = [10, 20, 30___",
+      "options": [
+        "]",
+        ")",
+        "}",
+        ">"
+      ],
+      "acceptedAnswers": [
+        "]"
+      ],
+      "answerIndex": 0,
+      "explanation": "Pembuatan list ditutup dengan kurung siku ']'."
+    },
+    {
+      "id": "m16_q05",
+      "type": "ro",
+      "prompt": "Susun kode membuat list nama siswa lalu mencetak nama keduanya:",
+      "lines": [
+        "siswa = ['Adnyana', 'Budi', 'Citra']",
+        "print(siswa[1])"
+      ],
+      "distractors": [],
+      "explanation": "Definisikan list 3 siswa, lalu akses indeks ke-1 ('Budi')."
+    },
+    {
+      "id": "m16_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu IndexError karena indeks melebihi isi list:",
+      "lines": [
+        "warna = ['Merah', 'Hijau']",
+        "print(warna[5])"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "print(warna[1])",
+      "explanation": "List warna hanya memiliki 2 item (indeks 0 dan 1). Mengakses indeks 5 memicu IndexError."
+    },
+    {
+      "id": "m16_q07",
+      "type": "mc",
+      "prompt": "Fungsi apakah yang digunakan untuk mengetahui total jumlah elemen di dalam list?",
+      "code": "",
+      "options": [
+        "len()",
+        "count()",
+        "size()",
+        "length()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi 'len(list)' mengembalikan panjang atau jumlah total item di dalam list."
+    },
+    {
+      "id": "m16_q08",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi penghitung jumlah item di dalam list:",
+      "codeWithBlank": "total_item = ___(daftar_belanja)",
+      "options": [
+        "len",
+        "count",
+        "size",
+        "total"
+      ],
+      "acceptedAnswers": [
+        "len"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi 'len()' digunakan untuk menghitung total isi elemen list."
+    },
+    {
+      "id": "m16_q09",
+      "type": "ro",
+      "prompt": "Susun kode mengubah nilai elemen list pada indeks tertentu:",
+      "lines": [
+        "angka = [10, 20, 30]",
+        "angka[0] = 99",
+        "print(angka)"
+      ],
+      "distractors": [],
+      "explanation": "Buat list awal, ubah elemen pertama angka[0] menjadi 99, lalu cetak isi list terbarunya."
+    },
+    {
+      "id": "m16_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam penulisan indeks negatif:",
+      "lines": [
+        "data = ['A', 'B', 'C']",
+        "print(data[- 0])"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "print(data[-1])",
+      "explanation": "-0 sama saja dengan 0 (elemen pertama). Gunakan -1 untuk mengambil elemen terakhir."
+    }
+  ]
+}

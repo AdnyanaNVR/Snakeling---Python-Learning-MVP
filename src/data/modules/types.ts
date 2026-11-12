@@ -63,5 +63,6 @@ export interface PythonModule {
   xpReward: number;
   gemReward: number;
   tip: ModuleTip;
+  skipTipCard?: boolean;
   quizzes: ModuleQuiz[];
 }

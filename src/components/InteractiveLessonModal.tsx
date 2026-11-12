@@ -39,7 +39,8 @@ export const InteractiveLessonModal: React.FC = () => {
   const isDemo = user.username.toLowerCase() === 'demo' || user.id === 'usr_demo_account';
 
   const lesson =
-    LESSON_UNITS.find((u) => u.id === selectedLessonId || u.id === 'module-01') ||
+    (selectedLessonId && LESSON_UNITS.find((u) => u.id === selectedLessonId)) ||
+    LESSON_UNITS.find((u) => u.id === 'module-01') ||
     LESSON_UNITS[0];
   // Helper function to shuffle an array uniformly (Fisher-Yates)
   const shuffleArray = <T,>(array: readonly T[] | T[]): T[] => {
@@ -116,7 +117,7 @@ export const InteractiveLessonModal: React.FC = () => {
   );
 
   // Lesson flow states
-  const [showTipCard, setShowTipCard] = useState<boolean>(() => Boolean(lesson.tip));
+  const [showTipCard, setShowTipCard] = useState<boolean>(() => Boolean(lesson.tip && !lesson.skipTipCard));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
 
@@ -152,7 +153,7 @@ export const InteractiveLessonModal: React.FC = () => {
     setCurrentIndex(0);
     setCorrectCount(0);
     setIsCompleted(false);
-    setShowTipCard(Boolean(lesson.tip));
+    setShowTipCard(Boolean(lesson.tip && !lesson.skipTipCard));
   }, [selectedLessonId, lesson.id]);
 
   const handleSelectOption = (opt: string) => {
@@ -541,7 +542,7 @@ export const InteractiveLessonModal: React.FC = () => {
                 setIsCompleted(false);
                 setCurrentIndex(0);
                 setCorrectCount(0);
-                setShowTipCard(Boolean(nextLesson.tip));
+                setShowTipCard(Boolean(nextLesson.tip && !nextLesson.skipTipCard));
                 setSelectedOption(null);
                 setSelectedTokens([]);
                 setSelectedLines([]);
@@ -599,14 +600,29 @@ export const InteractiveLessonModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 bg-[#121212] flex flex-col justify-between select-none">
       {/* Top Header Bar */}
-      <header className="w-full max-w-4xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
-        <button
-          onClick={() => setShowExitConfirm(true)}
-          className="text-[#898989] hover:text-white transition-colors p-1"
-          aria-label="Tutup Pelajaran"
-        >
-          <X className="w-6 h-6" />
-        </button>
+      <header className="w-full max-w-4xl mx-auto px-6 py-4 flex items-center justify-between gap-4 sm:gap-6">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowExitConfirm(true)}
+            className="text-[#898989] hover:text-white transition-colors p-1 rounded-lg hover:bg-[#1f1f1f] cursor-pointer"
+            aria-label="Tutup Pelajaran"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          {lesson.tip && (
+            <button
+              onClick={() => {
+                playSound('click');
+                setShowTipCard(true);
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#1c1b1b] hover:bg-[#252525] border border-[#2e2e2e] text-[#b4b4b4] hover:text-[#3ecf8e] text-xs font-bold transition-colors cursor-pointer shrink-0"
+              title="Buka Penjelasan Materi"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-[#3ecf8e]" />
+              <span className="hidden sm:inline">Materi</span>
+            </button>
+          )}
+        </div>
 
         {/* Progress Bar */}
         <div className="flex-1 h-3.5 bg-[#242424] rounded-full overflow-hidden p-0.5 border border-[#2e2e2e]">

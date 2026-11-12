@@ -1,0 +1,203 @@
+{
+  "id": "module-12",
+  "unit": 5,
+  "unitTitle": "Unit 5: Percabangan",
+  "moduleNumber": 12,
+  "title": "Kondisi if & Percabangan else",
+  "subtitle": "Mengambil keputusan alur program dengan pernyataan if dan else",
+  "xpReward": 45,
+  "gemReward": 20,
+  "tip": {
+    "title": "Percabangan Kondisi if & else",
+    "body": "Pernyataan if memungkinkan program menjalankan sekumpulan instruksi hanya jika suatu syarat bernilai True. Jika syarat tersebut tidak terpenuhi (bernilai False), blok else akan dieksekusi sebagai jalur alternatif. Setiap baris di dalam blok wajib diakhiri titik dua (:) dan diberi indentasi.",
+    "codeExample": "nilai = 75\nif nilai >= 70:\n    print('Selamat, Anda Lulus!')\nelse:\n    print('Silakan coba ujian remedial.')",
+    "outputExample": "Selamat, Anda Lulus!",
+    "sections": [
+      {
+        "heading": "Sintaks Dasar Pernyataan if",
+        "explanation": "Tulis kata kunci if diikuti kondisi logika dan tanda titik dua (:). Baris kode berikutnya yang menjorok (indentasi 4 spasi) adalah kode yang dijalankan saat kondisi benar.",
+        "codeSnippet": "usia = 20\nif usia >= 17:\n    print('Boleh membuat SIM')",
+        "outputSnippet": "Boleh membuat SIM"
+      },
+      {
+        "heading": "Blok Alternatif dengan else",
+        "explanation": "Pernyataan else tidak memerlukan kondisi apa pun. Blok else otomatis berjalan jika kondisi if sebelumnya bernilai False.",
+        "codeSnippet": "stok = 0\nif stok > 0:\n    print('Barang siap dikirim')\nelse:\n    print('Maaf, stok barang kosong')",
+        "outputSnippet": "Maaf, stok barang kosong"
+      },
+      {
+        "heading": "Kewajiban Tanda Titik Dua (:)",
+        "explanation": "Lupa menyertakan tanda titik dua di akhir baris pernyataan if atau else adalah salah satu kesalahan paling umum pemula yang memicu SyntaxError.",
+        "codeSnippet": "if True:\n    print('Titik dua itu wajib!')",
+        "outputSnippet": "Titik dua itu wajib!"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Pintu otomatis di stasiun kereta mengecek saldo tiket Anda: jika saldo mencukupi (if saldo >= tarif), gerbang terbuka; jika tidak (else), lampu merah menyala dan membunyikan alarm.",
+        "codeSnippet": "saldo = 5000\ntarif = 3000\nif saldo >= tarif:\n    print('Gerbang Terbuka!')\nelse:\n    print('Saldo Kurang!')",
+        "outputSnippet": "Gerbang Terbuka!"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Gunakan if untuk menguji syarat kebenaran, else untuk alternatif kegagalan. Jangan lupa titik dua (:) dan indentasi.",
+        "codeSnippet": "x = 10\nif x % 2 == 0:\n    print('Genap')\nelse:\n    print('Ganjil')",
+        "outputSnippet": "Genap"
+      }
+    ],
+    "notes": [
+      "Blok else bersifat opsional. Anda boleh membuat pernyataan if tunggal tanpa pasangan else.",
+      "Semua baris di dalam blok yang sama harus memiliki jumlah spasi indentasi yang persis sama.",
+      "Kondisi di belakang if dievaluasi ke nilai kebenaran Boolean (True atau False)."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m12_q01",
+      "type": "mc",
+      "prompt": "Simbol apakah yang wajib ditulis di akhir baris pernyataan if atau else di Python?",
+      "code": "",
+      "options": [
+        ": (titik dua)",
+        "; (titik koma)",
+        "{ (kurung kurawal)",
+        "=> (panah)"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, setiap kepala blok perintah seperti if, else, for, dan def wajib diakhiri tanda titik dua ':'."
+    },
+    {
+      "id": "m12_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci kondisi agar kode hanya berjalan saat syarat benar:",
+      "codeWithBlank": "___ nilai >= 75:\n    print(\"Kompeten\")",
+      "options": [
+        "if",
+        "when",
+        "check",
+        "then"
+      ],
+      "acceptedAnswers": [
+        "if"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'if' digunakan untuk memeriksa kondisi logika di Python."
+    },
+    {
+      "id": "m12_q03",
+      "type": "mc",
+      "prompt": "Perhatikan kode berikut. Apa teks yang akan tercetak di layar?",
+      "code": "skor = 60\nif skor >= 70:\n    print('Lulus')\nelse:\n    print('Gagal')",
+      "options": [
+        "Gagal",
+        "Lulus",
+        "Error",
+        "Tidak tercetak apapun"
+      ],
+      "answerIndex": 0,
+      "explanation": "Karena 60 >= 70 bernilai False, maka alur program masuk ke blok 'else' dan mencetak 'Gagal'."
+    },
+    {
+      "id": "m12_q04",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci jalur alternatif jika kondisi if tidak terpenuhi:",
+      "codeWithBlank": "if terdaftar:\n    print(\"Masuk\")\n___:\n    print(\"Daftar Dulu\")",
+      "options": [
+        "else",
+        "otherwise",
+        "elif",
+        "default"
+      ],
+      "acceptedAnswers": [
+        "else"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'else:' menangani semua kemungkinan ketika kondisi if bernilai False."
+    },
+    {
+      "id": "m12_q05",
+      "type": "ro",
+      "prompt": "Susun struktur percabangan if-else pengecekan umur membuat SIM:",
+      "lines": [
+        "umur = 18",
+        "if umur >= 17:",
+        "    print('Boleh buat SIM')",
+        "else:",
+        "    print('Belum cukup umur')"
+      ],
+      "distractors": [],
+      "explanation": "Variabel dibuat terlebih dahulu, diikuti if kondisi, baris menjorok, else, lalu baris menjorok."
+    },
+    {
+      "id": "m12_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu SyntaxError karena lupa titik dua pada if:",
+      "lines": [
+        "poin = 90",
+        "if poin > 80",
+        "    print('Hebat!')"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "if poin > 80:",
+      "explanation": "Baris ke-2 kekurangan tanda titik dua ':' di ujung pernyataan if."
+    },
+    {
+      "id": "m12_q07",
+      "type": "mc",
+      "prompt": "Apa yang terjadi jika suatu pernyataan if tidak memiliki blok else dan kondisinya bernilai False?",
+      "code": "x = 5\nif x > 10:\n    print('Besar')",
+      "options": [
+        "Program tidak melakukan apa-apa dan lanjut ke baris berikutnya",
+        "Program memicu RuntimeError",
+        "Program otomatis mencetak False",
+        "Program berhenti secara paksa"
+      ],
+      "answerIndex": 0,
+      "explanation": "Jika kondisi if False dan tidak ada else, blok if dilewati dan program lanjut ke baris berikutnya."
+    },
+    {
+      "id": "m12_q08",
+      "type": "fb",
+      "prompt": "Lengkapi titik dua penutup pada blok else:",
+      "codeWithBlank": "else___\n    print(\"Selesai\")",
+      "options": [
+        ":",
+        ";",
+        "{",
+        "->"
+      ],
+      "acceptedAnswers": [
+        ":"
+      ],
+      "answerIndex": 0,
+      "explanation": "Blok 'else:' harus selalu diakhiri dengan tanda titik dua ':'."
+    },
+    {
+      "id": "m12_q09",
+      "type": "ro",
+      "prompt": "Susun pengecekan saldo kasir sebelum transaksi:",
+      "lines": [
+        "saldo = 50000",
+        "harga = 75000",
+        "if saldo >= harga:",
+        "    print('Pembayaran Berhasil')",
+        "else:",
+        "    print('Saldo Tidak Cukup')"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi variabel saldo dan harga, uji kecukupan dengan if-else, lalu tampilkan status."
+    },
+    {
+      "id": "m12_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu IndentationError di dalam blok if:",
+      "lines": [
+        "cuaca = 'hujan'",
+        "if cuaca == 'hujan':",
+        "print('Bawa payung!')"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "    print('Bawa payung!')",
+      "explanation": "Baris ke-3 tidak menjorok ke dalam (kekurangan indentasi 4 spasi di dalam blok if)."
+    }
+  ]
+}

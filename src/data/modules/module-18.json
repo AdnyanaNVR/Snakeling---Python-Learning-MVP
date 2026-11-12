@@ -1,0 +1,200 @@
+{
+  "id": "module-18",
+  "unit": 7,
+  "unitTitle": "Unit 7: Struktur Data",
+  "moduleNumber": 18,
+  "title": "Dictionary, Tuple, & Set",
+  "subtitle": "Menyimpan data pasangan kunci-nilai {}, tuple imutabel (), dan set unik {}",
+  "xpReward": 50,
+  "gemReward": 25,
+  "tip": {
+    "title": "Struktur Data Koleksi di Python",
+    "body": "Selain List, Python memiliki tiga struktur data koleksi penting: 1. Dictionary (dict) menyimpan pasangan kunci-nilai (key-value) dengan kurung kurawal {}. 2. Tuple (tuple) koleksi terurut yang imutabel (tidak bisa diubah) dengan kurung biasa (). 3. Set (set) koleksi elemen unik tanpa duplikat.",
+    "codeExample": "profil = {'nama': 'Adnyana', 'skor': 95}  # Dict\nkoordinat = (10, 20)                     # Tuple\ntag_unik = {'python', 'koding', 'python'} # Set (duplikat dibuang)\nprint(profil['nama'], koordinat[0], tag_unik)",
+    "outputExample": "Adnyana 10 {'koding', 'python'}",
+    "sections": [
+      {
+        "heading": "Dictionary: Pasangan Kunci & Nilai (Key-Value)",
+        "explanation": "Gunakan key untuk mengakses data secara instan alih-alih mengandalkan nomor indeks angka.",
+        "codeSnippet": "kasir = {'item': 'Kopi', 'harga': 15000}\nprint(kasir['harga'])",
+        "outputSnippet": "15000"
+      },
+      {
+        "heading": "Tuple: Koleksi Imutabel (Tidak Dapat Diubah)",
+        "explanation": "Tuple dibuat dengan kurung biasa (). Setelah dibuat, elemen tuple tidak dapat ditambah, dihapus, atau diganti. Cocok untuk data konstan seperti koordinat GPS atau hari dalam seminggu.",
+        "codeSnippet": "hari = ('Senin', 'Selasa', 'Rabu')\nprint(hari[0])",
+        "outputSnippet": "Senin"
+      },
+      {
+        "heading": "Set: Himpunan Elemen Unik",
+        "explanation": "Set otomatis menghapus item duplikat dan tidak memiliki indeks posisi.",
+        "codeSnippet": "angka = {1, 2, 2, 3, 3, 3}\nprint(angka)",
+        "outputSnippet": "{1, 2, 3}"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Katalog menu restoran disimpan sebagai Dictionary di mana nama makanan adalah 'key' dan harganya adalah 'value'. Koordinat lokasi GPS restoran adalah Tuple (lat, long).",
+        "codeSnippet": "menu = {'Espresso': 18000, 'Latte': 24000}\nprint(f'Harga Latte: Rp{menu[\"Latte\"]}')",
+        "outputSnippet": "Harga Latte: Rp24000"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Dict untuk key-value `{k: v}`, Tuple untuk data permanen `(a, b)`, dan Set untuk elemen unik `{a, b}`.",
+        "codeSnippet": "d = {'id': 1}; t = (1, 2); s = {1, 2}\nprint(type(d), type(t), type(s))",
+        "outputSnippet": "<class 'dict'> <class 'tuple'> <class 'set'>"
+      }
+    ],
+    "notes": [
+      "Mengakses key dictionary yang tidak ada memicu KeyError. Gunakan dict.get('key') untuk nilai default aman.",
+      "Mencoba mengubah elemen tuple (t[0] = 5) memicu TypeError: 'tuple' object does not support item assignment.",
+      "Dictionary key harus bertipe data imutabel (seperti string, int, atau tuple)."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m18_q01",
+      "type": "mc",
+      "prompt": "Struktur data manakah di Python yang menyimpan data dalam format pasangan kunci dan nilai (key-value)?",
+      "code": "",
+      "options": [
+        "Dictionary (dict)",
+        "List",
+        "Tuple",
+        "Array"
+      ],
+      "answerIndex": 0,
+      "explanation": "Dictionary menggunakan format key-value yang diapit tanda kurung kurawal '{}'."
+    },
+    {
+      "id": "m18_q02",
+      "type": "fb",
+      "prompt": "Lengkapi cara mengakses nilai key 'nama' dari dictionary siswa:",
+      "codeWithBlank": "nama_siswa = siswa[___\"nama\"___]",
+      "options": [
+        "",
+        "'",
+        "\"",
+        ":"
+      ],
+      "acceptedAnswers": [
+        ""
+      ],
+      "answerIndex": 0,
+      "explanation": "Akses nilai dict dengan sintaks siswa['nama'] atau siswa[\"nama\"]."
+    },
+    {
+      "id": "m18_q03",
+      "type": "mc",
+      "prompt": "Manakah karakteristik utama dari struktur data Tuple di Python?",
+      "code": "",
+      "options": [
+        "Bersifat imutabel (tidak dapat diubah setelah dibuat)",
+        "Dapat ditambah item baru dengan append()",
+        "Menghapus duplikat secara otomatis",
+        "Menggunakan kurung siku []"
+      ],
+      "answerIndex": 0,
+      "explanation": "Tuple bersifat immutable (isi elemennya tidak dapat dimodifikasi setelah didefinisikan)."
+    },
+    {
+      "id": "m18_q04",
+      "type": "fb",
+      "prompt": "Lengkapi kurung pembuka dan penutup untuk membuat Tuple koordinat:",
+      "codeWithBlank": "titik = ___100, 200___",
+      "options": [
+        "( / )",
+        "[ / ]",
+        "{ / }",
+        "< / >"
+      ],
+      "acceptedAnswers": [
+        "( / )",
+        "()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Tuple dibuat dengan tanda kurung biasa '( )'."
+    },
+    {
+      "id": "m18_q05",
+      "type": "ro",
+      "prompt": "Susun kode membuat dictionary kasir dan menambahkan key baru:",
+      "lines": [
+        "produk = {'nama': 'Kopi', 'harga': 15000}",
+        "produk['stok'] = 10",
+        "print(produk)"
+      ],
+      "distractors": [],
+      "explanation": "Definisikan dictionary awal, tambahkan key 'stok' baru dengan penugasan, lalu cetak."
+    },
+    {
+      "id": "m18_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang mencoba mengubah elemen Tuple sehingga memicu TypeError:",
+      "lines": [
+        "koordinat = (10, 20)",
+        "koordinat[0] = 15",
+        "print(koordinat)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "koordinat = (15, 20)",
+      "explanation": "Tuple bersifat imutabel dan tidak mendukung penugasan elemen (item assignment)."
+    },
+    {
+      "id": "m18_q07",
+      "type": "mc",
+      "prompt": "Berapa banyak elemen yang tersisa di dalam Set berikut?",
+      "code": "angka = {1, 2, 2, 3, 3, 3}\nprint(len(angka))",
+      "options": [
+        "3",
+        "6",
+        "1",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Set otomatis membuang nilai duplikat sehingga menyisakan elemen unik {1, 2, 3} (panjang 3)."
+    },
+    {
+      "id": "m18_q08",
+      "type": "fb",
+      "prompt": "Lengkapi tanda titik dua pemisah key dan value di dalam dictionary:",
+      "codeWithBlank": "menu = {\"Teh\" ___ 8000}",
+      "options": [
+        ":",
+        "=",
+        "->",
+        "=>"
+      ],
+      "acceptedAnswers": [
+        ":"
+      ],
+      "answerIndex": 0,
+      "explanation": "Pasangan key dan value di dalam dict dipisahkan oleh tanda titik dua ':'."
+    },
+    {
+      "id": "m18_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu KeyError karena mengakses key yang tidak ada:",
+      "lines": [
+        "user = {'username': 'adnyana'}",
+        "print(user['email'])"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "print(user.get('email', 'Tidak ada'))",
+      "explanation": "Key 'email' belum pernah dibuat di dalam dictionary user, memicu KeyError."
+    },
+    {
+      "id": "m18_q10",
+      "type": "mc",
+      "prompt": "Metode dictionary apa yang aman digunakan untuk mengambil nilai tanpa memicu KeyError jika key tidak ada?",
+      "code": "",
+      "options": [
+        ".get()",
+        ".find()",
+        ".search()",
+        ".lookup()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode .get(key, default) mengembalikan None atau nilai default aman jika key tidak ditemukan."
+    }
+  ]
+}

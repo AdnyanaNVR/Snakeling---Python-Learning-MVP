@@ -1,0 +1,191 @@
+{
+  "id": "module-14",
+  "unit": 6,
+  "unitTitle": "Unit 6: Perulangan",
+  "moduleNumber": 14,
+  "title": "Perulangan for & Fungsi range()",
+  "subtitle": "Mengulang instruksi secara otomatis dengan loop for dan deret angka",
+  "xpReward": 45,
+  "gemReward": 20,
+  "tip": {
+    "title": "Perulangan for & Fungsi range()",
+    "body": "Perulangan (loop) digunakan untuk mengeksekusi sekumpulan instruksi berkali-kali tanpa menulis ulang kode yang sama. Di Python, for loop sangat powerful untuk mengulang elemen dalam urutan (list, string, atau deret range). Fungsi range(n) menghasilkan urutan angka dari 0 sampai sebelum n.",
+    "codeExample": "for i in range(3):\n    print(f'Iterasi ke-{i}')",
+    "outputExample": "Iterasi ke-0\nIterasi ke-1\nIterasi ke-2",
+    "sections": [
+      {
+        "heading": "Sintaks Dasar for in",
+        "explanation": "Formatnya adalah `for variabel in koleksi:`. Pada setiap putaran, variabel loop akan mengambil nilai elemen berikutnya secara berurutan.",
+        "codeSnippet": "for huruf in 'SNAKE':\n    print(huruf)",
+        "outputSnippet": "S\nN\nA\nK\nE"
+      },
+      {
+        "heading": "Memahami Fungsi range(stop)",
+        "explanation": "Fungsi range(5) menghasilkan urutan angka 0, 1, 2, 3, 4 (tepat 5 kali putaran, dimulai dari angka nol sampai sebelum 5).",
+        "codeSnippet": "for angka in range(4):\n    print(angka)",
+        "outputSnippet": "0\n1\n2\n3"
+      },
+      {
+        "heading": "Parameter range(start, stop, step)",
+        "explanation": "Anda dapat menentukan angka awal (start), batas henti sebelum angka akhir (stop), dan jarak loncatan angka (step).",
+        "codeSnippet": "for n in range(1, 10, 2):\n    print(n, end=' ')",
+        "outputSnippet": "1 3 5 7 9 "
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Saat mencetak tiket antrean bernomor 1 sampai 10 di bank atau kasir swalayan, for loop secara instan mengotomatiskan pencetakan seluruh tiket dalam hitungan milidetik.",
+        "codeSnippet": "for no_antre in range(1, 4):\n    print(f'Tiket Nomor A-{no_antre}')",
+        "outputSnippet": "Tiket Nomor A-1\nTiket Nomor A-2\nTiket Nomor A-3"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "for loop mengulang instruksi sebanyak elemen yang ada. range(n) mengulang n kali dari 0 hingga n-1.",
+        "codeSnippet": "total = 0\nfor x in range(1, 4):\n    total += x\nprint('Total:', total)",
+        "outputSnippet": "Total: 6"
+      }
+    ],
+    "notes": [
+      "Ingat: range(5) berhenti di angka 4, BUKAN 5.",
+      "range() tidak memakan banyak memori karena ia menghasilkan angka secara dinamis on-demand (generator-like).",
+      "Variabel iterasi (seperti 'i') otomatis diperbarui pada setiap awal putaran loop."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m14_q01",
+      "type": "mc",
+      "prompt": "Angka berapa sajakah yang dihasilkan oleh ekspresi `range(4)`?",
+      "code": "",
+      "options": [
+        "0, 1, 2, 3",
+        "1, 2, 3, 4",
+        "0, 1, 2, 3, 4",
+        "1, 2, 3"
+      ],
+      "answerIndex": 0,
+      "explanation": "range(4) menghasilkan 4 angka yang dimulai dari indeks 0 sampai sebelum 4: 0, 1, 2, dan 3."
+    },
+    {
+      "id": "m14_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci perulangan untuk menelusuri deret range:",
+      "codeWithBlank": "___ i in range(5):\n    print(i)",
+      "options": [
+        "for",
+        "loop",
+        "repeat",
+        "while"
+      ],
+      "acceptedAnswers": [
+        "for"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kata kunci 'for' digunakan untuk melakukan iterasi dalam perulangan Python."
+    },
+    {
+      "id": "m14_q03",
+      "type": "ro",
+      "prompt": "Susun kode for loop yang menghitung total penjumlahan angka 1 sampai 3:",
+      "lines": [
+        "total = 0",
+        "for i in range(1, 4):",
+        "    total += i",
+        "print(total)"
+      ],
+      "distractors": [],
+      "explanation": "Inisialisasi akumulator total = 0, jalankan perulangan range(1, 4), tambahkan nilai i, lalu cetak."
+    },
+    {
+      "id": "m14_q04",
+      "type": "mc",
+      "prompt": "Berapa kali baris perintah di dalam loop berikut akan dieksekusi?",
+      "code": "for _ in range(7):\n    print('Halo')",
+      "options": [
+        "7 kali",
+        "6 kali",
+        "8 kali",
+        "0 kali"
+      ],
+      "answerIndex": 0,
+      "explanation": "range(7) berputar tepat 7 kali (indeks 0, 1, 2, 3, 4, 5, 6)."
+    },
+    {
+      "id": "m14_q05",
+      "type": "ro",
+      "prompt": "Susun for loop untuk mencetak bilangan ganjil 1, 3, 5 menggunakan step 2:",
+      "lines": [
+        "for angka in range(1, 6, 2):",
+        "    print(angka)"
+      ],
+      "distractors": [],
+      "explanation": "Gunakan for in range dengan start=1, stop=6, step=2, lalu cetak variabel angka."
+    },
+    {
+      "id": "m14_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu SyntaxError karena lupa titik dua pada for:",
+      "lines": [
+        "for i in range(3)",
+        "    print(i)"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "for i in range(3):",
+      "explanation": "Baris ke-1 kekurangan tanda titik dua ':' di akhir baris kepala loop for."
+    },
+    {
+      "id": "m14_q07",
+      "type": "mc",
+      "prompt": "Apa hasil cetak dari loop string berikut?",
+      "code": "hasil = ''\nfor k in 'PY':\n    hasil += k + '-'\nprint(hasil)",
+      "options": [
+        "P-Y-",
+        "PY-",
+        "-P-Y",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Loop berjalan untuk huruf 'P' lalu 'Y', sehingga menghasilkan string 'P-Y-'."
+    },
+    {
+      "id": "m14_q08",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi penghasil deret angka untuk mengulang 10 kali:",
+      "codeWithBlank": "for n in ___(10):\n    pass",
+      "options": [
+        "range",
+        "series",
+        "count",
+        "list"
+      ],
+      "acceptedAnswers": [
+        "range"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi bawaan 'range(10)' menghasilkan deret urutan angka untuk iterasi loop."
+    },
+    {
+      "id": "m14_q09",
+      "type": "ro",
+      "prompt": "Susun kode perulangan hitung mundur dari 3 ke 1:",
+      "lines": [
+        "for detik in range(3, 0, -1):",
+        "    print(f'Mulai dalam {detik}...')",
+        "print('Mulai!')"
+      ],
+      "distractors": [],
+      "explanation": "Gunakan range dengan step negatif -1 untuk hitung mundur, lalu akhiri dengan print 'Mulai!'."
+    },
+    {
+      "id": "m14_q10",
+      "type": "sb",
+      "prompt": "Temukan baris yang mengalami IndentationError di dalam badan for loop:",
+      "lines": [
+        "for x in range(2):",
+        "print(x * 10)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "    print(x * 10)",
+      "explanation": "Baris ke-2 harus menjorok 4 spasi ke dalam (indentasi) di bawah pernyataan for."
+    }
+  ]
+}

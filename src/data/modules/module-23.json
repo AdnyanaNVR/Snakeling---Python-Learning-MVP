@@ -1,0 +1,199 @@
+{
+  "id": "module-23",
+  "unit": 11,
+  "unitTitle": "Unit 11: File Handling",
+  "moduleNumber": 23,
+  "title": "File Handling: with open()",
+  "subtitle": "Membaca, menulis, dan menambahkan data ke berkas teks secara permanen",
+  "xpReward": 55,
+  "gemReward": 30,
+  "tip": {
+    "title": "Mengelola File di Python dengan with open()",
+    "body": "File handling memungkinkan program menyimpan data secara permanen di media penyimpanan (hard disk) sehingga data tidak hilang saat program ditutup. Cara modern dan paling aman membuka file di Python adalah menggunakan 'with open(nama_file, mode) as f:' yang secara otomatis menutup file setelah selesai.",
+    "codeExample": "# Menulis ke file\nwith open('catatan.txt', 'w') as f:\n    f.write('Halo dari Snakeling!')\n\n# Membaca dari file\nwith open('catatan.txt', 'r') as f:\n    isi = f.read()\n    print(isi)",
+    "outputExample": "Halo dari Snakeling!",
+    "sections": [
+      {
+        "heading": "Mode Akses File: 'r', 'w', 'a'",
+        "explanation": "1. 'r' (read): membaca file (error jika file tidak ada). 2. 'w' (write): menulis file dari awal (menimpa isi lama). 3. 'a' (append): menambahkan data baru di akhir file tanpa menghapus isi lama.",
+        "codeSnippet": "# Mode append menambah data\nwith open('log.txt', 'a') as f:\n    f.write('Aktivitas baru\\n')",
+        "outputSnippet": "(data tertulis ke log.txt)"
+      },
+      {
+        "heading": "Keunggulan 'with open()' (Context Manager)",
+        "explanation": "Dulu kita harus memanggil file.close() secara manual. Jika lupa, memori bisa bocor atau file korup. Dengan pernyataan 'with', Python menjamin file otomatis tertutup bahkan jika terjadi error di tengah jalan.",
+        "codeSnippet": "with open('pesan.txt', 'w') as f:\n    f.write('Aman dengan with')",
+        "outputSnippet": "(file otomatis tertutup rapi)"
+      },
+      {
+        "heading": "Membaca Baris per Baris: readlines() & loop",
+        "explanation": "Anda dapat melakukan iterasi langsung pada objek file untuk membaca baris demi baris secara hemat memori.",
+        "codeSnippet": "# Iterasi baris\n# for baris in f:\n#     print(baris.strip())",
+        "outputSnippet": "Membaca baris secara bertahap"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Menyimpan riwayat struk transaksi kasir ke dalam berkas 'laporan_harian.txt'. Setiap ada pelanggan yang membayar, data transaksi baru di-append ke baris paling bawah berkas.",
+        "codeSnippet": "transaksi = '1x Kopi Latte - Rp24000\\n'\nwith open('laporan.txt', 'a') as f:\n    f.write(transaksi)",
+        "outputSnippet": "Transaksi tersimpan di laporan.txt"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Gunakan 'with open()' agar aman. Mode 'r' untuk baca, 'w' untuk tulis baru, dan 'a' untuk tambah.",
+        "codeSnippet": "print('File handling beres!')",
+        "outputSnippet": "File handling beres!"
+      }
+    ],
+    "notes": [
+      "Mode 'w' akan menghapus seluruh isi file lama jika file tersebut sudah ada sebelumnya!",
+      "Membuka file dengan mode 'r' yang tidak ada di direktori akan memicu FileNotFoundError.",
+      "Gunakan encoding='utf-8' saat membuka file teks yang memuat karakter khusus atau emoji."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m23_q01",
+      "type": "mc",
+      "prompt": "Mode akses file apakah yang digunakan untuk MENAMBAH data di baris akhir tanpa menghapus isi lama?",
+      "code": "",
+      "options": [
+        "'a' (append)",
+        "'w' (write)",
+        "'r' (read)",
+        "'x' (exclusive)"
+      ],
+      "answerIndex": 0,
+      "explanation": "Mode 'a' (append) menambahkan teks ke akhir berkas tanpa menimpa data yang sudah ada."
+    },
+    {
+      "id": "m23_q02",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi bawaan untuk membuka file berkas di Python:",
+      "codeWithBlank": "with ___(\"data.txt\", \"r\") as f:\n    teks = f.read()",
+      "options": [
+        "open",
+        "file",
+        "load",
+        "read"
+      ],
+      "acceptedAnswers": [
+        "open"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi bawaan 'open()' digunakan untuk membuka koneksi berkas di Python."
+    },
+    {
+      "id": "m23_q03",
+      "type": "mc",
+      "prompt": "Apa keuntungan utama menggunakan pernyataan `with open(...)` dibandingkan open biasa?",
+      "code": "",
+      "options": [
+        "File otomatis tertutup secara aman meskipun terjadi error",
+        "File otomatis terenkripsi dengan password",
+        "Kecepatan penulisan meningkat 10 kali lipat",
+        "Tidak perlu menentukan nama file"
+      ],
+      "answerIndex": 0,
+      "explanation": "Pernyataan 'with' bertindak sebagai context manager yang otomatis menutup file (f.close())."
+    },
+    {
+      "id": "m23_q04",
+      "type": "fb",
+      "prompt": "Lengkapi mode untuk membaca isi file berkas teks:",
+      "codeWithBlank": "with open(\"laporan.txt\", \"___\") as f:\n    isi = f.read()",
+      "options": [
+        "r",
+        "w",
+        "a",
+        "read"
+      ],
+      "acceptedAnswers": [
+        "r"
+      ],
+      "answerIndex": 0,
+      "explanation": "Mode 'r' (read) digunakan untuk membaca isi file."
+    },
+    {
+      "id": "m23_q05",
+      "type": "ro",
+      "prompt": "Susun penulisan data ke dalam file teks menggunakan with open:",
+      "lines": [
+        "pesan = 'Sistem Aktif'",
+        "with open('status.txt', 'w') as f:",
+        "    f.write(pesan)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan teks pesan, buka file dengan mode 'w' menggunakan with open, lalu tulis dengan f.write()."
+    },
+    {
+      "id": "m23_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu FileNotFoundError saat membaca file yang tidak eksis:",
+      "lines": [
+        "with open('file_yang_tidak_ada.txt', 'r') as f:",
+        "    data = f.read()",
+        "print(data)"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "with open('file_yang_tidak_ada.txt', 'a') as f:",
+      "explanation": "Membuka file non-eksisten dalam mode 'r' memicu FileNotFoundError. Gunakan 'w' atau 'a' jika ingin otomatis membuatnya."
+    },
+    {
+      "id": "m23_q07",
+      "type": "mc",
+      "prompt": "Metode apakah yang digunakan pada objek file untuk menuliskan teks string ke dalam berkas?",
+      "code": "",
+      "options": [
+        ".write()",
+        ".print()",
+        ".save()",
+        ".put()"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.write(string)' digunakan untuk menuangkan data teks ke dalam file."
+    },
+    {
+      "id": "m23_q08",
+      "type": "fb",
+      "prompt": "Lengkapi metode untuk membaca seluruh isi file menjadi satu string:",
+      "codeWithBlank": "with open(\"data.txt\", \"r\") as f:\n    konten = f.___()",
+      "options": [
+        "read",
+        "get",
+        "scan",
+        "all"
+      ],
+      "acceptedAnswers": [
+        "read"
+      ],
+      "answerIndex": 0,
+      "explanation": "Metode '.read()' membaca seluruh isi file dan mengembalikannya sebagai string tunggal."
+    },
+    {
+      "id": "m23_q09",
+      "type": "sb",
+      "prompt": "Temukan baris yang lupa menggunakan kata kunci 'as' pada sintaks with open:",
+      "lines": [
+        "with open('log.txt', 'w') f:",
+        "    f.write('Catatan')"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "with open('log.txt', 'w') as f:",
+      "explanation": "Sintaks context manager memerlukan kata kunci 'as f:' untuk menampung objek file."
+    },
+    {
+      "id": "m23_q10",
+      "type": "mc",
+      "prompt": "Apa yang terjadi jika file 'skor.txt' sudah ada lalu dibuka kembali dengan mode `'w'`?",
+      "code": "with open('skor.txt', 'w') as f:\n    f.write('Baru')",
+      "options": [
+        "Seluruh isi file lama dihapus (ditimpa) dengan teks 'Baru'",
+        "Teks 'Baru' otomatis ditambahkan di baris paling bawah",
+        "Memicu FileExistsError",
+        "File otomatis diduplikat menjadi skor_2.txt"
+      ],
+      "answerIndex": 0,
+      "explanation": "Mode 'w' (write) mengosongkan/menimpa isi file lama dari awal."
+    }
+  ]
+}

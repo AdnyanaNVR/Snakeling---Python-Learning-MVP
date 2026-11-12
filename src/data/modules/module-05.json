@@ -1,0 +1,198 @@
+{
+  "id": "module-05",
+  "unit": 2,
+  "unitTitle": "Unit 2: Tipe Data",
+  "moduleNumber": 5,
+  "title": "String & Boolean (Teks & Kebenaran)",
+  "subtitle": "Mengolah teks dan nilai logika True/False",
+  "xpReward": 35,
+  "gemReward": 15,
+  "tip": {
+    "title": "Tipe Data String & Boolean",
+    "body": "String (str) digunakan untuk menyimpan teks yang diapit tanda kutip (' atau \"). Boolean (bool) hanya memiliki dua nilai kemungkinan: True (benar) atau False (salah). Tipe Boolean sangat penting sebagai fondasi logika pengambilan keputusan di dalam program.",
+    "codeExample": "nama = 'Python'\nstatus_aktif = True\nsudah_lulus = False\nprint(nama, status_aktif)",
+    "outputExample": "Python True",
+    "sections": [
+      {
+        "heading": "Karakter String & Tanda Kutip",
+        "explanation": "String dapat ditulis dengan tanda kutip tunggal ('...') atau ganda (\"...\"). Jika teks memuat tanda kutip di dalamnya, Anda dapat menggunakan kutip jenis lain sebagai pembungkusnya.",
+        "codeSnippet": "pesan = \"Hari ini hari Jum'at\"\nprint(pesan)",
+        "outputSnippet": "Hari ini hari Jum'at"
+      },
+      {
+        "heading": "Karakter Escape (\\n dan \\t)",
+        "explanation": "Gunakan backslash (\\) untuk karakter khusus, seperti \\n untuk baris baru dan \\t untuk tab indentasi.",
+        "codeSnippet": "print('Menu:\\n1. Kopi\\n2. Teh')",
+        "outputSnippet": "Menu:\n1. Kopi\n2. Teh"
+      },
+      {
+        "heading": "Aturan Penulisan Boolean",
+        "explanation": "Nilai Boolean di Python wajib diawali huruf kapital: True dan False. Menuliskan true atau false dengan huruf kecil akan memicu NameError.",
+        "codeSnippet": "lampu_menyala = True\nprint(lampu_menyala)",
+        "outputSnippet": "True"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Pada sistem login aplikasi, username Anda disimpan sebagai String ('user123'), sedangkan status 'apakah password cocok' dievaluasi sebagai Boolean (True jika benar, False jika salah).",
+        "codeSnippet": "is_admin = False\nprint('Akses admin:', is_admin)",
+        "outputSnippet": "Akses admin: False"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "String menyimpan data karakter alfanumerik dalam tanda kutip. Boolean mewakili kebenaran mutlak (True / False).",
+        "codeSnippet": "print(type('Halo'), type(True))",
+        "outputSnippet": "<class 'str'> <class 'bool'>"
+      }
+    ],
+    "notes": [
+      "Penulisan True dan False peka huruf kapital: huruf pertama harus huruf besar T dan F.",
+      "String kosong '' atau '\"\"' memiliki panjang 0 karakter.",
+      "Nilai 1 sering dipetakan ke True, dan 0 ke False pada konversi logika."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m05_q01",
+      "type": "mc",
+      "prompt": "Manakah penulisan nilai Boolean yang sah di Python?",
+      "code": "",
+      "options": [
+        "True dan False",
+        "true dan false",
+        "TRUE dan FALSE",
+        "'true' dan 'false'"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, nilai Boolean diawali dengan huruf kapital: True dan False."
+    },
+    {
+      "id": "m05_q02",
+      "type": "fb",
+      "prompt": "Lengkapi karakter escape untuk membuat baris baru di dalam string:",
+      "codeWithBlank": "print(\"Baris 1___nBaris 2\")",
+      "options": [
+        "\\",
+        "/",
+        "%",
+        "$"
+      ],
+      "acceptedAnswers": [
+        "\\"
+      ],
+      "answerIndex": 0,
+      "explanation": "Simbol '\\n' digunakan untuk membuat baris baru di dalam teks string."
+    },
+    {
+      "id": "m05_q03",
+      "type": "ro",
+      "prompt": "Susun kode berikut untuk mendeklarasikan string dan boolean lalu mencetaknya:",
+      "lines": [
+        "nama = 'Snakeling'",
+        "is_gratis = True",
+        "print(nama, is_gratis)"
+      ],
+      "distractors": [],
+      "explanation": "Variabel dideklarasikan terlebih dahulu kemudian dicetak menggunakan fungsi print."
+    },
+    {
+      "id": "m05_q04",
+      "type": "sb",
+      "prompt": "Temukan baris di bawah ini yang salah dalam penulisan nilai Boolean:",
+      "lines": [
+        "tersedia = true",
+        "harga = 15000",
+        "print(harga)"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "tersedia = True",
+      "explanation": "Baris ke-1 menulis 'true' dengan huruf kecil. Huruf 'T' harus kapital pada tipe bool Python."
+    },
+    {
+      "id": "m05_q05",
+      "type": "mc",
+      "prompt": "Apa hasil cetak dari baris kode penggabungan string berikut?",
+      "code": "print('Ular' + ' ' + 'Python')",
+      "options": [
+        "Ular Python",
+        "UlarPython",
+        "'Ular' 'Python'",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Tanda '+' di antara teks menggabungkan string. Karena ada spasi di tengah, hasilnya 'Ular Python'."
+    },
+    {
+      "id": "m05_q06",
+      "type": "fb",
+      "prompt": "Lengkapi tanda kutip penutup yang cocok untuk string berikut:",
+      "codeWithBlank": "kota = 'Jakarta___",
+      "options": [
+        "'",
+        "\"",
+        "`",
+        ";"
+      ],
+      "acceptedAnswers": [
+        "'"
+      ],
+      "answerIndex": 0,
+      "explanation": "Tanda kutip pembuka dan penutup harus bertipe sama."
+    },
+    {
+      "id": "m05_q07",
+      "type": "ro",
+      "prompt": "Susun baris kode untuk mengevaluasi kebenaran kondisi ke dalam variabel boolean:",
+      "lines": [
+        "poin = 80",
+        "lulus = poin >= 70",
+        "print(lulus)"
+      ],
+      "distractors": [],
+      "explanation": "Tentukan nilai skor, evaluasi perbandingan menghasilkan Boolean, lalu cetak hasilnya."
+    },
+    {
+      "id": "m05_q08",
+      "type": "sb",
+      "prompt": "Temukan baris dengan string yang belum ditutup tanda kutipnya:",
+      "lines": [
+        "pesan = 'Selamat datang",
+        "level = 1",
+        "print(level)"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "pesan = 'Selamat datang'",
+      "explanation": "Baris ke-1 memicu SyntaxError: unterminated string literal karena tanda kutip belum ditutup."
+    },
+    {
+      "id": "m05_q09",
+      "type": "mc",
+      "prompt": "Berapa panjang karakter dari string kosong `teks = ''`?",
+      "code": "print(len(''))",
+      "options": [
+        "0",
+        "1",
+        "None",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "String kosong memiliki 0 karakter."
+    },
+    {
+      "id": "m05_q10",
+      "type": "fb",
+      "prompt": "Lengkapi nilai boolean untuk menyatakan kondisi salah:",
+      "codeWithBlank": "pintu_terkunci = ___",
+      "options": [
+        "False",
+        "false",
+        "FALSE",
+        "Salah"
+      ],
+      "acceptedAnswers": [
+        "False"
+      ],
+      "answerIndex": 0,
+      "explanation": "Nilai kebenaran salah ditulis 'False' dengan F kapital."
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "id": "module-02",
+  "unit": 1,
+  "unitTitle": "Unit 1: Dasar Python",
+  "moduleNumber": 2,
+  "title": "Sintaks Dasar & Komentar (#)",
+  "subtitle": "Memahami aturan indentasi dan catatan kode di Python",
+  "xpReward": 35,
+  "gemReward": 15,
+  "tip": {
+    "title": "Sintaks Dasar & Komentar di Python",
+    "body": "Python terkenal dengan sintaksnya yang bersih dan mudah dibaca. Di Python, blok kode tidak menggunakan tanda kurung kurawal {}, melainkan menggunakan indentasi (spasi menjorok). Tanda pagar (#) digunakan untuk membuat catatan atau komentar yang diabaikan oleh komputer.",
+    "codeExample": "# Program sapaan ramah\npesan = 'Selamat pagi!'\nprint(pesan)  # Menampilkan isi variabel",
+    "outputExample": "Selamat pagi!",
+    "sections": [
+      {
+        "heading": "Aturan Indentasi (Whitespace)",
+        "explanation": "Python menggunakan spasi di awal baris untuk menentukan struktur blok instruksi. Standar resmi Python menggunakan 4 spasi untuk satu tingkatan indentasi. Kesalahan indentasi akan memicu IndentationError.",
+        "codeSnippet": "if True:\n    print('Baris ini menjorok 4 spasi')",
+        "outputSnippet": "Baris ini menjorok 4 spasi"
+      },
+      {
+        "heading": "Komentar Satu Baris dengan #",
+        "explanation": "Tanda pagar (#) menandai awal komentar satu baris. Semua teks setelah simbol # hingga akhir baris tersebut tidak akan dieksekusi. Sangat berguna untuk memberi penjelasan bagi programmer lain.",
+        "codeSnippet": "# Hitung total harga minuman\nharga = 15000\nprint(harga)",
+        "outputSnippet": "15000"
+      },
+      {
+        "heading": "Komentar Multi-Baris (Docstring)",
+        "explanation": "Untuk dokumentasi fungsi atau komentar yang panjang melintasi beberapa baris, Anda dapat menggunakan tiga tanda kutip berurutan (''' atau \"\"\").",
+        "codeSnippet": "\"\"\"\nAplikasi Kasir Sederhana\nDibuat oleh: Siswa Python\n\"\"\"\nprint('Sistem Kasir Aktif')",
+        "outputSnippet": "Sistem Kasir Aktif"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Bayangkan resep masakan di mana setiap langkah utama memiliki catatan kaki khusus untuk koki (seperti: 'Tips: jangan terlalu panas'). Komentar kode adalah catatan rahasia tersebut yang membantu tim membaca alur kerja tanpa mengacaukan hasil masakan.",
+        "codeSnippet": "suhu = 80  # Suhu ideal espresso\nprint(f'Menyeduh pada {suhu}°C')",
+        "outputSnippet": "Menyeduh pada 80°C"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "1. Python mengeksekusi kode baris demi baris dari atas ke bawah. 2. Gunakan simbol # untuk catatan satu baris. 3. Jaga kerapian indentasi agar terhindar dari IndentationError.",
+        "codeSnippet": "# Selesai\nprint('Kode bersih dan rapi!')",
+        "outputSnippet": "Kode bersih dan rapi!"
+      }
+    ],
+    "notes": [
+      "Jangan mencampur spasi dan tombol Tab di dalam kode Python, selalu gunakan spasi murni.",
+      "Komentar yang baik menjelaskan 'mengapa' kode ditulis, bukan hanya sekadar mengulang 'apa' yang dilakukan kode.",
+      "Meletakkan spasi sembarangan di baris biasa tanpa pernyataan blok (seperti if atau for) akan memicu IndentationError: unexpected indent."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m02_q01",
+      "type": "mc",
+      "prompt": "Simbol apakah yang digunakan untuk menulis komentar satu baris di Python?",
+      "code": "",
+      "options": [
+        "# (tanda pagar)",
+        "// (garis miring ganda)",
+        "/* */ (blok)",
+        "<!-- --> (tag)"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, karakter '#' digunakan untuk membuat komentar satu baris yang diabaikan oleh penerjemah."
+    },
+    {
+      "id": "m02_q02",
+      "type": "fb",
+      "prompt": "Lengkapi baris komentar berikut agar tidak dieksekusi sebagai perintah Python:",
+      "codeWithBlank": "___ Ini adalah catatan kalkulasi harga\nharga = 20000",
+      "options": [
+        "#",
+        "//",
+        "--",
+        "/*"
+      ],
+      "acceptedAnswers": [
+        "#"
+      ],
+      "answerIndex": 0,
+      "explanation": "Komentar satu baris di Python wajib diawali dengan simbol '#'."
+    },
+    {
+      "id": "m02_q03",
+      "type": "ro",
+      "prompt": "Susun baris kode berikut agar diawali komentar lalu diakhiri fungsi print:",
+      "lines": [
+        "# Menampilkan pesan selamat datang",
+        "print(\"Halo Siswa Snakeling!\")"
+      ],
+      "distractors": [],
+      "explanation": "Komentar dokumentasi diletakkan di atas sebelum instruksi eksekusi fungsi print()."
+    },
+    {
+      "id": "m02_q04",
+      "type": "mc",
+      "prompt": "Bagaimana cara Python mengelompokkan blok kode program?",
+      "code": "",
+      "options": [
+        "Menggunakan indentasi (spasi menjorok)",
+        "Menggunakan kurung kurawal { }",
+        "Menggunakan kata kunci begin dan end",
+        "Menggunakan titik koma ; di setiap baris"
+      ],
+      "answerIndex": 0,
+      "explanation": "Python mengandalkan indentasi spasi untuk menentukan hierarki blok kode."
+    },
+    {
+      "id": "m02_q05",
+      "type": "fb",
+      "prompt": "Lengkapi tanda kutip tiga untuk membuat blok komentar multi-baris (docstring):",
+      "codeWithBlank": "___Dokumentasi Modul Python___",
+      "options": [
+        "\"\"\"",
+        "'''",
+        "###",
+        "///"
+      ],
+      "acceptedAnswers": [
+        "\"\"\"",
+        "'''"
+      ],
+      "answerIndex": 0,
+      "explanation": "Komentar multi-baris dibuat dengan tiga tanda kutip pembuka dan penutup (\"\"\" atau ''')."
+    },
+    {
+      "id": "m02_q06",
+      "type": "ro",
+      "prompt": "Urutkan proses penulisan kode berikut dari baris komentar hingga pencetakan:",
+      "lines": [
+        "# Simpan nama kursus",
+        "kursus = 'Python Dasar'",
+        "print(kursus)"
+      ],
+      "distractors": [],
+      "explanation": "Komentar diletakkan di atas, diikuti inisialisasi variabel, lalu pencetakan variabel."
+    },
+    {
+      "id": "m02_q07",
+      "type": "mc",
+      "prompt": "Perhatikan kode berikut. Apa hasil yang muncul di layar terminal?",
+      "code": "print('Python Hebat')\n# print('Python Sulit')",
+      "options": [
+        "Python Hebat",
+        "Python Hebat\nPython Sulit",
+        "Python Sulit",
+        "Error: Sintaks komentar salah"
+      ],
+      "answerIndex": 0,
+      "explanation": "Baris kedua diawali tanda '#' sehingga diabaikan sepenuhnya oleh penerjemah Python."
+    },
+    {
+      "id": "m02_q08",
+      "type": "fb",
+      "prompt": "Berapa standar jumlah spasi yang direkomendasikan PEP 8 untuk setiap level indentasi Python?",
+      "codeWithBlank": "# Standar indentasi adalah ___ spasi",
+      "options": [
+        "4",
+        "2",
+        "8",
+        "1"
+      ],
+      "acceptedAnswers": [
+        "4"
+      ],
+      "answerIndex": 0,
+      "explanation": "Panduan gaya resmi Python (PEP 8) merekomendasikan penggunaan 4 spasi untuk setiap level indentasi."
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "module-25",
+  "unit": 14,
+  "unitTitle": "Unit 14: Praktik & Proyek Akhir",
+  "moduleNumber": 25,
+  "title": "Ujian Kelulusan Utama Python Master",
+  "subtitle": "Evaluasi akhir terpadu mencakup seluruh 14 tingkat materi Python",
+  "xpReward": 150,
+  "gemReward": 100,
+  "tip": {
+    "title": "Ujian Kelulusan Utama Python Master",
+    "body": "Selamat atas pencapaian luar biasa Anda di Snakeling! Ini adalah ujian puncak kelulusan yang mencakup integrasi fungsi, struktur data, percabangan, perulangan, penanganan error, file handling, dan OOP.",
+    "codeExample": "# Aplikasi Kasir Berbasis OOP Lengkap\nclass Kasir:\n    def __init__(self, nama):\n        self.nama = nama\n        self.items = []\n    def tambah(self, item, harga):\n        self.items.append({'item': item, 'harga': harga})\n    def hitung(self):\n        return sum(x['harga'] for x in self.items)\n\nk = Kasir('Snakeling Cafe')\nk.tambah('Espresso', 18000)\nprint('Total:', k.hitung())",
+    "outputExample": "Total: 18000"
+  },
+  "skipTipCard": true,
+  "quizzes": [
+    {
+      "id": "m25_q01",
+      "type": "mc",
+      "prompt": "Manakah paradigma yang memadukan atribut (data) dan method (fungsi) ke dalam satu kesatuan Class di Python?",
+      "code": "",
+      "options": [
+        "Object-Oriented Programming (OOP)",
+        "Functional Programming murni",
+        "Procedural Programming saja",
+        "Low-level Assembly"
+      ],
+      "answerIndex": 0,
+      "explanation": "OOP (Object-Oriented Programming) mengemas data (atribut) dan perilaku (method) ke dalam Class dan Objek."
+    },
+    {
+      "id": "m25_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci pembuka definisi fungsi kasir:",
+      "codeWithBlank": "___ cetak_struk(pesanan):\n    pass",
+      "options": [
+        "def",
+        "fn",
+        "function",
+        "void"
+      ],
+      "acceptedAnswers": [
+        "def"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi selalu diawali kata kunci 'def'."
+    },
+    {
+      "id": "m25_q03",
+      "type": "ro",
+      "prompt": "Susun alur lengkap aplikasi kasir berbasis fungsi dan list:",
+      "lines": [
+        "pesanan = []",
+        "pesanan.append({'menu': 'Kopi', 'harga': 15000})",
+        "total = sum(item['harga'] for item in pesanan)",
+        "print(f'Total Bayar: Rp{total}')"
+      ],
+      "distractors": [],
+      "explanation": "Buat list pesanan, tambahkan item dict, hitung total akumulasi dengan sum(), lalu tampilkan nota."
+    },
+    {
+      "id": "m25_q04",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam membuka file transaksi untuk dibaca:",
+      "lines": [
+        "with open('nota.txt', 'read') as f:",
+        "    isi = f.read()",
+        "print(isi)"
+      ],
+      "buggyLineIndex": 0,
+      "fixedLine": "with open('nota.txt', 'r') as f:",
+      "explanation": "Mode baca adalah karakter tunggal 'r', bukan kata 'read'."
+    },
+    {
+      "id": "m25_q05",
+      "type": "mc",
+      "prompt": "Apa hasil dari pemanggilan `hitung(5)` jika fungsinya memiliki parameter default `def hitung(a, b=10): return a + b`?",
+      "code": "def hitung(a, b=10):\n    return a + b\nprint(hitung(5))",
+      "options": [
+        "15",
+        "5",
+        "10",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "Karena argumen kedua tidak diberikan, nilai default b=10 digunakan: 5 + 10 = 15."
+    },
+    {
+      "id": "m25_q06",
+      "type": "fb",
+      "prompt": "Lengkapi penanganan exception untuk mencegah crash saat file tidak ditemukan:",
+      "codeWithBlank": "except ___:\n    print(\"File tidak ditemukan!\")",
+      "options": [
+        "FileNotFoundError",
+        "IOError",
+        "ValueError",
+        "KeyError"
+      ],
+      "acceptedAnswers": [
+        "FileNotFoundError"
+      ],
+      "answerIndex": 0,
+      "explanation": "Python memicu 'FileNotFoundError' ketika file yang dicoba dibaca tidak ada di disk."
+    },
+    {
+      "id": "m25_q07",
+      "type": "ro",
+      "prompt": "Susun alur pemecahan kalimat dan penyaringan kata yang panjangnya lebih dari 3 huruf:",
+      "lines": [
+        "kalimat = 'Belajar Python itu seru'",
+        "kata_list = kalimat.split()",
+        "kata_panjang = [k for k in kata_list if len(k) > 3]",
+        "print(kata_panjang)"
+      ],
+      "distractors": [],
+      "explanation": "Siapkan kalimat, pecah dengan .split(), filter dengan list comprehension len(k) > 3, lalu cetak."
+    },
+    {
+      "id": "m25_q08",
+      "type": "sb",
+      "prompt": "Temukan baris di mana dictionary diakses dengan sintaks method get yang salah ketik:",
+      "lines": [
+        "data = {'skor': 90}",
+        "nilai = data.fetch('skor', 0)",
+        "print(nilai)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "nilai = data.get('skor', 0)",
+      "explanation": "Metode resmi dictionary adalah '.get()', bukan '.fetch()'."
+    },
+    {
+      "id": "m25_q09",
+      "type": "mc",
+      "prompt": "Berapa kali for loop berikut akan mengeksekusi perintah di dalamnya?",
+      "code": "for i in range(2, 8, 2):\n    pass",
+      "options": [
+        "3 kali (angka 2, 4, 6)",
+        "4 kali",
+        "6 kali",
+        "2 kali"
+      ],
+      "answerIndex": 0,
+      "explanation": "range(2, 8, 2) menghasilkan angka 2, 4, dan 6 (tepat 3 putaran sebelum angka 8)."
+    },
+    {
+      "id": "m25_q10",
+      "type": "fb",
+      "prompt": "Lengkapi operator untuk menggabungkan dua list menjadi satu:",
+      "codeWithBlank": "gabung = list_a ___ list_b",
+      "options": [
+        "+",
+        "&",
+        "*",
+        "extend"
+      ],
+      "acceptedAnswers": [
+        "+"
+      ],
+      "answerIndex": 0,
+      "explanation": "Operator '+' pada dua list akan menyambungkan (concatenate) keduanya."
+    },
+    {
+      "id": "m25_q11",
+      "type": "ro",
+      "prompt": "Susun class Kasir dengan method tambah item belanja:",
+      "lines": [
+        "class Kasir:",
+        "    def __init__(self):",
+        "        self.total = 0",
+        "    def beli(self, harga):",
+        "        self.total += harga"
+      ],
+      "distractors": [],
+      "explanation": "Deklarasikan class Kasir, buat __init__ menginisialisasi total, dan buat method beli menambah total."
+    },
+    {
+      "id": "m25_q12",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam menuliskan operator penugasan modulo:",
+      "lines": [
+        "x = 10",
+        "x %= 3",
+        "print(x)"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "x = x % 3",
+      "explanation": "Sintaks x %= 3 valid, namun jika ditulis terbalik =% maka akan memicu SyntaxError."
+    },
+    {
+      "id": "m25_q13",
+      "type": "mc",
+      "prompt": "Jika `x = [1, 2, 3]` dan `y = x`, lalu `y.append(4)`, apa isi dari `x`?",
+      "code": "x = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)",
+      "options": [
+        "[1, 2, 3, 4]",
+        "[1, 2, 3]",
+        "[4]",
+        "Error"
+      ],
+      "answerIndex": 0,
+      "explanation": "List di Python adalah objek referensi; 'y = x' merujuk ke memori yang sama sehingga x ikut berubah menjadi [1, 2, 3, 4]!"
+    },
+    {
+      "id": "m25_q14",
+      "type": "fb",
+      "prompt": "Lengkapi fungsi bawaan untuk membulatkan angka float desimal:",
+      "codeWithBlank": "bulat = ___(3.7)",
+      "options": [
+        "round",
+        "ceil",
+        "floor",
+        "int"
+      ],
+      "acceptedAnswers": [
+        "round"
+      ],
+      "answerIndex": 0,
+      "explanation": "Fungsi bawaan 'round(angka)' membulatkan desimal ke bilangan bulat terdekat (3.7 menjadi 4)."
+    },
+    {
+      "id": "m25_q15",
+      "type": "sb",
+      "prompt": "Temukan baris yang memicu KeyError pada dictionary:",
+      "lines": [
+        "inventaris = {'buku': 10}",
+        "print(inventaris['pena'])"
+      ],
+      "buggyLineIndex": 1,
+      "fixedLine": "print(inventaris.get('pena', 0))",
+      "explanation": "Key 'pena' tidak ada di dalam dictionary inventaris sehingga memicu KeyError."
+    }
+  ]
+}

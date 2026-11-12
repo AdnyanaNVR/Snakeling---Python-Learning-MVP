@@ -1,0 +1,209 @@
+{
+  "id": "module-13",
+  "unit": 5,
+  "unitTitle": "Unit 5: Percabangan",
+  "moduleNumber": 13,
+  "title": "Kondisi Majemuk elif & Nested if",
+  "subtitle": "Mengevaluasi banyak kemungkinan cabang dan kondisi bersarang",
+  "xpReward": 45,
+  "gemReward": 20,
+  "tip": {
+    "title": "Percabangan Majemuk elif & Kondisi Bersarang",
+    "body": "Ketika Anda memiliki lebih dari dua cabang keputusan (misalnya menentukan predikat nilai A, B, C, atau D), gunakan kata kunci elif (singkatan dari 'else if'). Python akan memeriksa kondisi dari atas ke bawah dan hanya mengeksekusi cabang pertama yang bernilai True. Anda juga dapat membuat if di dalam if (nested if).",
+    "codeExample": "skor = 85\nif skor >= 90:\n    grade = 'A'\nelif skor >= 80:\n    grade = 'B'\nelif skor >= 70:\n    grade = 'C'\nelse:\n    grade = 'D'\nprint(f'Predikat: {grade}')",
+    "outputExample": "Predikat: B",
+    "sections": [
+      {
+        "heading": "Penggunaan elif (Else If)",
+        "explanation": "elif memungkinkan pengecekan berurutan. Jika if pertama False, Python menguji elif berikutnya. Anda bisa memiliki sebanyak mungkin blok elif yang dibutuhkan.",
+        "codeSnippet": "jam = 14\nif jam < 12:\n    print('Pagi')\nelif jam < 18:\n    print('Siang/Sore')\nelse:\n    print('Malam')",
+        "outputSnippet": "Siang/Sore"
+      },
+      {
+        "heading": "Nested if (Kondisi Bersarang)",
+        "explanation": "Nested if adalah kondisi if yang berada di dalam blok kode if lainnya. Blok bagian dalam hanya akan diperiksa jika kondisi di luarnya sudah terbukti bernilai True.",
+        "codeSnippet": "punya_tiket = True\npunya_identitas = True\nif punya_tiket:\n    if punya_identitas:\n        print('Boleh masuk pesawat')\n    else:\n        print('Tunjukkan KTP/Paspor')",
+        "outputSnippet": "Boleh masuk pesawat"
+      },
+      {
+        "heading": "Hanya Satu Cabang yang Dijalankan",
+        "explanation": "Segera setelah salah satu kondisi if atau elif terpenuhi (True), Python menjalankan kodenya lalu langsung melompati seluruh sisa elif dan else di bawahnya.",
+        "codeSnippet": "x = 10\nif x > 5:\n    print('Besar')\nelif x > 8:\n    print('Sangat Besar')  # Tidak akan dieksekusi",
+        "outputSnippet": "Besar"
+      },
+      {
+        "heading": "Contoh dalam Kehidupan Nyata",
+        "explanation": "Pada sistem penentuan tarif parkir kendaraan: 1 jam pertama gratis, 2-5 jam tarif standar Rp3.000/jam, di atas 5 jam tarif maksimal Rp20.000.",
+        "codeSnippet": "durasi = 3\nif durasi <= 1:\n    biaya = 0\nelif durasi <= 5:\n    biaya = durasi * 3000\nelse:\n    biaya = 20000\nprint(f'Biaya parkir: Rp{biaya}')",
+        "outputSnippet": "Biaya parkir: Rp9000"
+      },
+      {
+        "heading": "Ringkasan Pembelajaran",
+        "explanation": "Urutan penulisan: diawali if tunggal, diikuti satu atau lebih elif, dan diakhiri else (opsional).",
+        "codeSnippet": "print('Alur cabang selesai.')",
+        "outputSnippet": "Alur cabang selesai."
+      }
+    ],
+    "notes": [
+      "Kata kuncinya adalah 'elif', BUKAN 'else if' atau 'elseif' seperti bahasa lain.",
+      "Perhatikan urutan kondisi! Letakkan kondisi yang paling spesifik di bagian paling atas.",
+      "Hindari nested if yang terlalu dalam (lebih dari 3 tingkat) karena membuat kode sulit dibaca."
+    ]
+  },
+  "quizzes": [
+    {
+      "id": "m13_q01",
+      "type": "mc",
+      "prompt": "Kata kunci apakah yang digunakan Python untuk membuat cabang alternatif dengan kondisi baru?",
+      "code": "",
+      "options": [
+        "elif",
+        "else if",
+        "elseif",
+        "case"
+      ],
+      "answerIndex": 0,
+      "explanation": "Di Python, singkatan resmi untuk cabang kondisi lanjutan adalah 'elif'."
+    },
+    {
+      "id": "m13_q02",
+      "type": "fb",
+      "prompt": "Lengkapi kata kunci percabangan kedua untuk menguji nilai ukuran M:",
+      "codeWithBlank": "if size == 'S':\n    p = 10\n___ size == 'M':\n    p = 15",
+      "options": [
+        "elif",
+        "else if",
+        "else",
+        "if else"
+      ],
+      "acceptedAnswers": [
+        "elif"
+      ],
+      "answerIndex": 0,
+      "explanation": "Gunakan 'elif' untuk memeriksa kondisi lanjutan baru setelah pernyataan if."
+    },
+    {
+      "id": "m13_q03",
+      "type": "mc",
+      "prompt": "Berapa nilai variabel tarif yang dicetak oleh program berikut?",
+      "code": "usia = 10\nif usia < 5:\n    tarif = 0\nelif usia < 12:\n    tarif = 10000\nelif usia < 60:\n    tarif = 25000\nelse:\n    tarif = 15000\nprint(tarif)",
+      "options": [
+        "10000",
+        "0",
+        "25000",
+        "15000"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kondisi 'usia < 5' bernilai False (10 tidak kurang dari 5). Cabang kedua 'usia < 12' True (10 < 12), sehingga tarif = 10000."
+    },
+    {
+      "id": "m13_q04",
+      "type": "fb",
+      "prompt": "Lengkapi kondisi if bersarang untuk mengecek kecukupan saldo member:",
+      "codeWithBlank": "if is_member:\n    ___ saldo >= 10000:\n        print(\"Dapat Diskon\")",
+      "options": [
+        "if",
+        "elif",
+        "else",
+        "when"
+      ],
+      "acceptedAnswers": [
+        "if"
+      ],
+      "answerIndex": 0,
+      "explanation": "Kondisi di dalam blok if ditulis kembali menggunakan kata kunci 'if'."
+    },
+    {
+      "id": "m13_q05",
+      "type": "ro",
+      "prompt": "Susun urutan tangga kondisi penilaian predikat kelulusan:",
+      "lines": [
+        "skor = 85",
+        "if skor >= 90:",
+        "    print('Grade A')",
+        "elif skor >= 80:",
+        "    print('Grade B')",
+        "else:",
+        "    print('Grade C')"
+      ],
+      "distractors": [],
+      "explanation": "Mulai dari skor awal, cek kondisi tertinggi (>=90), lanjut elif (>=80), lalu tangani sisanya dengan else."
+    },
+    {
+      "id": "m13_q06",
+      "type": "sb",
+      "prompt": "Temukan baris yang salah dalam menuliskan kata kunci elif:",
+      "lines": [
+        "x = 5",
+        "if x == 1:",
+        "    print('Satu')",
+        "else if x == 5:",
+        "    print('Lima')"
+      ],
+      "buggyLineIndex": 3,
+      "fixedLine": "elif x == 5:",
+      "explanation": "Python tidak mengenal 'else if' terpisah dengan spasi, gunakan kata kunci 'elif'."
+    },
+    {
+      "id": "m13_q07",
+      "type": "mc",
+      "prompt": "Berapa banyak blok `elif` yang boleh ada di dalam satu struktur percabangan?",
+      "code": "",
+      "options": [
+        "Tidak terbatas (sebanyak yang dibutuhkan program)",
+        "Maksimal hanya 1",
+        "Maksimal 3",
+        "Harus berjumlah genap"
+      ],
+      "answerIndex": 0,
+      "explanation": "Anda dapat menambahkan cabang elif sebanyak apa pun yang dibutuhkan oleh logika aplikasi."
+    },
+    {
+      "id": "m13_q08",
+      "type": "fb",
+      "prompt": "Lengkapi titik dua penutup pada pernyataan elif:",
+      "codeWithBlank": "elif level == 2___\n    bonus = 50",
+      "options": [
+        ":",
+        ";",
+        "then",
+        "{"
+      ],
+      "acceptedAnswers": [
+        ":"
+      ],
+      "answerIndex": 0,
+      "explanation": "Pernyataan elif wajib diakhiri dengan tanda titik dua ':'."
+    },
+    {
+      "id": "m13_q09",
+      "type": "ro",
+      "prompt": "Susun alur evaluasi nested if akun verifikasi email:",
+      "lines": [
+        "login = True",
+        "email_terverifikasi = True",
+        "if login:",
+        "    if email_terverifikasi:",
+        "        print('Selamat datang di Dashboard!')"
+      ],
+      "distractors": [],
+      "explanation": "Deklarasikan status boolean, cek kondisi luar login, lalu cek kondisi dalam verifikasi email."
+    },
+    {
+      "id": "m13_q10",
+      "type": "sb",
+      "prompt": "Temukan baris di mana kondisi else diletakkan di tengah sebelum elif:",
+      "lines": [
+        "if skor > 90:",
+        "    print('A')",
+        "else:",
+        "    print('B')",
+        "elif skor > 70:",
+        "    print('C')"
+      ],
+      "buggyLineIndex": 2,
+      "fixedLine": "elif skor > 80:\n    print('B')",
+      "explanation": "Blok 'else' harus selalu berada di urutan paling akhir, tidak boleh mendahului blok 'elif'."
+    }
+  ]
+}
